@@ -6,7 +6,7 @@ interface Props {
 }
 
 const Title = ({ children }: Props) => {
-  return <div className='text-xs font-medium w-[249px] uppercase'>{children}</div>
+  return <div className='text-xs font-medium w-[300px] uppercase'>{children}</div>
 }
 
 export default Title

@@ -3,6 +3,7 @@ const Dashboard = lazy(() => import('src/pages/Dashboard'))
 const ProductList = lazy(() => import('src/pages/Product'))
 const Home = lazy(() => import('src/pages/Home'))
 const Login = lazy(() => import('src/pages/Login'))
+const About = lazy(() => import('src/pages/About'))
 
 interface IRoute {
   path: string
@@ -30,6 +31,12 @@ export const routes: IRoutes = {
     element: Dashboard,
     layout: 'DashboardLayout',
     protected: true //được bảo vệ
+  },
+  AboutUs: {
+    path: '/about',
+    element: About,
+    layout: 'MainLayout',
+    protected: false //được bảo vệ
   },
   Login: {
     path: '/login',
