@@ -1,4 +1,5 @@
 import { lazy } from 'react'
+const DetailProduct = lazy(() => import('src/pages/DetailProduct'))
 const Dashboard = lazy(() => import('src/pages/Dashboard'))
 const ProductList = lazy(() => import('src/pages/Product'))
 const Home = lazy(() => import('src/pages/Home'))
@@ -22,6 +23,12 @@ export const routes: IRoutes = {
   Product: {
     path: '/product',
     element: ProductList,
+    layout: 'MainLayout',
+    protected: false //không được bảo vệ ?
+  },
+  ProductDetail: {
+    path: '/product/:id',
+    element: DetailProduct,
     layout: 'MainLayout',
     protected: false //không được bảo vệ ?
   },

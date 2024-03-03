@@ -1,0 +1,44 @@
+.delimiter {
+    margin: 0 13px;
+    width: 1px;
+    height: 20px;
+    background: #d4d4d4;
+    transform: rotate(45deg);
+    display: inline-block;
+    transform-origin: center;
+    position: relative;
+    top: 5px
+}
+
+@keyframes my {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.eyes {
+    font-size: 24px;
+    font-weight: bold;
+    animation: my 1500ms infinite;
+}
+
+.column ul li:before {
+    content: "";
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    background-color: var(--text-color,#4e4e4e);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%)
+}
