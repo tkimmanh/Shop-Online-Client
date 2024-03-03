@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom'
 import Title from 'src/components/Card/Title'
 import Price from 'src/components/Card/Price'
 import { formatMoney } from 'src/utils/formatMoney'
+import { listProducts } from 'src/constants/data.constants'
 
 const DetailProduct = () => {
   const [valueTab, setValueTab] = useState(1)
@@ -225,17 +226,21 @@ const DetailProduct = () => {
           </div>
         )}
       </div>
-      <p className='text-[32px] leading-[41px] font-[400] mt-[80px] text-center'>Related Products</p>
+      <p className='text-[32px] leading-[41px] font-[400] mt-[80px] mb-[50px] text-center'>Related Products</p>
       <div className='grid grid-cols-4 gap-[30px]'>
-        <div>
-          <Card image='https://wpbingosite.com/wordpress/bedesk/wp-content/uploads/2023/06/home-banner-2.jpg'></Card>
-          <div className='mt-5 flex flex-col gap-y-2'>
-            <Link className='inline-block' to={''}>
-              <Title>ELIA MOCK NECK CUTOUT SWEATER</Title>
-            </Link>
-            <Price>{formatMoney(200000)}</Price>
-          </div>
-        </div>
+        {listProducts.slice(0, 4).map((product) => {
+          return (
+            <div key={product.id}>
+              <Card image={product.imageUrl}></Card>
+              <Link className='inline-block' to={`${product.id}`}>
+                <div className='mt-5 flex w-full flex-col gap-y-2'>
+                  <Title>{product.name}</Title>
+                  <Price>{Number(product?.price || 0)?.toLocaleString('en')}đ</Price>
+                </div>
+              </Link>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
