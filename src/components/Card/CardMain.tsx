@@ -27,8 +27,8 @@ const Card = ({ image, discount }: Props) => {
   }, [])
 
   return (
-    <div>
-      <div className='relative max-w-[338px] h-[518px]' ref={nodeRef}>
+    <>
+      <div className='relative lg:mx-0 mx-2  lg:max-w-[338px] h-[518px]' ref={nodeRef}>
         <img className='w-full h-[518px] object-cover' src={image || images.placeholderImage} alt='image-product' />
         <div
           className={classNames(
@@ -55,7 +55,7 @@ const Card = ({ image, discount }: Props) => {
           {discount && <div className='w-11 h-6 bg-white text-center flex items-center justify-center'>20%</div>}
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

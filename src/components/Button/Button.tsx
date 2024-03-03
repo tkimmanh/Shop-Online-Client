@@ -1,10 +1,10 @@
-import { ButtonHTMLAttributes } from 'react'
+import { ButtonHTMLAttributes, ReactNode } from 'react'
 import Loading from '../Loading'
 import classNames from 'src/utils/classNames'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string
-  children: string
+  children: string | ReactNode
   isLoading?: boolean
   kind: 'primary' | 'secondary' | 'ghost'
 }
