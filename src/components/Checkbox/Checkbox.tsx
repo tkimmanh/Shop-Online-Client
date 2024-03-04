@@ -1,13 +1,15 @@
 import { UseFormRegister } from 'react-hook-form'
+import classNames from 'src/utils/classNames'
 
 interface Props {
   register?: UseFormRegister<any>
-  value: string
+  value?: string
   name: string
   label?: string
+  className?: string
 }
 
-const Checkbox = ({ name, value, label, register }: Props) => {
+const Checkbox = ({ name, value, label, register, className }: Props) => {
   const registerResult = register && name ? register(name) : ({} as any)
 
   return (
@@ -16,7 +18,7 @@ const Checkbox = ({ name, value, label, register }: Props) => {
       <span className='relative w-3 h-3 border-[2px] border-gray-400 flex justify-center items-center'>
         <span className='checkbox-indicator absolute w-[6px] h-[6px] bg-black transform scale-0'></span>
       </span>
-      <span className='capitalize text-base'>{label}</span>
+      <span className={classNames('text-base', className)}>{label}</span>
     </label>
   )
 }

@@ -9,6 +9,7 @@ import Button from 'src/components/Button'
 import { routes } from 'src/routes/routes'
 import { Link } from 'react-router-dom'
 import Slider from 'react-slick'
+import Login from '../Login'
 
 const Home = () => {
   const settings = {
@@ -145,6 +146,7 @@ const Home = () => {
             />
           </div>
         </div>
+        <Login></Login>
       </div>
     </div>
   )

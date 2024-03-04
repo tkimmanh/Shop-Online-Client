@@ -1,9 +1,10 @@
 import { CiSearch, CiHeart, CiUser } from 'react-icons/ci'
-import { FiMenu } from 'react-icons/fi'
+import { routes } from 'src/routes/routes'
 import { IoBagOutline } from 'react-icons/io5'
 import { useLocation } from 'react-router-dom'
 import classNames from 'src/utils/classNames'
 import { useState, useEffect } from 'react'
+import { FiMenu } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import { links } from 'src/constants'
 import Logo from '../Logo'
@@ -65,9 +66,11 @@ const Header = () => {
           <button className='mx-2 relative'>
             <CiSearch size={26} />
           </button>
-          <button className='mx-2 relative'>
-            <CiUser size={26} />
-          </button>
+          <Link to={routes.Login.path}>
+            <button className='mx-2 relative'>
+              <CiUser size={26} />
+            </button>
+          </Link>
           <button className='mx-2 relative'>
             <CiHeart size={26} />
             <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>3</span>

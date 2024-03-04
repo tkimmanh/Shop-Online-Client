@@ -101,3 +101,29 @@ input[type='checkbox']:checked + span .checkbox-indicator {
     transform: translateY(0px);
   }
 }
+/* Thêm vào file CSS chính của bạn */
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 500ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.ReactModal__Content {
+  transform: translateX(100%);
+  transition: transform 500ms ease-in-out;
+}
+
+.ReactModal__Content--after-open {
+  transform: translateX(0%);
+}
+
+.ReactModal__Content--before-close {
+  transform: translateX(100%);
+}

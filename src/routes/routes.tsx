@@ -2,6 +2,7 @@ import { lazy } from 'react'
 const DetailProduct = lazy(() => import('src/pages/DetailProduct'))
 const Dashboard = lazy(() => import('src/pages/Dashboard'))
 const ProductList = lazy(() => import('src/pages/Product'))
+const Register = lazy(() => import('src/pages/Register'))
 const Home = lazy(() => import('src/pages/Home'))
 const Login = lazy(() => import('src/pages/Login'))
 const About = lazy(() => import('src/pages/About'))
@@ -48,6 +49,12 @@ export const routes: IRoutes = {
   Login: {
     path: '/login',
     element: Login,
+    layout: 'AuthLayout',
+    protected: false
+  },
+  Register: {
+    path: '/register',
+    element: Register,
     layout: 'AuthLayout',
     protected: false
   }
