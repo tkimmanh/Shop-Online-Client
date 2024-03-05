@@ -28,14 +28,14 @@ const Card = ({ image, discount }: Props) => {
 
   return (
     <>
-      <div className='relative lg:mx-0 mx-2  lg:max-w-[338px] h-[518px]' ref={nodeRef}>
-        <img className='w-full h-[518px] object-cover' src={image || images.placeholderImage} alt='image-product' />
+      <div className='relative lg:mx-0 lg:max-w-[338px] lg:h-[518px] md:h-[500px] h-[400px] ' ref={nodeRef}>
+        <img className='w-full h-full object-cover' src={image || images.placeholderImage} alt='image-product' />
         <div
           className={classNames(
             'absolute bottom-8 right-0 flex gap-x-3',
             hovered && isDesktop
               ? 'slide-top transform md:translate-x-0 lg:left-[30%] lg:-translate-x-1/2'
-              : 'md:flex flex flex-col gap-y-3 -translate-y-1/2 pr-5 lg:hidden'
+              : 'md:flex flex flex-col gap-y-3 -translate-y-[100%] pr-5 lg:hidden'
           )}
         >
           <Option>
@@ -49,7 +49,7 @@ const Card = ({ image, discount }: Props) => {
           </Option>
         </div>
         <div className='absolute top-4 left-4 flex gap-x-2 text-xs'>
-          <div className='w-11 h-6 bg-[#af6d57] text-center flex items-center justify-center text-white capitalize  '>
+          <div className='w-11 h-6 bg-[#af6d57] text-center flex items-center justify-center text-white capitalize'>
             hot
           </div>
           {discount && <div className='w-11 h-6 bg-white text-center flex items-center justify-center'>20%</div>}

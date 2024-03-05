@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 const DetailProduct = lazy(() => import('src/pages/DetailProduct'))
 const Dashboard = lazy(() => import('src/pages/Dashboard'))
-const ProductList = lazy(() => import('src/pages/Product'))
+const ProductList = lazy(() => import('src/pages/Products'))
 const Register = lazy(() => import('src/pages/Register'))
 const Home = lazy(() => import('src/pages/Home'))
 const Login = lazy(() => import('src/pages/Login'))
@@ -23,7 +23,7 @@ export const routes: IRoutes = {
     protected: false //không được bảo vệ ?
   },
   Product: {
-    path: '/product',
+    path: '/products',
     element: ProductList,
     layout: 'MainLayout',
     protected: false //không được bảo vệ ?
@@ -34,6 +34,7 @@ export const routes: IRoutes = {
     layout: 'MainLayout',
     protected: false //không được bảo vệ ?
   },
+
   Dashboard: {
     path: '/dashboard',
     element: Dashboard,

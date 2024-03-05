@@ -5,7 +5,7 @@ interface Props {
 }
 
 const Price = ({ children }: Props) => {
-  return <div className='text-base font-medium'>{children}</div>
+  return <div className='lg:text-base text-sm font-medium'>{children}</div>
 }
 
 export default Price

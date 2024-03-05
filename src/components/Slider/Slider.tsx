@@ -6,6 +6,8 @@ import Slider from 'react-slick'
 import Button from '../Button'
 import 'aos/dist/aos.css'
 import AOS from 'aos'
+import { Link } from 'react-router-dom'
+import { routes } from 'src/routes/routes'
 
 const CustomSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -73,15 +75,17 @@ const CustomSlider = () => {
                     {slideContents[currentSlide].subHeading2}
                   </Heading>
                 </div>
-                <Button
-                  className='text-[11px] px-7 py-3'
-                  kind='ghost'
-                  data-aos='fade-down'
-                  data-aos-delay='1300'
-                  data-aos-offset='-500'
-                >
-                  SHOP NOW
-                </Button>
+                <Link to={routes.Product.path}>
+                  <Button
+                    className='text-[11px] px-7 py-3'
+                    kind='ghost'
+                    data-aos='fade-down'
+                    data-aos-delay='1300'
+                    data-aos-offset='-500'
+                  >
+                    SHOP NOW
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

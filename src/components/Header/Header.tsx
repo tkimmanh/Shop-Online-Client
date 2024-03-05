@@ -1,18 +1,19 @@
 import { CiSearch, CiHeart, CiUser } from 'react-icons/ci'
-import { routes } from 'src/routes/routes'
+import { useState, useEffect, useContext } from 'react'
+import { AppContext } from 'src/context/app.context'
 import { IoBagOutline } from 'react-icons/io5'
 import { useLocation } from 'react-router-dom'
 import classNames from 'src/utils/classNames'
-import { useState, useEffect } from 'react'
-import { FiMenu } from 'react-icons/fi'
+import { routes } from 'src/routes/routes'
 import { Link } from 'react-router-dom'
+import { FiMenu } from 'react-icons/fi'
 import { links } from 'src/constants'
 import Logo from '../Logo'
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const location = useLocation()
-
+  const { setIsOpenModal } = useContext(AppContext)
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -63,7 +64,7 @@ const Header = () => {
           <Logo isScroll={isScrolled} location={location.pathname} />
         </div>
         <div className='relative flex-1 flex justify-end'>
-          <button className='mx-2 relative'>
+          <button onClick={() => setIsOpenModal(true)} className='mx-2 relative'>
             <CiSearch size={26} />
           </button>
           <Link to={routes.Login.path}>

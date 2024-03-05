@@ -17,7 +17,7 @@ const Modal = ({ children, className, overlayClassName }: Props) => {
         onRequestClose={() => setIsOpenModal(false)}
         isOpen={isOpenModal}
         overlayClassName={classNames(
-          'fixed inset-0 bg-black bg-opacity-40 z-50 w-full transition-opacity duration-500',
+          'fixed inset-0 bg-black bg-opacity-40 z-50 w-full transition-opacity duration-500 ',
           overlayClassName
         )}
         className={classNames(
