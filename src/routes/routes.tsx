@@ -6,6 +6,7 @@ const Register = lazy(() => import('src/pages/Register'))
 const Home = lazy(() => import('src/pages/Home'))
 const Login = lazy(() => import('src/pages/Login'))
 const About = lazy(() => import('src/pages/About'))
+const CartPage = lazy(() => import('src/pages/Cart'))
 
 interface IRoute {
   path: string
@@ -31,6 +32,12 @@ export const routes: IRoutes = {
   ProductDetail: {
     path: '/product/:id',
     element: DetailProduct,
+    layout: 'MainLayout',
+    protected: false //không được bảo vệ ?
+  },
+  CartPayment: {
+    path: '/cart-payment',
+    element: CartPage,
     layout: 'MainLayout',
     protected: false //không được bảo vệ ?
   },
