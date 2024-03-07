@@ -1,11 +1,11 @@
-import { AppContext } from 'src/context/app.context'
-import classNames from 'src/utils/classNames'
 import { ReactNode, useContext } from 'react'
 import ReactModal from 'react-modal'
+import { AppContext } from 'src/context/app.context'
+import { twMerge } from 'tailwind-merge'
 
 type Props = {
-  className: string
-  overlayClassName: string
+  className?: string
+  overlayClassName?: string
   children: ReactNode
 }
 
@@ -16,13 +16,13 @@ const Modal = ({ children, className, overlayClassName }: Props) => {
       <ReactModal
         onRequestClose={() => setIsOpenModal(false)}
         isOpen={isOpenModal}
-        overlayClassName={classNames(
+        overlayClassName={twMerge(
           'fixed inset-0 bg-black bg-opacity-40 z-50 w-full transition-opacity duration-500 ',
-          overlayClassName
+          overlayClassName && overlayClassName
         )}
-        className={classNames(
+        className={twMerge(
           'modal-content relative bg-white outline-none shadow-md transition-transform transform translate-x-full',
-          className
+          className && className
         )}
         closeTimeoutMS={500}
       >

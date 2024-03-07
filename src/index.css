@@ -13,6 +13,14 @@
   font-weight: 400;
   font-style: normal;
 }
+
+.required::before {
+  content: '*';
+  color: red;
+  margin-left: 2px;
+}
+
+
 img,
 picture,
 svg,
