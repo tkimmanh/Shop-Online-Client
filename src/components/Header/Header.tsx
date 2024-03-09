@@ -64,7 +64,7 @@ const Header = () => {
           <Logo isScroll={isScrolled} location={location.pathname} />
         </div>
         <div className='relative flex-1 flex justify-end'>
-          <button onClick={() => setIsOpenModal(true)} className='mx-2 relative'>
+          <button className='mx-2 relative'>
             <CiSearch size={26} />
           </button>
           <Link to={routes.Login.path}>
@@ -76,10 +76,12 @@ const Header = () => {
             <CiHeart size={26} />
             <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>3</span>
           </button>
-          <button className='mx-2 relative'>
-            <IoBagOutline size={26} />
-            <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>5</span>
-          </button>
+          <Link to={routes.CartPayment.path}>
+            <button className='mx-2 relative'>
+              <IoBagOutline size={26} />
+              <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>5</span>
+            </button>
+          </Link>
         </div>
       </div>
     </div>
