@@ -10,7 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button = ({ className = '', children = 'Shop now', isLoading = false, kind, ...rest }: ButtonProps) => {
-  const disableButton = isLoading ? 'pointer-events-none bg-black text-white ' : ''
+  const disableButton = isLoading ? 'pointer-events-none bg-black text-white flex justify-center' : ''
   let defaultClassName = 'uppercase font-normal border border-solid '
 
   switch (kind) {

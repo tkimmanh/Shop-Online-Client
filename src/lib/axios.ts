@@ -1,25 +1,58 @@
-import axios from 'axios'
+import { clearLocalStorage, getAccessTokenFromLocalStorage, setAccessTokenToLocalStorage } from 'src/utils/localStorage'
+import axios, { AxiosInstance, AxiosError, HttpStatusCode } from 'axios'
+import { routes } from 'src/routes/routes'
+import { AuthResponse } from 'src/types/auth'
 
-export const instance = axios.create({
-  baseURL: process.env.REACT_APP_ENDPOINT_URL,
-  timeout: 5000,
-  withCredentials: true
-})
+const BASE_URL = 'http://localhost:8001/'
 
-instance.interceptors.request.use(
-  function (config) {
-    return config
-  },
-  function (error) {
-    return Promise.reject(error)
-  }
-)
+function createHttpInstance(): AxiosInstance {
+  const accessToken = getAccessTokenFromLocalStorage()
 
-instance.interceptors.response.use(
-  function (response) {
-    return response
-  },
-  function (error) {
-    return Promise.reject(error)
-  }
-)
+  const instance = axios.create({
+    baseURL: BASE_URL,
+    timeout: 10000,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  instance.interceptors.request.use(
+    (config) => {
+      if (accessToken && config.headers) {
+        config.headers.authorization = `Bearer ${accessToken}`
+      }
+      return config
+    },
+    (error) => {
+      return Promise.reject(error)
+    }
+  )
+
+  instance.interceptors.response.use(
+    (response) => {
+      const { url } = response.config
+      if (url === `user${routes.Login.path}`) {
+        const data = response.data as AuthResponse
+        const newAccessToken = data?.access_token
+        setAccessTokenToLocalStorage(newAccessToken as string)
+      } else if (url === '/logout') {
+        clearLocalStorage()
+      }
+      return response
+    },
+    (error: AxiosError) => {
+      if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
+        const data: any | undefined = error.response?.data
+        const message = data.message || error?.message
+        alert(message)
+      }
+      return Promise.reject(error)
+    }
+  )
+
+  return instance
+}
+
+const http = createHttpInstance()
+
+export default http

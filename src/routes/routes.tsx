@@ -1,4 +1,5 @@
 import { lazy } from 'react'
+
 const DetailProduct = lazy(() => import('src/pages/DetailProduct'))
 const Dashboard = lazy(() => import('src/pages/Dashboard'))
 const ProductList = lazy(() => import('src/pages/Products'))
@@ -12,7 +13,9 @@ interface IRoute {
   path: string
   element: React.LazyExoticComponent<() => JSX.Element>
   layout: 'AuthLayout' | 'DashboardLayout' | 'MainLayout'
-  protected: boolean
+  redirectAuthenticatedToHome?: boolean
+  protected?: boolean
+  access?: string[]
 }
 type IRoutes = Record<string, IRoute>
 
@@ -20,50 +23,45 @@ export const routes: IRoutes = {
   Home: {
     path: '/',
     element: Home,
-    layout: 'MainLayout',
-    protected: false //không được bảo vệ ?
+    layout: 'MainLayout'
   },
   Product: {
     path: '/products',
     element: ProductList,
-    layout: 'MainLayout',
-    protected: false //không được bảo vệ ?
+    layout: 'MainLayout'
   },
   ProductDetail: {
-    path: '/product/:id',
+    path: '/:id',
     element: DetailProduct,
-    layout: 'MainLayout',
-    protected: false //không được bảo vệ ?
+    layout: 'MainLayout'
   },
   CartPayment: {
     path: '/cart-payment',
     element: CartPage,
     layout: 'MainLayout',
-    protected: false //không được bảo vệ ?
-  },
-
-  Dashboard: {
-    path: '/dashboard',
-    element: Dashboard,
-    layout: 'DashboardLayout',
-    protected: true //được bảo vệ
+    protected: true
   },
   AboutUs: {
     path: '/about',
     element: About,
-    layout: 'MainLayout',
-    protected: false //được bảo vệ
+    layout: 'MainLayout'
+  },
+  Dashboard: {
+    path: '/admin',
+    access: ['admin', 'staff'],
+    element: Dashboard,
+    layout: 'DashboardLayout'
   },
   Login: {
-    path: '/login',
+    path: '/sigin',
     element: Login,
     layout: 'AuthLayout',
-    protected: false
+    redirectAuthenticatedToHome: true
   },
   Register: {
     path: '/register',
     element: Register,
     layout: 'AuthLayout',
-    protected: false
+    redirectAuthenticatedToHome: true
   }
 }

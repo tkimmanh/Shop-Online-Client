@@ -1,4 +1,3 @@
-import { QueryProvider } from './lib/QueryProvider.tsx'
 import { AppProvider } from './context/app.context.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import 'slick-carousel/slick/slick-theme.css'
@@ -7,15 +6,20 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import React from 'react'
 import './index.css'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { SnackbarProvider } from 'notistack'
+const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <QueryProvider>
+      <QueryClientProvider client={queryClient}>
         <AppProvider>
-          <App />
+          <SnackbarProvider>
+            <App />
+          </SnackbarProvider>
         </AppProvider>
-      </QueryProvider>
+      </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>
 )

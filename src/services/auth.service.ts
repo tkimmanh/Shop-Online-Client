@@ -1,18 +1,20 @@
-import { instance } from 'src/lib/axios'
+import http from 'src/lib/axios'
+import { TRegister } from 'src/types/auth'
+import { TLogin } from 'src/types/auth'
 
-const URL_LOGIN = 'login'
-const URL_REGISTER = 'register'
+const URL_LOGIN = 'user/sigin'
+const URL_REGISTER = 'user/register'
 const URL_LOGOUT = 'logout'
 
 const authService = {
-  registerAccount(body: { username: string; password: string }) {
-    return instance.post(URL_REGISTER, body)
+  registerAccount(body: TRegister) {
+    return http.post(URL_REGISTER, body)
   },
-  login(body: { username: string; password: string }) {
-    return instance.post(URL_LOGIN, body)
+  login(body: TLogin) {
+    return http.post(URL_LOGIN, body)
   },
   logout() {
-    return instance.post(URL_LOGOUT)
+    return http.post(URL_LOGOUT)
   }
 }
 

@@ -1,15 +1,29 @@
+import { TRegister } from 'src/types/auth'
+import { useSnackbar } from 'notistack'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { useMutation } from 'react-query'
+import { Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import Checkbox from 'src/components/Checkbox'
 import Heading from 'src/components/Heading'
 import Input from 'src/components/Input'
 import { routes } from 'src/routes/routes'
+import authService from 'src/services/auth.service'
 
 const Register = () => {
-  const { register, handleSubmit } = useForm<any>()
-  const onSubmit = (values: { email: string; password: string }) => {
-    console.log('values:', values)
+  const { register, handleSubmit } = useForm<TRegister>()
+  const { enqueueSnackbar } = useSnackbar()
+  const navigate = useNavigate()
+  const registerAccountMutation = useMutation({
+    mutationFn: (body: TRegister) => authService.registerAccount(body)
+  })
+  const onSubmit = async (values: TRegister) => {
+    registerAccountMutation.mutate(values, {
+      onSuccess: () => {
+        enqueueSnackbar('Đăng ký thành công', { variant: 'success' })
+        navigate(routes.Login.path)
+      }
+    })
   }
   return (
     <div className='flex lg:inline-block items-center justify-center'>
@@ -22,7 +36,7 @@ const Register = () => {
               className='h-10'
               type='text'
               placeholder='Enter your user name *'
-              name='username'
+              name='full_name'
               register={register}
             ></Input>
           </div>
@@ -39,11 +53,28 @@ const Register = () => {
             <Input className='h-10' type='password' name='password' placeholder='Password*' register={register}></Input>
           </div>
           <div className='mb-5'>
+            <Input
+              className='h-10'
+              type='password'
+              name='confirm_password'
+              placeholder='Confirm password*'
+              register={register}
+            ></Input>
+          </div>
+          <div className='mb-5'>
+            <Input
+              className='h-10'
+              type='number'
+              name='phone'
+              placeholder='Your phone number *'
+              register={register}
+            ></Input>
+          </div>
+          <div className='mb-5'>
             <Checkbox name='re-member' label='Remember me' className='text-sm'></Checkbox>
           </div>
-
           <div className='mb-5'>
-            <Button className='w-full py-3 text-xs' kind='secondary'>
+            <Button isLoading={registerAccountMutation.isLoading} className='w-full py-3 text-xs' kind='secondary'>
               Register
             </Button>
           </div>

@@ -9,9 +9,12 @@ import Button from 'src/components/Button'
 import { routes } from 'src/routes/routes'
 import { Link } from 'react-router-dom'
 import Slider from 'react-slick'
-import Login from '../Login'
+import { useContext } from 'react'
+import { AppContext } from 'src/context/app.context'
 
 const Home = () => {
+  const { user } = useContext(AppContext)
+
   const settings = {
     infinite: true,
     speed: 500,
@@ -37,6 +40,7 @@ const Home = () => {
   return (
     <div>
       <SliderComponent></SliderComponent>
+      <h1>{user?.full_name || 'loading...'}</h1>
       <div className='mx-7'>
         <Heading className='text-3xl pt-20 pb-16'>Recommended For You</Heading>
         <div>

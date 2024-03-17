@@ -38,7 +38,11 @@ function useRouteElements() {
       )
       return {
         path: route.path,
-        element: route.protected ? <ProtectedRoute key={key}>{wrappedElement}</ProtectedRoute> : wrappedElement
+        element: (
+          <ProtectedRoute key={key} redirectAuthenticatedToHome={route.redirectAuthenticatedToHome}>
+            {wrappedElement}
+          </ProtectedRoute>
+        )
       }
     })
   )
