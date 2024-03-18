@@ -12,8 +12,8 @@ import Logo from '../Logo'
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
+  const { user } = useContext(AppContext)
   const location = useLocation()
-  const { setIsOpenModal } = useContext(AppContext)
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -68,7 +68,7 @@ const Header = () => {
             <CiSearch size={26} />
           </button>
           <Link to={routes.Login.path}>
-            <button className='mx-2 relative'>
+            <button className={classNames(user ? 'hidden' : 'mx-2 relative block')}>
               <CiUser size={26} />
             </button>
           </Link>

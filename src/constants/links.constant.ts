@@ -20,3 +20,36 @@ export const links = [
     text: 'Faq'
   }
 ]
+
+export const linksDashboard = [
+  {
+    id: 1,
+    text: 'Dashboard',
+    path: '/admin'
+  },
+  {
+    id: 2,
+    text: 'Product Management',
+    path: '/admin/products-list'
+  },
+  {
+    id: 3,
+    text: 'Category Management',
+    path: '/admin/category-list'
+  },
+  {
+    id: 4,
+    text: 'Variants Management',
+    path: '/admin/variants-manage'
+  },
+  {
+    id: 5,
+    text: 'Users Management',
+    path: '/admin/user-list'
+  },
+  {
+    id: 6,
+    text: 'Order Management',
+    path: '/admin/order-list'
+  }
+]

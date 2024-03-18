@@ -20,7 +20,6 @@
   margin-left: 2px;
 }
 
-
 img,
 picture,
 svg,
@@ -138,4 +137,35 @@ input[type='checkbox']:checked + span .checkbox-indicator {
   .slick-slide {
     padding: 0px 5px;
   }
+}
+.quill {
+  border: 2px solid #f1f1f3;
+  padding: 15px 25px;
+  border-radius: 10px;
+}
+
+.quill .ql-toolbar.ql-snow {
+  display: inline-block;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #f3f4f6;
+  border-radius: 10px;
+  padding: 12px 20px;
+}
+
+.quill .ql-container.ql-snow,
+.quill .ql-editor {
+  border: none;
+  font-size: 1rem;
+  height: 400px;
+}
+
+.quill .ql-editor {
+  padding-top: 2.5rem;
+}
+
+.quill .ql-editor.ql-blank::before {
+  font-size: 0.875rem;
+  color: #9ca3af;
 }
