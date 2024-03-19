@@ -74,15 +74,19 @@ const ProductsAddNew = () => {
   const {
     register,
     reset,
-    handleSubmit,
-    formState: { errors }
-  } = useForm()
+    handleSubmit  } = useForm()
   const { enqueueSnackbar } = useSnackbar()
 
   const addNewProductMutations = useMutation({
     mutationFn: (body: any) => productsService.createProduct(body),
     onSuccess: () => {
-      reset({})
+      reset()
+      setImages([])
+      setValue('')
+      setSelectedCategoryOptions([])
+      setSelectedColorOptions([])
+      setSelectedSizeOptions([])
+      setThumbnail([])
       enqueueSnackbar('Thêm mới thành công', { variant: 'success' })
     }
   })
@@ -192,6 +196,7 @@ const ProductsAddNew = () => {
 
         <div className='mt-5'>
           <ReactSelect
+            defaultInputValue=''
             options={categoryOptions}
             closeMenuOnSelect={false}
             onChange={setSelectedCategoryOptions as any}
@@ -208,7 +213,7 @@ const ProductsAddNew = () => {
               {thumbnail.length > 0 ? (
                 thumbnail.map((file) => (
                   <div key={file.name} className='w-full h-full relative'>
-                    <img src={file.preview} alt='Preview' className='w-full h-full absolute' />
+                    <img src={file.preview} alt='Preview' className='w-full h-full absolute object-contain' />
                     <button
                       className='absolute bg-white text-black left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 p-1 rounded-full shadow-lg'
                       onClick={() => removeThumbnail()}
@@ -236,7 +241,7 @@ const ProductsAddNew = () => {
               {images.length > 0 ? (
                 images.map((file, index) => (
                   <div key={file.name} className='w-full h-full relative'>
-                    <img src={file.preview} alt='Preview' className='w-full h-full absolute' />
+                    <img src={file.preview} alt='Preview' className='w-full h-full absolute object-contain' />
                     <button
                       className='absolute flex items-center justify-center h-12 w-12 bg-white text-black left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 p-1 rounded-full shadow-lg'
                       onClick={() => removeImages(index)}
@@ -263,7 +268,12 @@ const ProductsAddNew = () => {
             </label>
           </div>
         </div>
-        <Button type='submit' className='px-10 py-3 text-sm rounded mt-5' kind='secondary'>
+        <Button
+          isLoading={addNewProductMutations.isLoading}
+          type='submit'
+          className='px-10 py-3 text-sm rounded mt-5'
+          kind='secondary'
+        >
           Add new
         </Button>
       </form>

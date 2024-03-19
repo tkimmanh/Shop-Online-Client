@@ -9,12 +9,11 @@ import Button from 'src/components/Button'
 import { routes } from 'src/routes/routes'
 import { Link } from 'react-router-dom'
 import Slider from 'react-slick'
-import { useContext } from 'react'
-import { AppContext } from 'src/context/app.context'
+import productsService from 'src/services/products.service'
+import { useQuery } from 'react-query'
+import categoryService from 'src/services/category.service'
 
 const Home = () => {
-  const { user } = useContext(AppContext)
-
   const settings = {
     infinite: true,
     speed: 500,
@@ -37,21 +36,33 @@ const Home = () => {
       }
     ]
   }
+  const { data: listProducts } = useQuery({
+    queryKey: ['PRODUCTS'],
+    queryFn: () => {
+      return productsService.getAllProducts()
+    }
+  })
+  const { data: listCategory } = useQuery({
+    queryKey: ['CATEGORY'],
+    queryFn: () => {
+      return categoryService.getAllCategory()
+    }
+  })
+  const filteredProducts = listProducts?.data.products?.filter((product: any) => product.status == true)
   return (
     <div>
       <SliderComponent></SliderComponent>
-      <h1>{user?.full_name || 'loading...'}</h1>
       <div className='mx-7'>
         <Heading className='text-3xl pt-20 pb-16'>Recommended For You</Heading>
         <div>
           <Slider {...settings}>
-            {listProducts.map((product) => {
+            {filteredProducts?.slice(0, 10).map((product: any) => {
               return (
                 <div key={product.id}>
-                  <Card image={product.imageUrl}></Card>
-                  <Link className='inline-block' to={`${product.id}`}>
+                  <Card image={product.thumbnail?.url}></Card>
+                  <Link className='inline-block' to={`${product._id}`}>
                     <div className='mt-5 flex w-full flex-col gap-y-2'>
-                      <Title>{product.name}</Title>
+                      <Title>{product.title}</Title>
                       <Price>{formatMoney(product.price)}</Price>
                     </div>
                   </Link>
@@ -59,6 +70,31 @@ const Home = () => {
               )
             })}
           </Slider>
+        </div>
+
+        <div className='w-full bg-[#f7f4ef] h-[438px] mt-16'>
+          <div className='flex flex-col items-center justify-center'>
+            <Heading className='text-3xl mt-20 pb-16 text-center'>Shop by categories</Heading>
+            <p className='text-xl'>
+              Your all-in-one spot for finding trends, occasion looks, featured styles and more!
+            </p>
+          </div>
+          <div className='flex items-center justify-center gap-x-10 mt-4 '>
+            {listCategory?.data.getallCategory.slice(0, 6).map((category: any) => {
+              return (
+                <div className='bg-white hover:bg-black hover:text-white text-black  py-5 px-20 transition-colors cursor-pointer'>
+                  <span className='uppercase text-base font-normal'>{category.title}</span>
+                </div>
+              )
+            })}
+          </div>
+          <div className='flex items-center justify-center mt-10'>
+            <Link className='inline-block' to={routes.Product.path}>
+              <Button kind='primary' className='px-10 m-auto font-normal text-xs py-3'>
+                Show all categories
+              </Button>
+            </Link>
+          </div>
         </div>
 
         <div className='grid lg:grid-cols-2 lg:gap-y-0 gap-y-5 md:grid-col lg:mt-32 md:mt-30 mt-24 gap-x-10'>
@@ -104,25 +140,6 @@ const Home = () => {
           <div className='w-full bg-[#f7f4ef] h-[291px] flex flex-col items-center justify-center'>
             <Heading className='lg:text-4xl md:text-3xl text-2xl mb-7'>Buy better. Buy less. Wear more.</Heading>
             <p className='text-xs font-normal border-b py-1 border-black border-solid'>SHOP TRENDING COLLECTION</p>
-          </div>
-        </div>
-
-        <div className='w-full'>
-          <Heading className='text-3xl mt-20 pb-16'>Shop by categories</Heading>
-          <div className=''>
-            <img
-              className='w-[338px] h-[405px] mb-5'
-              src='https://wpbingosite.com/wordpress/bedesk/wp-content/uploads/2023/07/category-6.jpg'
-              alt=''
-            />
-            <span className='text-xl font-normal '>Clothing</span>
-          </div>
-          <div className='flex items-center justify-center mt-10'>
-            <Link className='inline-block' to={routes.Product.path}>
-              <Button kind='primary' className='px-10 m-auto font-normal text-xs py-3'>
-                Show all categories
-              </Button>
-            </Link>
           </div>
         </div>
 
