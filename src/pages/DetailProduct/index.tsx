@@ -8,96 +8,144 @@ import { GoClock } from 'react-icons/go'
 import { MdCompareArrows } from 'react-icons/md'
 import { CiShare2 } from 'react-icons/ci'
 import styles from './styles.module.scss'
-import Product1 from 'src/assets/images/product-1.jpg'
-import Product2 from 'src/assets/images/product-2.jpg'
-import Product3 from 'src/assets/images/product-3.jpg'
-import Product4 from 'src/assets/images/product-4.jpg'
 import CardImage from 'src/assets/images/payment-product.png'
 import Star from 'src/components/Star'
 import { twMerge } from 'tailwind-merge'
 import Card from 'src/components/Card/CardMain'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Title from 'src/components/Card/Title'
 import Price from 'src/components/Card/Price'
-import { formatMoney } from 'src/utils/formatMoney'
 import { listProducts } from 'src/constants/data.constants'
+import { useQuery } from 'react-query'
+import productsService from 'src/services/products.service'
+import { formatMoney } from 'src/utils/formatMoney'
+import DOMPurify from 'dompurify'
+import QuantitySelector from 'src/components/QuantitySelector'
+import usersService from 'src/services/users.service'
+import classNames from 'src/utils/classNames'
+import { useSnackbar } from 'notistack'
 
 const DetailProduct = () => {
   const [valueTab, setValueTab] = useState(1)
+  const { id } = useParams()
+  const [quantity, setQuantity] = useState(1)
+  const [selectedColor, setSelectedColor] = useState('')
+  const [selectedSize, setSelectedSize] = useState('')
+  const { enqueueSnackbar } = useSnackbar()
+
+  const { data: productDetail } = useQuery({
+    queryKey: ['product', id],
+    queryFn: () => productsService.getProduct(id as string)
+  })
+  const detail = productDetail?.data.findProduct || {}
+  const handleQuantityChange = (quantity: number) => {
+    setQuantity(quantity)
+  }
+  const handleAddToCart = async () => {
+    try {
+      const body = {
+        product_id: id,
+        quantity: quantity,
+        color_id: selectedColor,
+        size_id: selectedSize
+      }
+      await usersService.addToCart(body)
+      enqueueSnackbar('Đã thêm sản phẩm vào giỏ hàng', { variant: 'success' })
+    } catch (error) {
+      console.error(error)
+    }
+  }
   return (
     <div className='max-w-[1440px] mx-auto'>
-      <div className='text-[15px font-[400] py-[30px]'>
-        Home<span className={styles.delimiter}></span>Shop<span className={styles.delimiter}></span>Dresses
-        <span className={styles.delimiter}></span>Sheath <span className={styles.delimiter}></span>Laylin Floral Halter
-        Cutout Mini Dress
-      </div>
-
       <div className='grid grid-cols-5 gap-[115px]'>
         <div className='col-span-3 grid grid-cols-7  gap-[12px]'>
           <div className='col-span-1 flex flex-col gap-[13px]'>
-            <div className='w-full h-[147px]'>
-              <img src={Product1} alt='' className='w-full h-full object-cover' />
-            </div>
-            <div className='w-full h-[147px]'>
-              <img src={Product2} alt='' className='w-full h-full object-cover' />
-            </div>
-            <div className='w-full h-[147px]'>
-              <img src={Product3} alt='' className='w-full h-full object-cover' />
-            </div>
-            <div className='w-full h-[147px]'>
-              <img src={Product4} alt='' className='w-full h-full object-cover' />
-            </div>
+            {detail?.images?.length > 0 &&
+              detail?.images?.map((img: any) => {
+                return (
+                  <div className='w-full h-[147px]'>
+                    <img src={img?.url} alt='' className='w-full h-full object-cover' />
+                  </div>
+                )
+              })}
           </div>
           <div className='col-span-6'>
             <div className='w-full h-[1110px]'>
-              <img src={Product4} alt='' className='w-full h-full object-cover' />
+              <img src={detail?.thumbnail?.url} alt='' className='w-full h-full object-cover' />
             </div>
           </div>
         </div>
         <div className='col-span-2'>
           <div className='border-b-[1px] border-[#e5e5e5]'>
-            <p className='font-[400] text-[21px] mb-[12px]'>Laylin Floral Halter Cutout Mini Dress</p>
+            <p className='font-[400] text-[21px] mb-[12px]'>{detail?.title}</p>
             <div className='flex mb-[12px]'>
               <Star />
               <p className='pl-[10px]'>(1 customer review)</p>
             </div>
-            <p className='font-[500] text-[18px] mb-[20px]'>250.000$</p>
+            <p className='font-[500] text-[18px] mb-[20px]'>{formatMoney(detail?.price || 0)}</p>
           </div>
           <div className='mt-[20px]'>
             <div className='flex items-center mb-[10px]'>
               <IoEyeSharp className={styles.eyes} />
               <span className='text-[16px] font-[500] ml-[10px]'>37 people are viewing this right now</span>
             </div>
-            <p className='font-[400] text-[16px] text-[#4e4e4e] mb-[20px] leading-[27px]'>
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            </p>
+            <p className='font-[400] text-[16px] text-[#4e4e4e] mb-[20px] leading-[27px]'></p>
             <p className='text-[16px font-[400] mb-[15px]'>
-              Only <span className='text-[#ff0000] text-[16px font-[400]'>47 item(s)</span> left in stock!
+              Only <span className='text-[#ff0000] text-[16px font-[400]'>{detail.quantity} item(s)</span> left in
+              stock!
             </p>
             <div
               className='h-[3px]'
               style={{ backgroundImage: 'linear-gradient(to right,#FF0000 80%, #eee 20%)' }}
             ></div>
             <div className='grid grid-cols-12 gap-[10px] mt-[20px]'>
-              <div className='flex col-span-3'>
-                <p className='border border-[#000] w-[42px] h-[40px] text-center text-[20px] font-[400] flex items-center justify-center cursor-pointer'>
-                  <FiMinus />
-                </p>
-                <input
-                  type='text'
-                  defaultValue={1}
-                  className='border-t border-b border-[#000] w-[42px] h-[40px] text-center text-[18px] font-[400] leading-[31px]'
-                />
-                <p className='border border-[#000] w-[42px] h-[40px] text-center text-[20px] font-[400] flex items-center justify-center cursor-pointer'>
-                  <GoPlus />
-                </p>
-              </div>
+              <QuantitySelector onQuantityChange={handleQuantityChange}></QuantitySelector>
               <button
+                onClick={handleAddToCart}
                 className='w-full bg-[#000] text-[#fff] hover:bg-[#fff] hover:text-[#000] font-[400] text-[12px] col-span-9 h-[40px]'
                 style={{ border: '1px solid #000' }}
               >
                 ADD TO CARD
               </button>
+            </div>
+            <div>
+              <div className='mt-[20px]'>
+                <div className='mb-[20px]'>
+                  <p>Color:</p>
+                  <div className='flex'>
+                    {detail.colors?.map((color: any) => {
+                      return (
+                        <div
+                          key={color._id}
+                          onClick={() => setSelectedColor(color._id)}
+                          className={classNames(
+                            'p-[10px] m-[5px] border-2 select-none cursor-pointer',
+                            selectedColor === color._id ? 'ring-2 ring-offset-2 ring-blue-500' : ''
+                          )}
+                        >
+                          {color.name}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+                <div>
+                  <p>Sizes:</p>
+                  <div className='flex'>
+                    {detail.sizes?.map((size: any) => (
+                      <div
+                        key={size._id}
+                        onClick={() => setSelectedSize(size._id)}
+                        className={`m-[5px] border-2 px-3 py-2 cursor-pointer ${
+                          selectedSize === size._id ? 'ring-2 ring-offset-2 ring-blue-500' : ''
+                        }`}
+                      >
+                        {size.name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
             <button
               className='w-full bg-[#fff] text-[#000] hover:bg-[#000] hover:text-[#fff] font-[400] text-[12px] h-[40px] mt-[10px]'
@@ -128,7 +176,7 @@ const DetailProduct = () => {
             <div className='grid grid-cols-2 gap-[20px]'>
               <div className='bg-[#f6f6f6] p-[10px]'>
                 <BsBox2 className='w-[30px] h-auto mb-[10px]' />
-                <p className='leading-[27px]'>Free worldwide shipping on all orders over $100</p>
+                <p className='leading-[27px]'>Free worldwide shipping on all orders over</p>
               </div>
               <div className='bg-[#f6f6f6] p-[10px]'>
                 <GoClock className='w-[30px] h-auto mb-[10px]' />
@@ -174,43 +222,11 @@ const DetailProduct = () => {
       </div>
       <div className='py-[46px] border-b border-gray-200'>
         {valueTab == 1 ? (
-          <div className='grid grid-cols-4 gap-[100px]'>
-            <div className='col-span-2'>
-              <p className='font-[500] text-[16px] leading-[19px] mb-[20px]'>Details</p>
-              <p className='font-[400] text-[16px] leading-[27px] text-[#4e4e4e]'>
-                Style No. 68755644; Color Code: 038
-              </p>
-              <p className='font-[400] text-[16px] leading-[27px] text-[#4e4e4e] mb-[20px]'>
-                Turn heads in this stunning maxi dress featured in a forever classic halter-neck silhouette with
-                gorgeous embroidery throughout and smocking at waistline for added shape.
-              </p>
-              <ul className='font-[400] text-[16px] leading-[27px] text-[#4e4e4e] pl-[20px] list-disc'>
-                <li>Effortless, pull-on style</li>
-                <li>Tiered design</li>
-                <li>Deep V-neckline</li>
-              </ul>
-            </div>
-            <div className=''>
-              <p className='font-[500] text-[16px] leading-[19px] mb-[20px]'>Care/Import</p>
-              <ul className='font-[400] text-[16px] leading-[27px] text-[#4e4e4e] pl-[20px] list-disc'>
-                <li>Dolman style sleeves</li>
-                <li>Side pockets</li>
-                <li>Deep V-neckline</li>
-                <li>Discreet bust clasp for modesty</li>
-                <li>Large decorative bow detail at front</li>
-                <li>Soft elastic waist</li>
-                <li>Side splits</li>
-              </ul>
-            </div>
-            <div className=''>
-              <p className='font-[500] text-[16px] leading-[19px] mb-[20px]'>Care/Import</p>
-              <ul className='font-[400] text-[16px] leading-[27px] text-[#4e4e4e] pl-[20px] list-disc'>
-                <li>Bump and breast feeding friendly</li>
-                <li>100% Crinkle Viscose</li>
-                <li>Cold Hand Wash</li>
-              </ul>
-            </div>
-          </div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(detail?.description)
+            }}
+          />
         ) : (
           <div>
             <p className='text-[25px] leading-[30px] mb-[31px]'>0 review for Laylin Floral Halter Cutout Mini Dress</p>

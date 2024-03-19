@@ -369,6 +369,13 @@
   resolved "https://registry.npmjs.org/@types/aos/-/aos-3.0.7.tgz"
   integrity sha512-sEhyFqvKauUJZDbvAB3Pggynrq6g+2PS4XB3tmUr+mDL1gfDJnwslUC4QQ7/l8UD+LWpr3RxZVR/rHoZrLqZVg==
 
+"@types/dompurify@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.npmjs.org/@types/dompurify/-/dompurify-3.0.5.tgz"
+  integrity sha512-1Wg0g3BtQF7sSb27fJQAKck1HECM6zV1EB66j8JH9i3LCjYabJa0FSdiSgsD5K/RbrsR0SiraKacLB+T8ZVYAg==
+  dependencies:
+    "@types/trusted-types" "*"
+
 "@types/estree@1.0.5":
   version "1.0.5"
   resolved "https://registry.npmjs.org/@types/estree/-/estree-1.0.5.tgz"
@@ -454,6 +461,11 @@
   version "7.5.6"
   resolved "https://registry.npmjs.org/@types/semver/-/semver-7.5.6.tgz"
   integrity sha512-dn1l8LaMea/IjDoHNd9J52uBbInB796CDffS6VdIxvqYCPSG0V0DzHp76GpaWnlhg88uYyPbXCDIowa86ybd5A==
+
+"@types/trusted-types@*":
+  version "2.0.7"
+  resolved "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.7.tgz"
+  integrity sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==
 
 "@typescript-eslint/eslint-plugin@^6.14.0":
   version "6.20.0"
@@ -988,10 +1000,10 @@ dom-helpers@^5.0.1:
     "@babel/runtime" "^7.8.7"
     csstype "^3.0.2"
 
-dompurify@^3.0.8:
-  version "3.0.8"
-  resolved "https://registry.npmjs.org/dompurify/-/dompurify-3.0.8.tgz"
-  integrity sha512-b7uwreMYL2eZhrSCRC4ahLTeZcPZxSmYfmcQGXGkXiZSNW1X85v+SDM5KsWcpivIiUBH47Ji7NtyUdpLeF5JZQ==
+dompurify@^3.0.10:
+  version "3.0.10"
+  resolved "https://registry.npmjs.org/dompurify/-/dompurify-3.0.10.tgz"
+  integrity sha512-WZDL8ZHTliEVP3Lk4phtvjg8SNQ3YMc5WVstxE8cszKZrFjzI4PF4ZTIk9VGAc9vZADO7uGO2V/ZiStcRSAT4Q==
 
 dotenv@^16.4.5:
   version "16.4.5"
