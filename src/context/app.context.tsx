@@ -27,7 +27,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
   const [user, setUser] = useState<TUser | null>(initialAppContext.user)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(initialAppContext.isOpenModal)
-  const accessToken = getAccessTokenFromLocalStorage()
+
   useEffect(() => {
     usersService
       .getCurrentUser()
@@ -39,7 +39,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated(false)
         setUser(null)
       })
-  }, [accessToken])
+  }, [])
 
   return (
     <AppContext.Provider

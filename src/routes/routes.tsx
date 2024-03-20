@@ -40,8 +40,7 @@ export const routes: IRoutes = {
   CartPayment: {
     path: '/cart-payment',
     element: CartPage,
-    layout: 'MainLayout',
-    protected: true
+    layout: 'MainLayout'
   },
   AboutUs: {
     path: '/about',
