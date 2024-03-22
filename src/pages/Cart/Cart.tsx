@@ -2,14 +2,34 @@ import Heading from 'src/components/Heading'
 import QuantitySelector from 'src/components/QuantitySelector'
 import { formatMoney } from 'src/utils/formatMoney'
 import { FiTrash } from 'react-icons/fi'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import usersService from 'src/services/users.service'
 import { useSnackbar } from 'notistack'
 import { useCartData } from 'src/hooks/useCartData'
+import { useContext, useEffect, useState } from 'react'
+import Modal from 'src/components/Modal'
+import Input from 'src/components/Input'
+import orderService from 'src/services/order.service'
+import Button from 'src/components/Button'
+import { useForm } from 'react-hook-form'
+import { AppContext } from 'src/context/app.context'
+import { TUser } from 'src/types/auth'
 const CartPage = () => {
+  const { user } = useContext(AppContext)
   const { data: listItemCart } = useCartData()
   const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
+  const [isOpen, setIsOpen] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm()
+
+  useEffect(() => {
+    reset(user as TUser)
+  }, [])
 
   const deleteCartMutation = useMutation({
     mutationFn: ({ product_id, color_id, size_id }: any) =>
@@ -36,7 +56,6 @@ const CartPage = () => {
       { product_id, color_id, size_id, quantity: newQuantity },
       {
         onSuccess: () => {
-          enqueueSnackbar('Cập nhật số lượng thành công', { variant: 'success' })
           queryClient.invalidateQueries('cart')
         },
         onError: () => {
@@ -45,7 +64,36 @@ const CartPage = () => {
       }
     )
   }
-
+  const totalAmount = listItemCart?.data.user?.cart?.reduce(
+    (total: number, item: { product: { price: number }; quantity: number }) => {
+      return total + item?.product?.price * item?.quantity
+    },
+    0
+  )
+  const handleOnClick = () => {
+    setIsOpen(true)
+  }
+  const createOrderMutation = useMutation({
+    mutationFn: (body) => orderService.create(body)
+  })
+  const handleCreateOrder = (body: any) => {
+    createOrderMutation.mutate(body, {
+      onSuccess: () => {
+        enqueueSnackbar('Cập nhật thông tin thành công', { variant: 'success' })
+        queryClient.invalidateQueries('cart')
+      }
+    })
+  }
+  const updateProfileMutation = useMutation({
+    mutationFn: (body: any) => usersService.edit({ _id: user?._id, ...body })
+  })
+  const hanldeUpdateInforUser = (values: any) => {
+    updateProfileMutation.mutate(values, {
+      onSuccess: () => {
+        enqueueSnackbar('Cập nhật thông tin thành công', { variant: 'success' })
+      }
+    })
+  }
   return (
     <div>
       <Heading className='text-4xl text-center py-10'>Cart</Heading>
@@ -53,7 +101,7 @@ const CartPage = () => {
         <table className='border border-gray-300 w-full mx-auto col-span-6'>
           <thead className='border border-gray-300 '>
             <tr>
-              <th className='p-3 w-[350px] font-semibold min-h-[58px] text-left'>Product</th>
+              <th className='p-3 w-[350px] font-semibold  text-left'>Product</th>
               <th className='w-[208px] border-l border-gray-300'>Quantity</th>
               <th className='w-[128px] border-l border-gray-300'>Subtotal</th>
               <th className='w-[80px] border-l border-gray-300'></th>
@@ -82,8 +130,8 @@ const CartPage = () => {
                       </div>
                     </div>
                   </td>
-                  <td className='flex items-center my-auto justify-center h-40'>
-                    <div>
+                  <td>
+                    <div className='flex items-center justify-center'>
                       <QuantitySelector
                         initialQuantity={item?.quantity}
                         onQuantityChange={(newQuantity) =>
@@ -106,7 +154,7 @@ const CartPage = () => {
                           })
                         }
                       >
-                        <FiTrash></FiTrash>
+                        <FiTrash size={20}></FiTrash>
                       </button>
                     </div>
                   </td>
@@ -116,8 +164,52 @@ const CartPage = () => {
           </tbody>
         </table>
         <div className='col-span-4'>
-          <div className='bg-[#f7f7f7] w-[460px] h-[476px]'></div>
+          <div className='bg-[#f7f7f7] w-[460px] h-[476px] p-10'>
+            <div className='w-full border-b border-black'>
+              <Heading className='text-left py-3 text-xl '>Cart totals</Heading>
+            </div>
+            <div>
+              <div className='flex justify-between mt-10'>
+                <span className='font-bold text-lg'>Total : </span>
+                <span className='font-semibold'>{formatMoney(totalAmount || 0)}</span>
+              </div>
+              <div className='flex items-center justify-between mt-10'>
+                <span className='text-lg'>Ordering information : </span>
+                <div className='border-b border-black'>
+                  <button onClick={handleOnClick}>Change</button>
+                </div>
+              </div>
+              <div className='mt-20 flex flex-col items-center'>
+                <form onSubmit={handleSubmit(handleCreateOrder)}>
+                  <select {...register('payment_method', { required: true })}>
+                    <option value='Thanh toán khi nhận hàng'>Thanh toán khi nhận hàng</option>
+                    <option value='Thanh toán bằng thẻ tín dụng'>Thanh toán bằng thẻ tín dụng</option>
+                  </select>
+                  {errors.payment_method && <span>This field is required</span>}
+                  <Button kind='secondary' className='px-5 py-3 text-xs' type='submit'>
+                    Payment confirmation
+                  </Button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
+        <Modal
+          overlayClassName='flex items-end justify-end '
+          className='w-[400px] h-screen p-4'
+          isOpenModal={isOpen}
+          setIsOpenModal={setIsOpen}
+        >
+          <Heading className='text-xl text-center py-10'>Information</Heading>
+          <form action='' onSubmit={handleSubmit(hanldeUpdateInforUser)}>
+            <Input register={register} type='text' placeholder='Full name *' name='full_name'></Input>
+            <Input register={register} type='number' placeholder='Phone *' name='phone'></Input>
+            <Input register={register} type='text' placeholder='Address *' name='address'></Input>
+            <Button type='submit' kind='secondary' className='w-full py-4 text-xs'>
+              Change infor
+            </Button>
+          </form>
+        </Modal>
       </div>
     </div>
   )

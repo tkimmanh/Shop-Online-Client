@@ -11,6 +11,8 @@ const CartPage = lazy(() => import('src/pages/Cart'))
 const ProductsAdmin = lazy(() => import('src/pages/Admin/Products/ProductsList'))
 const ProductAddNew = lazy(() => import('src/pages/Admin/Products/ProductsAddNew'))
 const VariantsManage = lazy(() => import('src/pages/Admin/Variants/VariantsManage'))
+const Profile = lazy(() => import('src/pages/Profile'))
+const ListOderAdmin = lazy(() => import('src/pages/Admin/Order/ListOrder'))
 interface IRoute {
   path: string
   element: React.LazyExoticComponent<() => JSX.Element>
@@ -47,10 +49,21 @@ export const routes: IRoutes = {
     element: About,
     layout: 'MainLayout'
   },
+  Profile: {
+    path: '/profile',
+    element: Profile,
+    layout: 'MainLayout'
+  },
   Dashboard: {
     path: '/admin',
     access: ['admin', 'staff'],
     element: Dashboard,
+    layout: 'DashboardLayout'
+  },
+  ListOrderAdmin: {
+    path: '/admin/order-list',
+    access: ['admin', 'staff'],
+    element: ListOderAdmin,
     layout: 'DashboardLayout'
   },
   ProductsAdmin: {
