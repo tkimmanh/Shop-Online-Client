@@ -4,6 +4,7 @@ import { formatMoney } from 'src/utils/formatMoney'
 
 const orderStatusOptions = [
   { label: 'Chờ xác nhận', value: 'Chờ xác nhận' },
+  { label: 'Đã xác nhận đơn hàng', value: 'Đã xác nhận đơn hàng' },
   { label: 'Đang giao', value: 'Đang giao' },
   { label: 'Giao hàng thành công', value: 'Giao hàng thành công' },
   { label: 'Đã hủy', value: 'Đã hủy' }
@@ -44,10 +45,16 @@ function ListOrder() {
                 Products
               </th>
               <th scope='col' className='px-6 py-3'>
+                Payment method
+              </th>
+              <th scope='col' className='px-6 py-3'>
                 Total Price
               </th>
               <th scope='col' className='px-6 py-3'>
-                Status
+                Status Payment
+              </th>
+              <th scope='col' className='px-6 py-3'>
+                Status Order
               </th>
               <th scope='col' className='px-6 py-3'>
                 Action
@@ -60,6 +67,7 @@ function ListOrder() {
                 <td className='px-6 py-4'>{order.user.full_name}</td>
                 <td className='px-6 py-4'>{order.user.address}</td>
                 <td className='px-6 py-4'>{order.user.phone}</td>
+
                 <td className='px-6 py-4'>
                   {order.products.map((product: any, productIndex: number) => (
                     <div key={productIndex}>
@@ -67,7 +75,11 @@ function ListOrder() {
                     </div>
                   ))}
                 </td>
-                <td className='px-6 py-4'>{formatMoney(order.total_price)}</td>
+                <td className='px-6 py-4'>{order.payment_method}</td>
+                <td className='px-6 py-4'>
+                  <span>{formatMoney(order.total_price)}</span>
+                </td>
+                <td className='px-6 py-4'>{order.status_payment}</td>
                 <td className='px-6 py-4'>
                   <select value={order.status} onChange={(e) => handleStatusChange(order._id, e.target.value)}>
                     {orderStatusOptions.map((option) => (

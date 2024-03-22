@@ -78,7 +78,10 @@ const CartPage = () => {
   })
   const handleCreateOrder = (body: any) => {
     createOrderMutation.mutate(body, {
-      onSuccess: () => {
+      onSuccess: (data: any) => {
+        if (data.data?.paymentUrl) {
+          window.location.href = data?.data.paymentUrl
+        }
         enqueueSnackbar('Cập nhật thông tin thành công', { variant: 'success' })
         queryClient.invalidateQueries('cart')
       }
@@ -179,7 +182,7 @@ const CartPage = () => {
                   <button onClick={handleOnClick}>Change</button>
                 </div>
               </div>
-              <div className='mt-20 flex flex-col items-center'>
+              <div className='mt-20 '>
                 <form onSubmit={handleSubmit(handleCreateOrder)}>
                   <select {...register('payment_method', { required: true })}>
                     <option value='Thanh toán khi nhận hàng'>Thanh toán khi nhận hàng</option>

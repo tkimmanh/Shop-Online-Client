@@ -81,7 +81,7 @@ const Home = () => {
           <div className='flex items-center justify-center gap-x-10 mt-4 '>
             {listCategory?.data.getallCategory.slice(0, 6).map((category: any) => {
               return (
-                <div className='bg-white hover:bg-black hover:text-white text-black  py-5 px-20 transition-colors cursor-pointer'>
+                <div key={category._id} className='bg-white hover:bg-black hover:text-white text-black  py-5 px-20 transition-colors cursor-pointer'>
                   <span className='uppercase text-base font-normal'>{category.title}</span>
                 </div>
               )
