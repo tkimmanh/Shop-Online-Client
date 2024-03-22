@@ -13,6 +13,7 @@ const ProductAddNew = lazy(() => import('src/pages/Admin/Products/ProductsAddNew
 const VariantsManage = lazy(() => import('src/pages/Admin/Variants/VariantsManage'))
 const Profile = lazy(() => import('src/pages/Profile'))
 const ListOderAdmin = lazy(() => import('src/pages/Admin/Order/ListOrder'))
+const PaymentSucess = lazy(() => import('src/pages/PaymentSuccess'))
 interface IRoute {
   path: string
   element: React.LazyExoticComponent<() => JSX.Element>
@@ -49,6 +50,11 @@ export const routes: IRoutes = {
     element: About,
     layout: 'MainLayout'
   },
+  PaymentSucess: {
+    path: '/payment-success',
+    element: PaymentSucess,
+    layout: 'MainLayout'
+  },
   Profile: {
     path: '/profile',
     element: Profile,
@@ -60,6 +66,7 @@ export const routes: IRoutes = {
     element: Dashboard,
     layout: 'DashboardLayout'
   },
+
   ListOrderAdmin: {
     path: '/admin/order-list',
     access: ['admin', 'staff'],

@@ -43,7 +43,6 @@ function createHttpInstance(): AxiosInstance {
         const data: any | undefined = error.response?.data
         const message = data.message || error?.message
         enqueueSnackbar(message, { variant: 'error' })
-        clearLocalStorage()
       }
       return Promise.reject(error)
     }
