@@ -67,8 +67,8 @@ const Header = () => {
           <button className='mx-2 relative'>
             <CiSearch size={26} />
           </button>
-          <Link to={routes.Login.path}>
-            <button className={classNames(user ? 'hidden' : 'mx-2 relative block')}>
+          <Link to={!user ? routes.Login.path : routes.Profile.path}>
+            <button className={'mx-2 relative block'}>
               <CiUser size={26} />
             </button>
           </Link>
@@ -79,7 +79,9 @@ const Header = () => {
           <Link to={routes.CartPayment.path}>
             <button className='mx-2 relative'>
               <IoBagOutline size={26} />
-              <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>5</span>
+              <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>
+                {user?.cart.length}
+              </span>
             </button>
           </Link>
         </div>

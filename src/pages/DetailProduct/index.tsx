@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { IoEyeSharp } from 'react-icons/io5'
 import { FiMinus } from 'react-icons/fi'
 import { GoPlus } from 'react-icons/go'
@@ -24,8 +24,10 @@ import QuantitySelector from 'src/components/QuantitySelector'
 import usersService from 'src/services/users.service'
 import classNames from 'src/utils/classNames'
 import { useSnackbar } from 'notistack'
+import { AppContext } from 'src/context/app.context'
 
 const DetailProduct = () => {
+  const { isAuthenticated } = useContext(AppContext)
   const [valueTab, setValueTab] = useState(1)
   const { id } = useParams()
   const [quantity, setQuantity] = useState(1)
@@ -102,7 +104,10 @@ const DetailProduct = () => {
               <QuantitySelector onQuantityChange={handleQuantityChange}></QuantitySelector>
               <button
                 onClick={handleAddToCart}
-                className='w-full bg-[#000] text-[#fff] hover:bg-[#fff] hover:text-[#000] font-[400] text-[12px] col-span-9 h-[40px]'
+                className={classNames(
+                  'w-full  text-[#fff] hover:bg-[#fff] hover:text-[#000] font-[400] text-[12px] col-span-9 h-[40px]',
+                  !isAuthenticated ? 'pointer-events-none bg-gray-600' : 'bg-[#000]'
+                )}
                 style={{ border: '1px solid #000' }}
               >
                 ADD TO CARD

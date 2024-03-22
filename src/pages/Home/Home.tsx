@@ -1,4 +1,3 @@
-import { listProducts } from 'src/constants/data.constants'
 import { formatMoney } from 'src/utils/formatMoney'
 import SliderComponent from 'src/components/Slider'
 import Card from 'src/components/Card/CardMain'

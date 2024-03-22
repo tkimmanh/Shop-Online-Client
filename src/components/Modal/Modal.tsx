@@ -1,16 +1,16 @@
-import { ReactNode, useContext } from 'react'
+import { ReactNode, useContext, useState } from 'react'
 import ReactModal from 'react-modal'
-import { AppContext } from 'src/context/app.context'
 import { twMerge } from 'tailwind-merge'
 
 type Props = {
   className?: string
   overlayClassName?: string
   children: ReactNode
+  isOpenModal: boolean
+  setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Modal = ({ children, className, overlayClassName }: Props) => {
-  const { isOpenModal, setIsOpenModal } = useContext(AppContext)
+const Modal = ({ children, className, overlayClassName, isOpenModal, setIsOpenModal }: Props) => {
   return (
     <>
       <ReactModal

@@ -2,6 +2,7 @@ import { clearLocalStorage, getAccessTokenFromLocalStorage, setAccessTokenToLoca
 import axios, { AxiosInstance, AxiosError, HttpStatusCode } from 'axios'
 import { routes } from 'src/routes/routes'
 import { AuthResponse } from 'src/types/auth'
+import { enqueueSnackbar } from 'notistack'
 
 const BASE_URL = 'http://localhost:8001/'
 
@@ -41,7 +42,8 @@ function createHttpInstance(): AxiosInstance {
       if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
         const data: any | undefined = error.response?.data
         const message = data.message || error?.message
-        alert(message)
+        enqueueSnackbar(message, { variant: 'error' })
+        clearLocalStorage()
       }
       return Promise.reject(error)
     }

@@ -9,6 +9,9 @@ const usersService = {
   getCurrentUser() {
     return http.get(GET_CURRENT_USER)
   },
+  edit(body: any) {
+    return http.put(`${GET_CURRENT_USER}/edit`, body)
+  },
   addToCart(body: any) {
     return http.post(ADD_TO_CART, body)
   },
