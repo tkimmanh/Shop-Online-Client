@@ -1,14 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { orderStatusOptions } from 'src/constants/order.constatns'
 import orderService from 'src/services/order.service'
 import { formatMoney } from 'src/utils/formatMoney'
 
-const orderStatusOptions = [
-  { label: 'Chờ xác nhận', value: 'Chờ xác nhận' },
-  { label: 'Đã xác nhận đơn hàng', value: 'Đã xác nhận đơn hàng' },
-  { label: 'Đang giao', value: 'Đang giao' },
-  { label: 'Giao hàng thành công', value: 'Giao hàng thành công' },
-  { label: 'Đã hủy', value: 'Đã hủy' }
-]
 function ListOrder() {
   const { data } = useQuery({
     queryKey: ['ORDER'],
@@ -32,7 +26,7 @@ function ListOrder() {
         <table className='w-full text-sm text-left rtl:text-right text-gray-500'>
           <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
             <tr>
-              <th scope='col' className='px-6 py-3'>
+              <th scope='col' className='px-6 py-3 w-1/2'>
                 Full name
               </th>
               <th scope='col' className='px-6 py-3'>
@@ -41,22 +35,22 @@ function ListOrder() {
               <th scope='col' className='px-6 py-3'>
                 Phone
               </th>
-              <th scope='col' className='px-6 py-3'>
+              <th scope='col' className='px-6 py-3 w-1/2'>
                 Products
               </th>
-              <th scope='col' className='px-6 py-3'>
+              <th scope='col' className='px-6 py-3 '>
                 Payment method
               </th>
               <th scope='col' className='px-6 py-3'>
                 Total Price
               </th>
-              <th scope='col' className='px-6 py-3'>
+              <th scope='col' className='px-6 py-3 '>
                 Status Payment
               </th>
-              <th scope='col' className='px-6 py-3'>
+              <th scope='col' className='px-6 py-3 w-20'>
                 Status Order
               </th>
-              <th scope='col' className='px-6 py-3'>
+              <th scope='col' className='px-6 py-3 w-20'>
                 Action
               </th>
             </tr>
@@ -68,7 +62,8 @@ function ListOrder() {
                 <td className='px-6 py-4'>{order.user.address}</td>
                 <td className='px-6 py-4'>{order.user.phone}</td>
 
-                <td className='px-6 py-4'>
+                <td className='px-6 py-4 w-1/3'>
+                  {' '}
                   {order.products.map((product: any, productIndex: number) => (
                     <div key={productIndex}>
                       {product.product.title} - {product.color.name} - {product.size.name} x {product.quantity}
@@ -80,7 +75,7 @@ function ListOrder() {
                   <span>{formatMoney(order.total_price)}</span>
                 </td>
                 <td className='px-6 py-4'>{order.status_payment}</td>
-                <td className='px-6 py-4'>
+                <td className='px-6 py-4 w-20'>
                   <select value={order.status} onChange={(e) => handleStatusChange(order._id, e.target.value)}>
                     {orderStatusOptions.map((option) => (
                       <option key={option.value} value={option.value}>

@@ -76,17 +76,7 @@ const CartPage = () => {
   const createOrderMutation = useMutation({
     mutationFn: (body) => orderService.create(body)
   })
-  const handleCreateOrder = (body: any) => {
-    createOrderMutation.mutate(body, {
-      onSuccess: (data: any) => {
-        if (data.data?.paymentUrl) {
-          window.location.href = data?.data.paymentUrl
-        }
-        enqueueSnackbar('Cập nhật thông tin thành công', { variant: 'success' })
-        queryClient.invalidateQueries('cart')
-      }
-    })
-  }
+
   const updateProfileMutation = useMutation({
     mutationFn: (body: any) => usersService.edit({ _id: user?._id, ...body })
   })
@@ -94,6 +84,17 @@ const CartPage = () => {
     updateProfileMutation.mutate(values, {
       onSuccess: () => {
         enqueueSnackbar('Cập nhật thông tin thành công', { variant: 'success' })
+      }
+    })
+  }
+  const handleCreateOrder = (body: any) => {
+    createOrderMutation.mutate(body, {
+      onSuccess: (data: any) => {
+        if (data.data?.paymentUrl) {
+          window.location.href = data?.data.paymentUrl
+        }
+        enqueueSnackbar('Đặt hàng thành công', { variant: 'success' })
+        queryClient.invalidateQueries('cart')
       }
     })
   }

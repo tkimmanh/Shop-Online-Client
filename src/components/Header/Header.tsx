@@ -2,17 +2,19 @@ import { CiSearch, CiHeart, CiUser } from 'react-icons/ci'
 import { useState, useEffect, useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
 import { IoBagOutline } from 'react-icons/io5'
-import { useLocation } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import classNames from 'src/utils/classNames'
 import { routes } from 'src/routes/routes'
 import { Link } from 'react-router-dom'
 import { FiMenu } from 'react-icons/fi'
 import { links } from 'src/constants'
 import Logo from '../Logo'
+import Popover from '../Popover'
+import { clearLocalStorage } from 'src/utils/localStorage'
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
-  const { user } = useContext(AppContext)
+  const { user, isAuthenticated, setIsAuthenticated } = useContext(AppContext)
   const location = useLocation()
   useEffect(() => {
     const handleScroll = () => {
@@ -29,7 +31,10 @@ const Header = () => {
 
     return () => window.removeEventListener('scroll', handleScroll)
   }, [location.pathname])
-
+  const handleLogout = () => {
+    clearLocalStorage()
+    setIsAuthenticated(false)
+  }
   const headerClassDefaults = location.pathname === '/' ? 'fixed' : 'relative'
   const headerClass = location.pathname === '/' && isScrolled ? 'bg-black shadow-md fixed' : ' bg-transparent '
   const textColorClass = location.pathname === '/' ? 'text-white' : 'text-black'
@@ -55,6 +60,7 @@ const Header = () => {
             </Link>
           ))}
         </div>
+
         <div className='flex-1 lg:hidden'>
           <button>
             <FiMenu size={26} />
@@ -67,24 +73,56 @@ const Header = () => {
           <button className='mx-2 relative'>
             <CiSearch size={26} />
           </button>
-          <Link to={!user ? routes.Login.path : routes.Profile.path}>
-            <button className={'mx-2 relative block'}>
-              <CiUser size={26} />
-            </button>
-          </Link>
-          <button className='mx-2 relative'>
-            <CiHeart size={26} />
-            <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>3</span>
-          </button>
-          <Link to={routes.CartPayment.path}>
-            <button className='mx-2 relative'>
-              <IoBagOutline size={26} />
-              <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>
-                {user?.cart.length}
-              </span>
-            </button>
-          </Link>
+          <Popover
+            renderPopover={
+              <div className='flex flex-col '>
+                {isAuthenticated ? (
+                  <>
+                    <Link className='mt-3 px-10 py-3 inline-block cursor-pointer' to={routes.Profile.path}>
+                      My Account
+                    </Link>
+                    <Link className='px-10 py-3' to={routes.Profile.path}>
+                      Wish List
+                    </Link>
+                    <Link className='px-10 py-3' to={routes.ListOrder.path}>
+                      My Order
+                    </Link>
+                    {user?.role === 'admin' && (
+                      <Link className='px-10 py-3' to={routes.Dashboard.path}>
+                        Dashboard
+                      </Link>
+                    )}
+                    <button onClick={handleLogout} className='px-8 py-3 mb-3'>
+                      Log Out
+                    </button>
+                  </>
+                ) : (
+                  <Link className='px-10 py-3' to={routes.Login.path}>
+                    Login
+                  </Link>
+                )}
+              </div>
+            }
+          >
+            <>
+              <button className={'mx-2 relative block'}>
+                <CiUser size={26} />
+              </button>
+            </>
+          </Popover>
         </div>
+        <button className='mx-2 relative'>
+          <CiHeart size={26} />
+          <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>3</span>
+        </button>
+        <Link to={routes.CartPayment.path}>
+          <button className='mx-2 relative'>
+            <IoBagOutline size={26} />
+            <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>
+              {user?.cart.length}
+            </span>
+          </button>
+        </Link>
       </div>
     </div>
   )

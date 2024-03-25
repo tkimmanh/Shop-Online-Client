@@ -14,6 +14,7 @@ const VariantsManage = lazy(() => import('src/pages/Admin/Variants/VariantsManag
 const Profile = lazy(() => import('src/pages/Profile'))
 const ListOderAdmin = lazy(() => import('src/pages/Admin/Order/ListOrder'))
 const PaymentSucess = lazy(() => import('src/pages/PaymentSuccess'))
+const ListOrder = lazy(() => import('src/pages/Order'))
 interface IRoute {
   path: string
   element: React.LazyExoticComponent<() => JSX.Element>
@@ -58,6 +59,11 @@ export const routes: IRoutes = {
   Profile: {
     path: '/profile',
     element: Profile,
+    layout: 'MainLayout'
+  },
+  ListOrder: {
+    path: '/list-order',
+    element: ListOrder,
     layout: 'MainLayout'
   },
   Dashboard: {
