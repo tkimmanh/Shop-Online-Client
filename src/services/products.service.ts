@@ -6,6 +6,9 @@ const productsService = {
   createProduct(body: any) {
     return http.post(BASE_URL, body)
   },
+  deleteProduct(id: string | number) {
+    return http.delete(BASE_URL + `/${id}`)
+  },
   getAllProducts() {
     return http.get(BASE_URL)
   },

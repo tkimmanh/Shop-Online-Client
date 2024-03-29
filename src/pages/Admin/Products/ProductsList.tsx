@@ -1,9 +1,30 @@
+import { useSnackbar } from 'notistack'
+import { useMutation } from 'react-query'
 import { Link } from 'react-router-dom'
 import Button from 'src/components/Button'
 import Heading from 'src/components/Heading'
 import { routes } from 'src/routes/routes'
+import productsService from 'src/services/products.service'
 
 const ProductsList = () => {
+  const { enqueueSnackbar } = useSnackbar()
+
+  const deleteProductMutations = useMutation({
+    mutationFn: (body: any) => productsService.deleteProduct(body),
+    onSuccess: () => {
+      enqueueSnackbar('Xoá thành công', { variant: 'success' })
+    },
+    mutationKey: 'list-products'
+  })
+
+  const handleDelete = async (id: string | number) => {
+    try {
+      if (confirm('Are you sure you want to delete?')) {
+        await deleteProductMutations.mutateAsync(id)
+      }
+    } catch (error) {}
+  }
+
   return (
     <div>
       <div className='flex items-center justify-between gap-x-5 mb-5'>
@@ -47,6 +68,12 @@ const ProductsList = () => {
                 <a href='#' className='font-medium text-blue-600 hover:underline'>
                   Edit
                 </a>
+                <span
+                  className='font-medium text-red-600 ml-[10px] hover:underline cursor-pointer'
+                  onClick={() => handleDelete(111111)}
+                >
+                  Delete
+                </span>
               </td>
             </tr>
             <tr className='bg-white border-b'>
@@ -60,6 +87,12 @@ const ProductsList = () => {
                 <a href='#' className='font-medium text-blue-600 hover:underline'>
                   Edit
                 </a>
+                <span
+                  className='font-medium text-red-600 ml-[10px] hover:underline cursor-pointer'
+                  onClick={() => handleDelete(111111)}
+                >
+                  Delete
+                </span>
               </td>
             </tr>
             <tr className='bg-white'>
@@ -73,6 +106,12 @@ const ProductsList = () => {
                 <a href='#' className='font-medium text-blue-600 hover:underline'>
                   Edit
                 </a>
+                <span
+                  className='font-medium text-red-600 ml-[10px] hover:underline cursor-pointer'
+                  onClick={() => handleDelete(111111)}
+                >
+                  Delete
+                </span>
               </td>
             </tr>
           </tbody>
