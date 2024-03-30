@@ -5,7 +5,12 @@ import dayjs from 'dayjs'
 import { formatMoney } from 'src/utils/formatMoney'
 import { enqueueSnackbar } from 'notistack'
 import { messageOrder } from 'src/constants/order.constatns'
+import ModalInformation from '../Admin/Order/components/ModalInformation'
+import { useMemo, useState } from 'react'
 const ListOrder = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [idDetail, setIdDetail] = useState('')
+
   const queryClient = useQueryClient()
   const { data: myOrders } = useQuery({
     queryKey: ['ORDER'],
@@ -35,9 +40,13 @@ const ListOrder = () => {
     updateOrderStatusMutation.mutate({ id, status: newStatus })
   }
 
+  const detail = useMemo(() => {
+    return myOrders?.data?.orders.find((_item: any) => _item?._id === idDetail)
+  }, [idDetail, myOrders])
+
   return (
     <div className='w-full '>
-      <table className='border border-gray-300 w-full mx-auto max-w-[1000px]'>
+      <table className='border border-gray-300 w-full mx-auto max-w-[1400px]'>
         <thead>
           <tr>
             <th className='py-5 border-l'>Order ID</th>
@@ -60,16 +69,16 @@ const ListOrder = () => {
                 <td className='py-5 border-l text-left pl-3'>
                   {order.products.map((product: any) => (
                     <div key={product._id} className='my-2'>
-                      <div>
+                      <div className='py-[2px]'>
                         <strong>Title:</strong> {product.product.title}
                       </div>
-                      <div>
+                      <div className='py-[2px]'>
                         <strong>Size:</strong> {product.size.name}
                       </div>
-                      <div>
+                      <div className='py-[2px]'>
                         <strong>Color:</strong> {product.color.name}
                       </div>
-                      <div>
+                      <div className='py-[2px]'>
                         <strong>Quantity:</strong> {product.quantity}
                       </div>
                     </div>
@@ -78,28 +87,51 @@ const ListOrder = () => {
                 <td className='py-5 border-l text-center px-2 text-sm'>{order.status}</td>
                 <td className='py-5 border-l text-center px-2 text-sm'>{order.status_payment}</td>
                 <td className='py-5 border-l text-left pl-3'>{formatMoney(order.total_price)}</td>
-                <td className='py-5 border-l text-center px-3 flex flex-col gap-5'>
-                  <button onClick={() => handleDeleteOrder(order._id)}>Delete</button>
-                  <td>
+                <td className='py-5 border-l text-center px-3'>
+                  <p>
+                    <button
+                      className='py-[5px] bg-[#000] w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid border-[#000] hover:bg-[#fff] hover:text-[#000]'
+                      onClick={() => {
+                        setIsOpen(true)
+                        setIdDetail(order?._id)
+                      }}
+                    >
+                      View
+                    </button>
+                  </p>
+                  <p>
+                    <button
+                      className='py-[5px] bg-[#d90000] w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid border-[#d90000] hover:bg-[#fff] hover:text-[#d90000]'
+                      onClick={() => handleDeleteOrder(order._id)}
+                    >
+                      Delete
+                    </button>
+                  </p>
+                  <p>
                     {order.status === messageOrder.USER_CANCEL_ORDER ? (
-                      <button onClick={() => handleUpdateOrderStatus(order._id, messageOrder.ORDER_WAIT_CONFIRM)}>
+                      <button
+                        className='py-[5px] bg-[#000] w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid border-[#000] hover:bg-[#fff] hover:text-[#000]'
+                        onClick={() => handleUpdateOrderStatus(order._id, messageOrder.ORDER_WAIT_CONFIRM)}
+                      >
                         Re-order
                       </button>
                     ) : (
                       <button
+                        className='py-[5px] bg-[#d90000] w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid border-[#d90000] hover:bg-[#fff] hover:text-[#d90000]'
                         disabled={order.status === messageOrder.ORDER_PEDDING}
                         onClick={() => handleUpdateOrderStatus(order._id, messageOrder.USER_CANCEL_ORDER)}
                       >
                         Cancel Order
                       </button>
                     )}
-                  </td>
+                  </p>
                 </td>
               </tr>
             )
           })}
         </tbody>
       </table>
+      {isOpen && <ModalInformation isOpen={isOpen} setIsOpen={setIsOpen} detail={detail} />}
     </div>
   )
 }

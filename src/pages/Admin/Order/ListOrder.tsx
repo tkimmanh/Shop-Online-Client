@@ -1,9 +1,17 @@
+import { useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+import Modal from 'src/components/Modal'
 import { orderStatusOptions } from 'src/constants/order.constatns'
 import orderService from 'src/services/order.service'
 import { formatMoney } from 'src/utils/formatMoney'
+import moment from 'moment'
+import './styles.css'
+import ModalInformation from './components/ModalInformation'
 
 function ListOrder() {
+  const [isOpen, setIsOpen] = useState(false)
+  const [idDetail, setIdDetail] = useState('')
+
   const { data } = useQuery({
     queryKey: ['ORDER'],
     queryFn: () => {
@@ -20,6 +28,11 @@ function ListOrder() {
   const handleStatusChange = (orderId: any, newStatus: any) => {
     updateOrderStatusMutation.mutate({ id: orderId, status: newStatus })
   }
+
+  const detail = useMemo(() => {
+    return data?.data?.orders.find((_item: any) => _item?._id === idDetail)
+  }, [idDetail, data])
+
   return (
     <div>
       <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
@@ -85,13 +98,22 @@ function ListOrder() {
                   </select>
                 </td>
                 <td className='px-6 py-4'>
-                  <button className='font-medium text-blue-600 hover:underline'>Edit</button>
+                  <button
+                    onClick={() => {
+                      setIsOpen(true)
+                      setIdDetail(order?._id)
+                    }}
+                    className='font-medium text-blue-600 hover:underline'
+                  >
+                    View
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {isOpen && <ModalInformation isOpen={isOpen} setIsOpen={setIsOpen} detail={detail} />}
     </div>
   )
 }
