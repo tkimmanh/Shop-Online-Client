@@ -11,20 +11,24 @@ const orderService = {
   create(body: any) {
     return http.post(BASE_URL, body)
   },
-  listAdmin() {
-    return http.get(LIST_ORDER)
+  listAdmin(params: any) {
+    return http.get(LIST_ORDER, { params })
   },
   updateStatus(body: any) {
     return http.patch(`${BASE_URL}/${body.id}/update-status-order`, body)
   },
+
   paymentSuccess(orderId: string) {
     return http.get(`/order/payment-success?vnp_TxnRef=${orderId}`)
   },
   myOrder() {
     return http.get(MY_ORDER)
   },
-  updateOrder(id: string, body: any) {
-    return http.patch(`${BASE_URL}/${id}/update`, body)
+  myOrderDetail(id: string) {
+    return http.get(`${BASE_URL}/${id}/detail`)
+  },
+  updateOrder(body: any) {
+    return http.patch(`${BASE_URL}/${body.id}/update`, body)
   },
   deleteOrder(id: string) {
     return http.delete(`${BASE_URL}/${id}/delete`)

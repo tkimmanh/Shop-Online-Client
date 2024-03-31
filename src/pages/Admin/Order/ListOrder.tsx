@@ -1,23 +1,22 @@
 import { useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import Modal from 'src/components/Modal'
+import { debounce } from 'lodash'
 import { orderStatusOptions } from 'src/constants/order.constatns'
 import orderService from 'src/services/order.service'
 import { formatMoney } from 'src/utils/formatMoney'
-import moment from 'moment'
 import './styles.css'
 import ModalInformation from './components/ModalInformation'
 
 function ListOrder() {
   const [isOpen, setIsOpen] = useState(false)
   const [idDetail, setIdDetail] = useState('')
+  const [sort, setSort] = useState('')
+  const [search, setSearch] = useState('')
 
-  const { data } = useQuery({
-    queryKey: ['ORDER'],
-    queryFn: () => {
-      return orderService.listAdmin()
-    }
+  const { data } = useQuery(['ORDER', { sort, search }], () => {
+    return orderService.listAdmin({ sort, search })
   })
+
   const queryClient = useQueryClient()
   const updateOrderStatusMutation = useMutation(orderService.updateStatus, {
     onSuccess: () => {
@@ -35,20 +34,32 @@ function ListOrder() {
 
   return (
     <div>
+      <div>
+        <select value={sort} onChange={(e) => setSort(e.target.value)}>
+          <option value='newest'>Latest</option>
+          <option value='oldest'>Oldest</option>
+        </select>
+        <input
+          type='text'
+          placeholder='Tìm kiếm theo tên...'
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
       <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
         <table className='w-full text-sm text-left rtl:text-right text-gray-500'>
           <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
             <tr>
-              <th scope='col' className='px-6 py-3 w-1/2'>
+              <th scope='col' className='px-6 py-3'>
                 Full name
               </th>
-              <th scope='col' className='px-6 py-3'>
+              <th scope='col' className='px-6 py-3 w-1/2'>
                 Address
               </th>
               <th scope='col' className='px-6 py-3'>
                 Phone
               </th>
-              <th scope='col' className='px-6 py-3 w-1/2'>
+              <th scope='col' className='px-6 py-3 w-2/3'>
                 Products
               </th>
               <th scope='col' className='px-6 py-3 '>
@@ -57,13 +68,8 @@ function ListOrder() {
               <th scope='col' className='px-6 py-3'>
                 Total Price
               </th>
-              <th scope='col' className='px-6 py-3 '>
-                Status Payment
-              </th>
-              <th scope='col' className='px-6 py-3 w-20'>
-                Status Order
-              </th>
-              <th scope='col' className='px-6 py-3 w-20'>
+
+              <th scope='col' className='px-6 py-3'>
                 Action
               </th>
             </tr>
@@ -83,11 +89,12 @@ function ListOrder() {
                     </div>
                   ))}
                 </td>
-                <td className='px-6 py-4'>{order.payment_method}</td>
+                <td className='px-6 py-4'>
+                  <span>{order.payment_method}</span>
+                </td>
                 <td className='px-6 py-4'>
                   <span>{formatMoney(order.total_price)}</span>
                 </td>
-                <td className='px-6 py-4'>{order.status_payment}</td>
                 <td className='px-6 py-4 w-20'>
                   <select value={order.status} onChange={(e) => handleStatusChange(order._id, e.target.value)}>
                     {orderStatusOptions.map((option) => (

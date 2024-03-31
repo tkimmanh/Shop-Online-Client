@@ -27,17 +27,19 @@ const ListOrder = () => {
       }
     })
   }
-  const updateOrderStatusMutation = useMutation(orderService.updateStatus, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('ORDER')
-      enqueueSnackbar('Cập nhật trạng thái đơn hàng thành công', { variant: 'success' })
-    },
-    onError: () => {
-      enqueueSnackbar('Có lỗi xảy ra', { variant: 'error' })
-    }
+  const updateOrderStatusMutation = useMutation({
+    mutationFn: (body: any) => orderService.updateOrder(body)
   })
   const handleUpdateOrderStatus = (id: string, newStatus: string) => {
-    updateOrderStatusMutation.mutate({ id, status: newStatus })
+    updateOrderStatusMutation.mutate(
+      { id, status: newStatus },
+      {
+        onSuccess: () => {
+          enqueueSnackbar('Cập nhật thành công', { variant: 'success' })
+          queryClient.invalidateQueries('ORDER')
+        }
+      }
+    )
   }
 
   const detail = useMemo(() => {
