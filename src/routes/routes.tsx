@@ -91,6 +91,12 @@ export const routes: IRoutes = {
     element: ProductAddNew,
     layout: 'DashboardLayout'
   },
+  ProductView: {
+    path: '/admin/products/:id',
+    access: ['admin', 'staff'],
+    element: ProductAddNew,
+    layout: 'DashboardLayout'
+  },
   VariantsManage: {
     path: '/admin/variants-manage',
     access: ['admin', 'staff'],

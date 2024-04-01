@@ -9,6 +9,9 @@ const productsService = {
   deleteProduct(id: string | number) {
     return http.delete(BASE_URL + `/${id}`)
   },
+  editProduct(body: any, id?: string) {
+    return http.put(BASE_URL + `/${id}`, body)
+  },
   getAllProducts() {
     return http.get(BASE_URL)
   },

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation, useQuery } from 'react-query'
 import ReactQuill from 'react-quill'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import ReactSelect from 'react-select'
 import Button from 'src/components/Button'
 import Heading from 'src/components/Heading'
@@ -22,6 +22,7 @@ const ProductsAddNew = () => {
   const [value, setValue] = useState('')
   const [thumbnail, setThumbnail] = useState<FileWithPreview[]>([])
   const [images, setImages] = useState<FileWithPreview[]>([])
+  const { id } = useParams()
 
   const { data: colors } = useQuery({
     queryKey: ['COLORS'],
@@ -62,7 +63,7 @@ const ProductsAddNew = () => {
 
   const [selectedSizes, setSelectedSizeOptions] = useState([])
 
-  const [selectdCategory, setSelectedCategoryOptions] = useState([])
+  const [selectdCategory, setSelectedCategoryOptions] = useState<any>([])
 
   const removeThumbnail = () => {
     setThumbnail([])
@@ -71,11 +72,57 @@ const ProductsAddNew = () => {
     setImages(images.filter((_, i) => i !== index))
   }
 
-  const {
-    register,
-    reset,
-    handleSubmit  } = useForm()
+  const { register, reset, handleSubmit } = useForm()
   const { enqueueSnackbar } = useSnackbar()
+
+  const { data: detailProduct } = useQuery({
+    queryKey: ['product', id],
+    queryFn: () => productsService.getProduct(id as string),
+    enabled: !!id,
+    onSuccess(data) {
+      const item = data?.data?.findProduct
+      reset({
+        ...item
+      })
+      setSelectedColorOptions(
+        item?.colors?.map((_item: any) => {
+          return { value: _item?._id, label: _item?.name }
+        })
+      )
+      setSelectedSizeOptions(
+        item?.sizes?.map((_item: any) => {
+          return { value: _item?._id, label: _item?.name }
+        })
+      )
+      setSelectedCategoryOptions({
+        value: item?.category?._id,
+        label: item?.category?.title
+      })
+      setValue(item?.description)
+      setThumbnail([
+        {
+          name: item?.thumbnail?.public_id,
+          preview: item?.thumbnail?.url
+        } as any
+      ])
+
+      setImages(
+        item?.images?.map((_item: any) => {
+          return {
+            name: _item?._id,
+            preview: _item?.url
+          } as any
+        })
+      )
+    }
+  })
+
+  const editProductMutations = useMutation({
+    mutationFn: (body: any) => productsService.editProduct(body, id),
+    onSuccess: () => {
+      enqueueSnackbar('Cập nhật mới thành công', { variant: 'success' })
+    }
+  })
 
   const addNewProductMutations = useMutation({
     mutationFn: (body: any) => productsService.createProduct(body),
@@ -127,8 +174,8 @@ const ProductsAddNew = () => {
 
   const onSubmit = async (data: any) => {
     const formData = new FormData()
-    const colorValues = selectedColors?.map((color) => color?.value).join(',')
-    const sizeValues = selectedSizes?.map((size) => size?.value).join(',')
+    const colorValues = selectedColors?.map((color: any) => color?.value).join(',')
+    const sizeValues = selectedSizes?.map((size: any) => size?.value).join(',')
     formData.append('title', data.title)
     formData.append('price', data.price)
     formData.append('quantity', data.quantity)
@@ -145,7 +192,7 @@ const ProductsAddNew = () => {
     formData.append('sizes', sizeValues)
     formData.append('status', data.status)
     try {
-      await addNewProductMutations.mutateAsync(formData)
+      id ? await editProductMutations.mutateAsync(formData) : await addNewProductMutations.mutateAsync(formData)
     } catch (error) {
       console.log('error:', error)
     }
@@ -177,6 +224,10 @@ const ProductsAddNew = () => {
           <ReactSelect
             options={colorOptions}
             isMulti
+            key={JSON.stringify(detailProduct)}
+            defaultValue={detailProduct?.data?.findProduct?.colors?.map((_item: any) => {
+              return { value: _item?._id, label: _item?.name }
+            })}
             closeMenuOnSelect={false}
             onChange={setSelectedColorOptions as any}
             placeholder='Select colors'
@@ -185,6 +236,10 @@ const ProductsAddNew = () => {
           <ReactSelect
             options={sizeOptions}
             isMulti
+            key={JSON.stringify(detailProduct)}
+            defaultValue={detailProduct?.data?.findProduct?.sizes?.map((_item: any) => {
+              return { value: _item?._id, label: _item?.name }
+            })}
             closeMenuOnSelect={false}
             onChange={setSelectedSizeOptions as any}
             placeholder='Select sizes'
@@ -198,6 +253,11 @@ const ProductsAddNew = () => {
           <ReactSelect
             defaultInputValue=''
             options={categoryOptions}
+            key={JSON.stringify(detailProduct)}
+            defaultValue={{
+              value: detailProduct?.data?.findProduct?.category?._id,
+              label: detailProduct?.data?.findProduct?.category?.title
+            }}
             closeMenuOnSelect={false}
             onChange={setSelectedCategoryOptions as any}
             placeholder='Select category'
@@ -274,7 +334,7 @@ const ProductsAddNew = () => {
           className='px-10 py-3 text-sm rounded mt-5'
           kind='secondary'
         >
-          Add new
+          {id ? 'Save' : 'Add new'}
         </Button>
       </form>
     </div>
