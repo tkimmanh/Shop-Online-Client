@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import Heading from 'src/components/Heading'
@@ -9,12 +9,18 @@ import productsService from 'src/services/products.service'
 const ProductsList = () => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
-
+  const queryClient = useQueryClient()
+  const { data: listProducts } = useQuery({
+    queryKey: 'list-products',
+    queryFn: () => {
+      return productsService.getAllProducts()
+    }
+  })
   const deleteProductMutations = useMutation({
     mutationFn: (body: any) => productsService.deleteProduct(body),
     onSuccess: () => {
       enqueueSnackbar('Xoá thành công', { variant: 'success' })
-      window.location.reload()
+      queryClient.invalidateQueries('list-products')
     },
     mutationKey: 'list-products'
   })
@@ -26,13 +32,6 @@ const ProductsList = () => {
       }
     } catch (error) {}
   }
-
-  const { data: listProducts } = useQuery({
-    queryKey: 'list-products',
-    queryFn: () => {
-      return productsService.getAllProducts()
-    }
-  })
 
   return (
     <div>
