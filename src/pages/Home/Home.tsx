@@ -6,13 +6,16 @@ import Title from 'src/components/Card/Title'
 import Heading from 'src/components/Heading'
 import Button from 'src/components/Button'
 import { routes } from 'src/routes/routes'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import Slider from 'react-slick'
 import productsService from 'src/services/products.service'
 import { useQuery } from 'react-query'
 import categoryService from 'src/services/category.service'
+import { useEffect } from 'react'
+import { setAccessTokenToLocalStorage, setIsAuthenticated } from 'src/utils/localStorage'
 
 const Home = () => {
+  const [params] = useSearchParams()
   const settings = {
     infinite: true,
     speed: 500,
@@ -47,6 +50,14 @@ const Home = () => {
       return categoryService.getAllCategory()
     }
   })
+  useEffect(() => {
+    const access_token = params.get('access_token')
+    if (access_token) {
+      setAccessTokenToLocalStorage(access_token)
+      setIsAuthenticated(true)
+      window.location.href = routes.Home.path
+    }
+  }, [params])
   const filteredProducts = listProducts?.data.products?.filter((product: any) => product.status == true)
   return (
     <div>
@@ -81,7 +92,10 @@ const Home = () => {
           <div className='flex items-center justify-center gap-x-10 mt-4 '>
             {listCategory?.data.getallCategory.slice(0, 6).map((category: any) => {
               return (
-                <div key={category._id} className='bg-white hover:bg-black hover:text-white text-black  py-5 px-20 transition-colors cursor-pointer'>
+                <div
+                  key={category._id}
+                  className='bg-white hover:bg-black hover:text-white text-black  py-5 px-20 transition-colors cursor-pointer'
+                >
                   <span className='uppercase text-base font-normal'>{category.title}</span>
                 </div>
               )

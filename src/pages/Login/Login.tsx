@@ -1,13 +1,15 @@
 import { useSnackbar } from 'notistack'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { FaGoogle } from 'react-icons/fa'
 import { useMutation } from 'react-query'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import Button from 'src/components/Button'
 import Checkbox from 'src/components/Checkbox'
 import Heading from 'src/components/Heading'
 import Input from 'src/components/Input'
 import { AppContext } from 'src/context/app.context'
+import http from 'src/lib/axios'
 import { routes } from 'src/routes/routes'
 import authService from 'src/services/auth.service'
 import { TLogin } from 'src/types/auth'
@@ -18,6 +20,25 @@ const Login = () => {
   const { register, handleSubmit, setError } = useForm<TLogin>()
   const { enqueueSnackbar } = useSnackbar()
   const { setIsAuthenticated } = useContext(AppContext)
+  const { VITE_CLIENT_GOOGLE_ID, VITE_GOOGLE_REDIRECT_URI } = import.meta.env
+
+  const getGoogleAuthUrl = () => {
+    const url = 'https://accounts.google.com/o/oauth2/v2/auth'
+    const query = {
+      client_id: VITE_CLIENT_GOOGLE_ID,
+      redirect_uri: VITE_GOOGLE_REDIRECT_URI,
+      response_type: 'code',
+      scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email'
+      ].join(' '),
+      prompt: 'consent',
+      access_type: 'offline'
+    }
+    const queryString = new URLSearchParams(query).toString()
+    return `${url}?${queryString}`
+  }
+
   const loginAccountMutation = useMutation({
     mutationFn: (body: TLogin) => authService.login(body)
   })
@@ -30,7 +51,7 @@ const Login = () => {
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<TLogin>>(error)) {
-          const formError = error.response?.data
+          const formError = error.response?.data as any
           if (formError) {
             Object.keys(formError).forEach((key) => {
               setError(key as any, {
@@ -43,6 +64,8 @@ const Login = () => {
       }
     })
   }
+  const googleOauthUrl = getGoogleAuthUrl()
+
   return (
     <div className='flex lg:inline-block items-center justify-center'>
       <div className='w-[445px] text-left mx-0 md:px-6'>
@@ -64,13 +87,18 @@ const Login = () => {
           <div className='mb-5'>
             <Checkbox name='re-member' label='Remember me' className='text-sm'></Checkbox>
           </div>
-          <div className='mb-5'>
+          <div className='mb-2'>
             <Button className='w-full py-3 text-xs' kind='secondary'>
               Login
             </Button>
           </div>
         </form>
-        <div>
+        <Link to={googleOauthUrl}>
+          <Button className='w-full py-3 text-[10px] flex items-center justify-center gap-x-4' kind='primary'>
+            Login with google <FaGoogle />
+          </Button>
+        </Link>
+        <div className='mt-5'>
           <Link className='text-sm border-b-2 border-black border-solid' to={routes.Register.path}>
             Do not have an account ?
           </Link>
