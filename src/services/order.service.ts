@@ -32,6 +32,9 @@ const orderService = {
   },
   deleteOrder(id: string) {
     return http.delete(`${BASE_URL}/${id}/delete`)
+  },
+  applyCoupon(body: any) {
+    return http.post(`${BASE_URL}/apply-coupon`, body)
   }
 }
 

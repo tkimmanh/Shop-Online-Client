@@ -1,3 +1,3 @@
 export const formatMoney = (amount: number | string) => {
-  return amount.toLocaleString('it-IT') + 'đ'
+  return amount?.toLocaleString('it-IT') + 'đ'
 }

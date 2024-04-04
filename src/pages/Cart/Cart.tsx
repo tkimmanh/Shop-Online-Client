@@ -14,8 +14,10 @@ import Button from 'src/components/Button'
 import { useForm } from 'react-hook-form'
 import { AppContext } from 'src/context/app.context'
 import { TUser } from 'src/types/auth'
+
 const CartPage = () => {
   const { user } = useContext(AppContext)
+
   const { data: listItemCart } = useCartData()
   const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
@@ -74,7 +76,11 @@ const CartPage = () => {
     setIsOpen(true)
   }
   const createOrderMutation = useMutation({
-    mutationFn: (body) => orderService.create(body)
+    mutationFn: (body: any) =>
+      orderService.create({
+        ...body,
+        coupon_code: body.payload_coupon
+      })
   })
 
   const updateProfileMutation = useMutation({
@@ -96,6 +102,37 @@ const CartPage = () => {
         enqueueSnackbar('Đặt hàng thành công', { variant: 'success' })
         queryClient.invalidateQueries('cart')
       }
+    })
+  }
+  const [totalPriceAfterDiscount, setTotalPriceAfterDiscount] = useState(totalAmount)
+
+  useEffect(() => {
+    reset(user as TUser)
+    calculateTotalPrice()
+  }, [listItemCart])
+
+  const calculateTotalPrice = () => {
+    const total = listItemCart?.data.user?.cart?.reduce(
+      (acc: any, item: any) => acc + item.product.price * item.quantity,
+      0
+    )
+    setTotalPriceAfterDiscount(total || 0)
+  }
+
+  const applyCouponMutation = useMutation(orderService.applyCoupon, {
+    onSuccess: (data) => {
+      setTotalPriceAfterDiscount(data?.data.totalPrice as any)
+      enqueueSnackbar('Áp dụng mã giảm giá thành công', { variant: 'success' })
+    },
+    onError: (error: any) => {
+      enqueueSnackbar(error.response.data.message, { variant: 'error' })
+    }
+  })
+
+  const onSubmitApplyCoupon = (data: any) => {
+    applyCouponMutation.mutate({
+      coupon_code: data.payload_coupon,
+      cartItems: listItemCart?.data.user?.cart
     })
   }
   return (
@@ -145,7 +182,9 @@ const CartPage = () => {
                     </div>
                   </td>
                   <td className='border-l border-gray-300'>
-                    <span className='flex items-center justify-center '>{formatMoney(item?.product?.subtotal)}</span>
+                    <span className='flex items-center justify-center '>
+                      {formatMoney(item?.product?.subtotal) || 0}
+                    </span>
                   </td>
                   <td className='border-l border-gray-300'>
                     <div className='flex items-center justify-center '>
@@ -175,7 +214,7 @@ const CartPage = () => {
             <div>
               <div className='flex justify-between mt-10'>
                 <span className='font-bold text-lg'>Total : </span>
-                <span className='font-semibold'>{formatMoney(totalAmount || 0)}</span>
+                <span className='font-semibold'>{formatMoney(totalPriceAfterDiscount)}</span>
               </div>
               <div className='flex items-center justify-between mt-10'>
                 <span className='text-lg'>Ordering information : </span>
@@ -183,18 +222,35 @@ const CartPage = () => {
                   <button onClick={handleOnClick}>Change</button>
                 </div>
               </div>
-              <div className='mt-20 '>
+
+              <div className='mt-20'>
                 <form onSubmit={handleSubmit(handleCreateOrder)}>
-                  <select {...register('payment_method', { required: true })}>
-                    <option value='Thanh toán khi nhận hàng'>Thanh toán khi nhận hàng</option>
-                    <option value='Thanh toán bằng thẻ tín dụng'>Thanh toán bằng thẻ tín dụng</option>
-                  </select>
-                  {errors.payment_method && <span>This field is required</span>}
-                  <Button kind='secondary' className='px-5 py-3 text-xs' type='submit'>
-                    Payment confirmation
-                  </Button>
+                  <div className='flex justify-between items-center'>
+                    <select
+                      className='py-2 px-4 border border-gray-300 '
+                      {...register('payment_method', { required: true })}
+                    >
+                      <option value='Thanh toán khi nhận hàng'>Thanh toán khi nhận hàng</option>
+                      <option value='Thanh toán bằng thẻ tín dụng'>Thanh toán bằng thẻ tín dụng</option>
+                    </select>
+                    {errors.payment_method && <span>This field is required</span>}
+                    <Button kind='secondary' className='py-1 px-4 text-xs ' type='submit'>
+                      Payment confirmation
+                    </Button>
+                  </div>
                 </form>
               </div>
+              <form className='flex my-5' onSubmit={handleSubmit(onSubmitApplyCoupon)}>
+                <input
+                  placeholder='Apply discount code'
+                  {...register('payload_coupon')}
+                  type='text'
+                  className='border py-3 px-5 text-base lg:w-[70%] w-full'
+                />
+                <Button kind='secondary' className='lg:py-3 lg:px-5 py-2 px-3 lg:text-xs w-[30%]'>
+                  Apply
+                </Button>
+              </form>
             </div>
           </div>
         </div>
