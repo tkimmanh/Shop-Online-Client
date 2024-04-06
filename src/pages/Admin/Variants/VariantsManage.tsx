@@ -1,24 +1,32 @@
 import { useSnackbar } from 'notistack'
 import { useForm } from 'react-hook-form'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
 import Button from 'src/components/Button'
 import Heading from 'src/components/Heading'
 import Input from 'src/components/Input'
 import { routes } from 'src/routes/routes'
 import variantsService from 'src/services/variants.service'
+import ModalInformation from './components/ModalInformation'
+import { useState } from 'react'
+import ModalSize from './components/ModalSize'
 
 const VariantsManage = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [isOpenSize, setIsOpenSize] = useState(false)
+  const [detail, setDetail] = useState('')
   const { register, reset, setError, handleSubmit } = useForm()
+  const { register: registerSize, reset: resetSize, handleSubmit: handleSubmitSize } = useForm()
   const { enqueueSnackbar } = useSnackbar()
+  const queryClient = useQueryClient()
 
-  const { data: colors } = useQuery({
+  const { data: colors, refetch: refetchColors } = useQuery({
     queryKey: ['COLORS'],
     queryFn: () => {
       return variantsService.getAllColor()
     }
   })
-  const { data: sizes } = useQuery({
+  const { data: sizes, refetch: refetchSize } = useQuery({
     queryKey: ['SIZE'],
     queryFn: () => {
       return variantsService.getAllSize()
@@ -30,10 +38,23 @@ const VariantsManage = () => {
   const addNewSizeMutation = useMutation({
     mutationFn: (body) => variantsService.createSize(body)
   })
-  const addNewColor = (value: any) => {
+
+  const detailColor = useMutation({
+    mutationFn: (body: any) => variantsService.getColor(body)
+  })
+
+  const detailSize = useMutation({
+    mutationFn: (body: any) => variantsService.getSize(body)
+  })
+
+  const addNewColor = async (value: any) => {
     addNewColorMutation.mutate(value, {
       onSuccess() {
         enqueueSnackbar('Thêm colors mới thành công', { variant: 'success' })
+        reset({
+          name: '',
+          color_code: ''
+        })
       }
     })
   }
@@ -41,9 +62,66 @@ const VariantsManage = () => {
     addNewSizeMutation.mutate(value, {
       onSuccess() {
         enqueueSnackbar('Thêm colors mới thành công', { variant: 'success' })
+        resetSize({
+          name: '',
+          color_code: ''
+        })
       }
     })
   }
+
+  const handleDetailColor = (id: any) => {
+    detailColor.mutate(id, {
+      onSuccess(data) {
+        setDetail(data?.data?.getColor)
+        setIsOpen(true)
+      }
+    })
+  }
+
+  const handleDetailSize = (id: any) => {
+    detailSize.mutate(id, {
+      onSuccess(data) {
+        setDetail(data?.data?.getSize)
+        setIsOpenSize(true)
+      }
+    })
+  }
+
+  const deleteColorMutations = useMutation({
+    mutationFn: (body: any) => variantsService.deleteColor(body),
+    onSuccess: () => {
+      enqueueSnackbar('Xoá thành công', { variant: 'success' })
+      queryClient.invalidateQueries(['COLORS'])
+    },
+    mutationKey: ['COLORS']
+  })
+
+  const handleDelete = async (id: string | number) => {
+    try {
+      if (confirm('Are you sure you want to delete?')) {
+        await deleteColorMutations.mutateAsync(id)
+      }
+    } catch (error) {}
+  }
+
+  const deleteSizeMutations = useMutation({
+    mutationFn: (body: any) => variantsService.deleteSize(body),
+    onSuccess: () => {
+      enqueueSnackbar('Xoá thành công', { variant: 'success' })
+      queryClient.invalidateQueries(['SIZE'])
+    },
+    mutationKey: ['SIZE']
+  })
+
+  const handleDeleteSize = async (id: string | number) => {
+    try {
+      if (confirm('Are you sure you want to delete?')) {
+        await deleteSizeMutations.mutateAsync(id)
+      }
+    } catch (error) {}
+  }
+
   return (
     <div>
       <div className='mb-2'>
@@ -69,7 +147,7 @@ const VariantsManage = () => {
 
           <div>
             <h2 className='mb-2'>Size</h2>
-            <form action='' onSubmit={handleSubmit(addNewSize)}>
+            <form action='' onSubmit={handleSubmitSize(addNewSize)}>
               <Input
                 type='text'
                 name='name'
@@ -77,7 +155,7 @@ const VariantsManage = () => {
                 rules={{
                   required: true
                 }}
-                register={register}
+                register={registerSize}
               ></Input>
               <Button kind='secondary' type='submit' className='text-xs px-3 py-3'>
                 Add Size
@@ -117,7 +195,22 @@ const VariantsManage = () => {
                   <td className='px-6 py-4'>{color.name}</td>
                   <td className='px-6 py-4'>{color.code || '(trống)'}</td>
                   <td className='px-6 py-4 text-right'>
-                    <button className='font-medium text-blue-600 hover:underline'>Edit</button>
+                    <button
+                      className='font-medium text-blue-600 hover:underline mr-[5px]'
+                      onClick={() => {
+                        handleDetailColor(color._id)
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className='font-medium text-red-600 hover:underline'
+                      onClick={() => {
+                        handleDelete(color._id)
+                      }}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -148,7 +241,22 @@ const VariantsManage = () => {
                     <td className='px-6 py-4'>{size._id}</td>
                     <td className='px-6 py-4'>{size.name}</td>
                     <td className='px-6 py-4 text-right'>
-                      <button className='font-medium text-blue-600 hover:underline'>Edit</button>
+                      <button
+                        className='font-medium text-blue-600 hover:underline mr-[5px]'
+                        onClick={() => {
+                          handleDetailSize(size._id)
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className='font-medium text-red-600 hover:underline mr-[5px]'
+                        onClick={() => {
+                          handleDeleteSize(size._id)
+                        }}
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -157,6 +265,8 @@ const VariantsManage = () => {
           </div>
         </div>
       </div>
+      {isOpen && <ModalInformation isOpen={isOpen} setIsOpen={setIsOpen} detail={detail} refetch={refetchColors} />}
+      {isOpenSize && <ModalSize isOpen={isOpenSize} setIsOpen={setIsOpenSize} detail={detail} refetch={refetchSize} />}
     </div>
   )
 }
