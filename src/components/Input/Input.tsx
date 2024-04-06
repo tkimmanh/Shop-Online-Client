@@ -11,6 +11,7 @@ interface Props {
   autoComplete?: string
   classNameErrors?: string
   classNameInput?: string
+  defaultValue?: any
 }
 const Input = ({
   type,
