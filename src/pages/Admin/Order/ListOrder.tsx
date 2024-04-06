@@ -9,7 +9,7 @@ import ModalInformation from './components/ModalInformation'
 
 function ListOrder() {
   const [isOpen, setIsOpen] = useState(false)
-  const [idDetail, setIdDetail] = useState('')
+  const [detail, setDetail] = useState('')
   const [sort, setSort] = useState('')
   const [search, setSearch] = useState('')
 
@@ -24,13 +24,21 @@ function ListOrder() {
     }
   })
 
+  const detailMutation = useMutation(orderService.myOrderDetail, {
+    onSuccess: (data) => {
+      setDetail(data?.data?.order)
+      setIsOpen(true)
+      queryClient.invalidateQueries(['ORDER'])
+    }
+  })
+
   const handleStatusChange = (orderId: any, newStatus: any) => {
     updateOrderStatusMutation.mutate({ id: orderId, status: newStatus })
   }
 
-  const detail = useMemo(() => {
-    return data?.data?.orders.find((_item: any) => _item?._id === idDetail)
-  }, [idDetail, data])
+  const handleEdit = (id: string) => {
+    detailMutation.mutate(id)
+  }
 
   return (
     <div>
@@ -85,7 +93,7 @@ function ListOrder() {
                   {' '}
                   {order.products.map((product: any, productIndex: number) => (
                     <div key={productIndex}>
-                      {product.product.title} - {product.color.name} - {product.size.name} x {product.quantity}
+                      {product?.product?.title} - {product?.color?.name} - {product?.size?.name} x {product?.quantity}
                     </div>
                   ))}
                 </td>
@@ -107,8 +115,8 @@ function ListOrder() {
                 <td className='px-6 py-4'>
                   <button
                     onClick={() => {
-                      setIsOpen(true)
-                      setIdDetail(order?._id)
+                      // setIsOpen(true)
+                      handleEdit(order?._id)
                     }}
                     className='font-medium text-blue-600 hover:underline'
                   >
