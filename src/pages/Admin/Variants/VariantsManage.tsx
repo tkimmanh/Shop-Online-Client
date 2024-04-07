@@ -51,6 +51,7 @@ const VariantsManage = () => {
     addNewColorMutation.mutate(value, {
       onSuccess() {
         enqueueSnackbar('Thêm colors mới thành công', { variant: 'success' })
+        queryClient.invalidateQueries(['COLORS'])
         reset({
           name: '',
           color_code: ''
@@ -62,6 +63,7 @@ const VariantsManage = () => {
     addNewSizeMutation.mutate(value, {
       onSuccess() {
         enqueueSnackbar('Thêm colors mới thành công', { variant: 'success' })
+        queryClient.invalidateQueries(['SIZE'])
         resetSize({
           name: '',
           color_code: ''
@@ -117,7 +119,11 @@ const VariantsManage = () => {
   const handleDeleteSize = async (id: string | number) => {
     try {
       if (confirm('Are you sure you want to delete?')) {
-        await deleteSizeMutations.mutateAsync(id)
+        await deleteSizeMutations.mutateAsync(id, {
+          onSuccess: () => {
+            queryClient.invalidateQueries(['SIZE'])
+          }
+        })
       }
     } catch (error) {}
   }

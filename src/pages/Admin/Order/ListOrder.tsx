@@ -90,7 +90,6 @@ function ListOrder() {
                 <td className='px-6 py-4'>{order.user.phone}</td>
 
                 <td className='px-6 py-4 w-1/3'>
-                  {' '}
                   {order.products.map((product: any, productIndex: number) => (
                     <div key={productIndex}>
                       {product?.product?.title} - {product?.color?.name} - {product?.size?.name} x {product?.quantity}
