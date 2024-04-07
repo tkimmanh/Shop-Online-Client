@@ -56,5 +56,10 @@ export const linksDashboard = [
     id: 7,
     text: 'Coupon Management',
     path: '/admin/coupon'
+  },
+  {
+    id: 8,
+    text: 'Send Mail',
+    path: '/admin/list-email'
   }
 ]

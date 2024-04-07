@@ -1,16 +1,16 @@
 import http from 'src/lib/axios'
 
-const GET_CURRENT_USER = 'user'
+const BASE_URL = 'user'
 const ADD_TO_CART = 'user/add-to-cart'
 const UPDATE_CART = 'user/update-cart'
 const DELETE_CART = 'user/delete-cart'
 
 const usersService = {
   getCurrentUser() {
-    return http.get(GET_CURRENT_USER)
+    return http.get(BASE_URL)
   },
   edit(body: any) {
-    return http.put(`${GET_CURRENT_USER}/edit`, body)
+    return http.put(`${BASE_URL}/edit`, body)
   },
   addToCart(body: any) {
     return http.post(ADD_TO_CART, body)
@@ -20,6 +20,12 @@ const usersService = {
   },
   deleteCart({ product_id, color_id, size_id }: any) {
     return http.post(DELETE_CART, { product_id, color_id, size_id })
+  },
+  getEmails() {
+    return http.get(`${BASE_URL}/email`)
+  },
+  sendEmailToAll(body: any) {
+    return http.post(`${BASE_URL}/send-email-to-all`, body)
   }
 }
 

@@ -17,6 +17,7 @@ const PaymentSucess = lazy(() => import('src/pages/PaymentSuccess'))
 const ListOrder = lazy(() => import('src/pages/Order'))
 const CounponPage = lazy(() => import('src/pages/Admin/Coupon/Counpon'))
 const CouponForm = lazy(() => import('src/pages/Admin/Coupon/CouponForm'))
+const ListEmail = lazy(() => import('src/pages/Admin/ListEmail'))
 interface IRoute {
   path: string
   element: React.LazyExoticComponent<() => JSX.Element>
@@ -83,6 +84,11 @@ export const routes: IRoutes = {
   CouponFormAdd: {
     path: '/admin/form-coupon',
     element: CouponForm,
+    layout: 'DashboardLayout'
+  },
+  ListEmail: {
+    path: '/admin/list-email',
+    element: ListEmail,
     layout: 'DashboardLayout'
   },
   CouponFormEdit: {
