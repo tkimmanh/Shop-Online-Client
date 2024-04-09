@@ -8,6 +8,9 @@ const Home = lazy(() => import('src/pages/Home'))
 const Login = lazy(() => import('src/pages/Login'))
 const About = lazy(() => import('src/pages/About'))
 const CartPage = lazy(() => import('src/pages/Cart'))
+const CategoriesAdmin = lazy(() => import('src/pages/Admin/Categories/CategoriesList'))
+const CategoriesAddNew = lazy(() => import('src/pages/Admin/Categories/CategoriesAddNew'))
+const CategoriesEdit = lazy(() => import('src/pages/Admin/Categories/CategoriesEdit'))
 const ProductsAdmin = lazy(() => import('src/pages/Admin/Products/ProductsList'))
 const ProductAddNew = lazy(() => import('src/pages/Admin/Products/ProductsAddNew'))
 const VariantsManage = lazy(() => import('src/pages/Admin/Variants/VariantsManage'))
@@ -100,6 +103,24 @@ export const routes: IRoutes = {
     path: '/admin/order-list',
     access: ['admin', 'staff'],
     element: ListOderAdmin,
+    layout: 'DashboardLayout'
+  },
+  CategoriesAdmin: {
+    path: '/admin/category-list',
+    access: ['admin', 'staff'],
+    element: CategoriesAdmin,
+    layout: 'DashboardLayout'
+  },
+  CategoriesAddNew: {
+    path: '/admin/category-add-new',
+    access: ['admin', 'staff'],
+    element: CategoriesAddNew,
+    layout: 'DashboardLayout'
+  },
+  CategoriesEdit: {
+    path: '/admin/category/:id',
+    access: ['admin', 'staff'],
+    element: CategoriesEdit,
     layout: 'DashboardLayout'
   },
   ProductsAdmin: {
