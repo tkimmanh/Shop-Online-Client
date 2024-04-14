@@ -23,7 +23,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, redirectAuthe
     return <Navigate to={routes.Login.path} replace />
   }
 
-  if (user !== null && currentRoute?.access && !currentRoute.access.some((accessRole) => user.role === accessRole)) {
+  if (
+    currentRoute?.protected &&
+    !isAuthenticated &&
+    user !== null &&
+    currentRoute?.access &&
+    !currentRoute.access.some((accessRole) => user.role === accessRole)
+  ) {
     return <Navigate to={routes.Home.path} replace />
   }
 

@@ -30,9 +30,7 @@ const ProductsList = () => {
       if (confirm('Are you sure you want to delete?')) {
         await deleteProductMutations.mutateAsync(id)
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 
   return (
@@ -56,10 +54,16 @@ const ProductsList = () => {
                 Color
               </th>
               <th scope='col' className='px-6 py-3'>
+                Quantity
+              </th>
+              <th scope='col' className='px-6 py-3'>
                 Category
               </th>
               <th scope='col' className='px-6 py-3'>
                 Price
+              </th>
+              <th scope='col' className='px-6 py-3'>
+                Allow display
               </th>
               <th scope='col' className='px-6 py-3'>
                 <span className='sr-only'>Edit</span>
@@ -74,8 +78,24 @@ const ProductsList = () => {
                     {_item?.title}
                   </th>
                   <td className='px-6 py-4'>{_item?.colors?.map((x: any) => x?.name).join(', ')}</td>
+                  <td className='px-6 py-4'>
+                    {_item?.quantity === 0 ? (
+                      <span className='text-red-500 w-5 h-5 px-5 py-2 rounded-lg bg-red-200'>{_item?.quantity}</span>
+                    ) : (
+                      <span className='text-green-500 w-5 h-5 px-5 py-2 rounded-lg bg-green-200'>
+                        {_item?.quantity}
+                      </span>
+                    )}
+                  </td>
                   <td className='px-6 py-4'>{_item?.category?.title}</td>
                   <td className='px-6 py-4'>{_item?.price}</td>
+                  <td className='px-6 py-4'>
+                    {_item?.status === false ? (
+                      <span className='text-red-500 w-5 h-5 px-5 py-2 rounded-lg bg-red-200'>false</span>
+                    ) : (
+                      <span className='text-green-500 w-5 h-5 px-5 py-2 rounded-lg bg-green-200'>true</span>
+                    )}
+                  </td>
                   <td className='px-6 py-4 text-right'>
                     <span
                       className='font-medium text-blue-600 hover:underline cursor-pointer'

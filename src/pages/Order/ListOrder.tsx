@@ -6,10 +6,13 @@ import { formatMoney } from 'src/utils/formatMoney'
 import { enqueueSnackbar } from 'notistack'
 import { messageOrder } from 'src/constants/order.constatns'
 import ModalInformation from '../Admin/Order/components/ModalInformation'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
+import { confirmAlert } from 'react-confirm-alert'
+import classNames from 'src/utils/classNames'
+
 const ListOrder = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [idDetail, setIdDetail] = useState('')
+  const [currentOrderId, setCurrentOrderId] = useState<string | null>(null)
 
   const queryClient = useQueryClient()
   const { data: myOrders } = useQuery({
@@ -30,6 +33,7 @@ const ListOrder = () => {
   const updateOrderStatusMutation = useMutation({
     mutationFn: (body: any) => orderService.updateOrder(body)
   })
+
   const handleUpdateOrderStatus = (id: string, newStatus: string) => {
     updateOrderStatusMutation.mutate(
       { id, status: newStatus },
@@ -41,10 +45,33 @@ const ListOrder = () => {
       }
     )
   }
-
-  const detail = useMemo(() => {
-    return myOrders?.data?.orders.find((_item: any) => _item?._id === idDetail)
-  }, [idDetail, myOrders])
+  const confirmReturnOrder = (orderId: string) => {
+    confirmAlert({
+      title: 'Confirm to return',
+      message: 'Are you sure you want to return this order?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => handleUpdateOrderStatus(orderId, messageOrder.USER_RETURN_ORDER)
+        },
+        {
+          label: 'No',
+          onClick: () => {}
+        }
+      ]
+    })
+  }
+  const { data: detailOrder } = useQuery(
+    ['ORDER_DETAIL', currentOrderId],
+    () => orderService.myOrderDetail(currentOrderId!),
+    {
+      enabled: !!currentOrderId
+    }
+  )
+  const handleDetailOrder = (id: string) => {
+    setCurrentOrderId(id)
+    setIsOpen(true)
+  }
 
   return (
     <div className='w-full '>
@@ -62,6 +89,9 @@ const ListOrder = () => {
         </thead>
         <tbody>
           {myOrders?.data?.orders?.map((order: any) => {
+            const canReturn =
+              order.status === messageOrder.ORDER_SUCESS && dayjs().diff(dayjs(order.deliveredAt), 'day') <= 3
+
             return (
               <tr className='border-b border-t'>
                 <td className='py-5 border-l text-left pl-3 text-sm'>{order._id}</td>
@@ -89,14 +119,11 @@ const ListOrder = () => {
                 <td className='py-5 border-l text-center px-2 text-sm'>{order.status}</td>
                 <td className='py-5 border-l text-center px-2 text-sm'>{order.status_payment}</td>
                 <td className='py-5 border-l text-left pl-3'>{formatMoney(order.total_price)}</td>
-                <td className='py-5 border-l text-center px-3'>
+                <td className='py-5 border-l text-center px-3 gap-y-4 flex flex-col'>
                   <p>
                     <button
                       className='py-[5px] bg-[#000] w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid border-[#000] hover:bg-[#fff] hover:text-[#000]'
-                      onClick={() => {
-                        setIsOpen(true)
-                        setIdDetail(order?._id)
-                      }}
+                      onClick={() => handleDetailOrder(order._id)}
                     >
                       View
                     </button>
@@ -110,30 +137,38 @@ const ListOrder = () => {
                     </button>
                   </p>
                   <p>
-                    {order.status === messageOrder.USER_CANCEL_ORDER ? (
+                    {canReturn ? (
                       <button
-                        className='py-[5px] bg-[#000] w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid border-[#000] hover:bg-[#fff] hover:text-[#000]'
-                        onClick={() => handleUpdateOrderStatus(order._id, messageOrder.ORDER_WAIT_CONFIRM)}
+                        onClick={() => confirmReturnOrder(order._id)}
+                        className='py-2 px-4 w-full bg-blue-500 text-white rounded hover:bg-blue-700'
                       >
-                        Re-order
+                        Returns
                       </button>
                     ) : (
-                      <button
-                        className='py-[5px] bg-[#d90000] w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid border-[#d90000] hover:bg-[#fff] hover:text-[#d90000]'
-                        disabled={order.status === messageOrder.ORDER_PEDDING}
-                        onClick={() => handleUpdateOrderStatus(order._id, messageOrder.USER_CANCEL_ORDER)}
-                      >
-                        Cancel Order
-                      </button>
+                      <span className='text-gray-300 '>Return period expired</span>
                     )}
                   </p>
+                  <button
+                    className={classNames(
+                      'py-[5px]  w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid ',
+                      order.status === messageOrder.USER_CANCEL_ORDER
+                        ? 'border-gray-400 bg-gray-400 pointer-events-none'
+                        : 'border-[#d90000] bg-[#d90000] hover:bg-[#fff] hover:text-[#d90000]'
+                    )}
+                    disabled={
+                      order.status === messageOrder.ORDER_PEDDING || order.status === messageOrder.USER_CANCEL_ORDER
+                    }
+                    onClick={() => handleUpdateOrderStatus(order._id, messageOrder.USER_CANCEL_ORDER)}
+                  >
+                    Cancel Order
+                  </button>
                 </td>
               </tr>
             )
           })}
         </tbody>
       </table>
-      {isOpen && <ModalInformation isOpen={isOpen} setIsOpen={setIsOpen} detail={detail} />}
+      {isOpen && <ModalInformation isOpen={isOpen} setIsOpen={setIsOpen} detail={detailOrder?.data.order} />}
     </div>
   )
 }

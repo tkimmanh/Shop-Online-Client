@@ -3,6 +3,7 @@ import Modal from 'src/components/Modal'
 
 const ModalInformation = (props: any) => {
   const { isOpen, setIsOpen, detail } = props
+
   return (
     <Modal
       overlayClassName='flex items-end justify-end '

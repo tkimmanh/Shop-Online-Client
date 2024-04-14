@@ -40,7 +40,7 @@ const ProductsAddNew = () => {
   const { data: categories } = useQuery({
     queryKey: ['CATEGORY'],
     queryFn: () => {
-      return categoryService.getAllCategory()
+      return categoryService.getAllCategoies()
     }
   })
 
@@ -80,7 +80,7 @@ const ProductsAddNew = () => {
     queryFn: () => productsService.getProduct(id as string),
     enabled: !!id,
     onSuccess(data) {
-      const item = data?.data?.findProduct
+      const item = data?.data?.response
       reset({
         ...item
       })
@@ -270,7 +270,7 @@ const ProductsAddNew = () => {
               className='h-[250px] border-2 rounded-md border-dashed flex justify-center items-center overflow-hidden bg-white'
             >
               <input type='file' {...getThumbnailInputProps()} />
-              {thumbnail.length > 0 ? (
+              {thumbnail?.length > 0 ? (
                 thumbnail.map((file) => (
                   <div key={file.name} className='w-full h-full relative'>
                     <img src={file.preview} alt='Preview' className='w-full h-full absolute object-contain' />
@@ -298,8 +298,8 @@ const ProductsAddNew = () => {
               className='h-[250px] border-2 rounded-md border-dashed flex justify-center items-center overflow-hidden bg-white'
             >
               <input type='file' multiple {...getImagesInputProps()} />
-              {images.length > 0 ? (
-                images.map((file, index) => (
+              {images?.length > 0 ? (
+                images?.map((file, index) => (
                   <div key={file.name} className='w-full h-full relative'>
                     <img src={file.preview} alt='Preview' className='w-full h-full absolute object-contain' />
                     <button

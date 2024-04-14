@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { SnackbarProvider } from 'notistack'
 const queryClient = new QueryClient()
 import 'react-quill/dist/quill.snow.css'
+import 'react-confirm-alert/src/react-confirm-alert.css'
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>

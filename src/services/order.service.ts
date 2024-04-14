@@ -17,7 +17,6 @@ const orderService = {
   updateStatus(body: any) {
     return http.patch(`${BASE_URL}/${body.id}/update-status-order`, body)
   },
-
   paymentSuccess(orderId: string) {
     return http.get(`/order/payment-success?vnp_TxnRef=${orderId}`)
   },

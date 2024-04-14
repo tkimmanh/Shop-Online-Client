@@ -29,11 +29,13 @@ function createHttpInstance(): AxiosInstance {
   instance.interceptors.response.use(
     (response) => {
       const { url } = response.config
+
       if (url === `user${routes.Login.path}`) {
         const data = response.data as AuthResponse
         const newAccessToken = data?.access_token
         setAccessTokenToLocalStorage(newAccessToken as string)
       } else if (url === '/logout') {
+        window.location.href = routes.Login.path
         clearLocalStorage()
       }
       return response

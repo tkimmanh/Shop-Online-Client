@@ -17,6 +17,9 @@ const productsService = {
   },
   getProduct(id: string) {
     return http.get(`${BASE_URL}/${id}`)
+  },
+  addReview(productId: string, review: { star: number }) {
+    return http.post(`${BASE_URL}/${productId}/reviews`, review)
   }
 }
 

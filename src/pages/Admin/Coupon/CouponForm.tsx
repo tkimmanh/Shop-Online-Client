@@ -82,7 +82,7 @@ const CouponForm = () => {
           </div>
         </div>
         <Button kind='secondary' type='submit' className='text-xs px-3 py-3'>
-          Create
+          {id ? 'Update' : 'Create'}
         </Button>
       </form>
     </div>

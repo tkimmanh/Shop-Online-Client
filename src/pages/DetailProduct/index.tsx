@@ -1,7 +1,5 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { IoEyeSharp } from 'react-icons/io5'
-import { FiMinus } from 'react-icons/fi'
-import { GoPlus } from 'react-icons/go'
 import { BsBox2 } from 'react-icons/bs'
 import { CiHeart } from 'react-icons/ci'
 import { GoClock } from 'react-icons/go'
@@ -16,7 +14,7 @@ import { Link, useParams } from 'react-router-dom'
 import Title from 'src/components/Card/Title'
 import Price from 'src/components/Card/Price'
 import { listProducts } from 'src/constants/data.constants'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import productsService from 'src/services/products.service'
 import { formatMoney } from 'src/utils/formatMoney'
 import DOMPurify from 'dompurify'
@@ -26,6 +24,10 @@ import classNames from 'src/utils/classNames'
 import { useSnackbar } from 'notistack'
 import { AppContext } from 'src/context/app.context'
 
+interface ReviewPayload {
+  star: number
+}
+
 const DetailProduct = () => {
   const { isAuthenticated } = useContext(AppContext)
   const [valueTab, setValueTab] = useState(1)
@@ -33,16 +35,39 @@ const DetailProduct = () => {
   const [quantity, setQuantity] = useState(1)
   const [selectedColor, setSelectedColor] = useState('')
   const [selectedSize, setSelectedSize] = useState('')
+  const [rating, _setRating] = useState(0)
+
+  const queryClient = useQueryClient()
   const { enqueueSnackbar } = useSnackbar()
+
+  const addReviewMutation = useMutation(
+    ({ productId, review }: { productId: string; review: ReviewPayload }) =>
+      productsService.addReview(productId, review),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['product', id])
+        enqueueSnackbar('Đánh giá sản phẩm thành công', { variant: 'success' })
+      }
+    }
+  )
+
+  const handleRating = (rating: number) => {
+    if (!isAuthenticated) {
+      enqueueSnackbar('Bạn cần đăng nhập để đánh giá sản phẩm', { variant: 'warning' })
+      return
+    }
+    addReviewMutation.mutate({ productId: id as string, review: { star: rating } })
+  }
 
   const { data: productDetail } = useQuery({
     queryKey: ['product', id],
     queryFn: () => productsService.getProduct(id as string)
   })
-  const detail = productDetail?.data.findProduct || {}
+  const detail = productDetail?.data.response || {}
   const handleQuantityChange = (quantity: number) => {
     setQuantity(quantity)
   }
+
   const handleAddToCart = async () => {
     try {
       const body = {
@@ -81,8 +106,8 @@ const DetailProduct = () => {
           <div className='border-b-[1px] border-[#e5e5e5]'>
             <p className='font-[400] text-[21px] mb-[12px]'>{detail?.title}</p>
             <div className='flex mb-[12px]'>
-              <Star />
-              <p className='pl-[10px]'>(1 customer review)</p>
+              <Star rating={detail?.averageRating || 0} isInteractive={false} />
+              <p className='pl-[10px]'>({detail?.totalReviews || 0} customer review)</p>
             </div>
             <p className='font-[500] text-[18px] mb-[20px]'>{formatMoney(detail?.price || 0)}</p>
           </div>
@@ -241,9 +266,6 @@ const DetailProduct = () => {
             >
               WRITE A REVIEW
             </button>
-            <p className='text-[16px] leading-[32px] mt-[20px]'>
-              Only logged in customers who have purchased this product may leave a review.
-            </p>
           </div>
         )}
       </div>
