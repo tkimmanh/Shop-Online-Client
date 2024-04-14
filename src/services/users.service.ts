@@ -7,7 +7,7 @@ const DELETE_CART = 'user/delete-cart'
 
 const usersService = {
   getAllUser() {
-    return http.get(BASE_URL)
+    return http.get(`${BASE_URL}/all-users`)
   },
   getCurrentUser() {
     return http.get(BASE_URL)
@@ -29,6 +29,9 @@ const usersService = {
   },
   sendEmailToAll(body: any) {
     return http.post(`${BASE_URL}/send-email-to-all`, body)
+  },
+  delete(id: string) {
+    return http.delete(`${BASE_URL}/delete-by-admin/${id}`)
   }
 }
 

@@ -48,7 +48,7 @@ const CategoriesEdit = () => {
   return (
     <div>
       <div className='flex items-center justify-between gap-x-5 mb-5'>
-        <Heading>Category Add New</Heading>
+        <Heading>Category Edit</Heading>
         <Link to={routes.CategoriesAdmin.path}>
           <Button className='py-2 px-6 text-xs' kind='primary'>
             Category Manage
