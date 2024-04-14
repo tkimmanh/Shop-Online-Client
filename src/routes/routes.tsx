@@ -8,6 +8,7 @@ const Home = lazy(() => import('src/pages/Home'))
 const Login = lazy(() => import('src/pages/Login'))
 const About = lazy(() => import('src/pages/About'))
 const CartPage = lazy(() => import('src/pages/Cart'))
+const UsersAdmin = lazy(() => import('src/pages/Admin/Users/UserList'))
 const CategoriesAdmin = lazy(() => import('src/pages/Admin/Categories/CategoriesList'))
 const CategoriesAddNew = lazy(() => import('src/pages/Admin/Categories/CategoriesAddNew'))
 const CategoriesEdit = lazy(() => import('src/pages/Admin/Categories/CategoriesEdit'))
@@ -103,6 +104,12 @@ export const routes: IRoutes = {
     path: '/admin/order-list',
     access: ['admin', 'staff'],
     element: ListOderAdmin,
+    layout: 'DashboardLayout'
+  },
+  UsersAdmin: {
+    path: '/admin/user-list',
+    access: ['admin', 'staff'],
+    element: UsersAdmin,
     layout: 'DashboardLayout'
   },
   CategoriesAdmin: {

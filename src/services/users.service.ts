@@ -1,24 +1,17 @@
 import http from 'src/lib/axios'
 
-<<<<<<< Updated upstream
-const BASE_URL = 'user'
-=======
+const BASE_URL = '/user'
 const GET_ALL_USERS = 'user/users'
-const GET_CURRENT_USER = 'user'
->>>>>>> Stashed changes
 const ADD_TO_CART = 'user/add-to-cart'
 const UPDATE_CART = 'user/update-cart'
 const DELETE_CART = 'user/delete-cart'
 
 const usersService = {
-  getAllUser(){
+  getAllUser() {
     return http.get(GET_ALL_USERS)
   },
   getCurrentUser() {
     return http.get(BASE_URL)
-  },
-  edit(body: any) {
-    return http.put(`${BASE_URL}/edit`, body)
   },
   addToCart() {
     return http.post(ADD_TO_CART)
@@ -34,6 +27,9 @@ const usersService = {
   },
   sendEmailToAll(body: any) {
     return http.post(`${BASE_URL}/send-email-to-all`, body)
+  },
+  delete(id: string) {
+    return http.delete(`${BASE_URL}/${id}`)
   }
 }
 
