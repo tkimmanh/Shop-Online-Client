@@ -3,7 +3,7 @@ import { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaGoogle } from 'react-icons/fa'
 import { useMutation } from 'react-query'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import Button from 'src/components/Button'
 import Checkbox from 'src/components/Checkbox'
 import Heading from 'src/components/Heading'
@@ -18,6 +18,7 @@ import { isAxiosUnprocessableEntityError } from 'src/utils/common'
 
 const Login = () => {
   const { register, handleSubmit, setError } = useForm<TLogin>()
+  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
   const { setIsAuthenticated } = useContext(AppContext)
   const { VITE_CLIENT_GOOGLE_ID, VITE_GOOGLE_REDIRECT_URI } = import.meta.env
@@ -47,7 +48,7 @@ const Login = () => {
       onSuccess: () => {
         enqueueSnackbar('Đăng nhập thành công', { variant: 'success' })
         setIsAuthenticated(true)
-        window.location.href = routes.Home.path
+        navigate(routes.Home.path)
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<TLogin>>(error)) {

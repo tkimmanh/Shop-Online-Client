@@ -2,7 +2,7 @@ import { CiSearch, CiHeart, CiUser } from 'react-icons/ci'
 import { useState, useEffect, useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
 import { IoBagOutline } from 'react-icons/io5'
-import { NavLink, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import classNames from 'src/utils/classNames'
 import { routes } from 'src/routes/routes'
 import { Link } from 'react-router-dom'
@@ -34,12 +34,13 @@ const Header = () => {
   const handleLogout = () => {
     clearLocalStorage()
     setIsAuthenticated(false)
+    window.location.href = routes.Login.path
   }
+
   const headerClassDefaults = location.pathname === '/' ? 'fixed' : 'relative'
   const headerClass = location.pathname === '/' && isScrolled ? 'bg-black shadow-md fixed' : ' bg-transparent '
   const textColorClass = location.pathname === '/' ? 'text-white' : 'text-black'
   const badgeBgClass = location.pathname === '/' && isScrolled ? 'bg-white text-black' : 'text-white bg-black'
-
   return (
     <div
       className={classNames(
@@ -90,6 +91,11 @@ const Header = () => {
                     {user?.role === 'admin' && (
                       <Link className='px-10 py-3' to={routes.Dashboard.path}>
                         Dashboard
+                      </Link>
+                    )}
+                    {user?.role === 'staff' && (
+                      <Link className='px-10 py-3' to={routes.ListOrderAdmin.path}>
+                        Check order
                       </Link>
                     )}
                     <button onClick={handleLogout} className='px-8 py-3 mb-3'>

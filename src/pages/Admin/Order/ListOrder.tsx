@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { debounce } from 'lodash'
+import { confirmAlert } from 'react-confirm-alert'
 import { orderStatusOptions } from 'src/constants/order.constatns'
 import orderService from 'src/services/order.service'
 import { formatMoney } from 'src/utils/formatMoney'
@@ -32,8 +32,30 @@ function ListOrder() {
     }
   })
 
-  const handleStatusChange = (orderId: any, newStatus: any) => {
-    updateOrderStatusMutation.mutate({ id: orderId, status: newStatus })
+  const handleUpdateOrderStatus = (id: string, newStatus: string) => {
+    updateOrderStatusMutation.mutate(
+      { id, status: newStatus },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['ORDER'])
+        }
+      }
+    )
+  }
+
+  const confirmUpdateOrderStatus = (id: string, newStatus: string) => {
+    confirmAlert({
+      message: 'Are you sure you want to update this order status?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => handleUpdateOrderStatus(id, newStatus)
+        },
+        {
+          label: 'No'
+        }
+      ]
+    })
   }
 
   const handleEdit = (id: string) => {
@@ -103,7 +125,7 @@ function ListOrder() {
                   <span>{formatMoney(order.total_price)}</span>
                 </td>
                 <td className='px-6 py-4 w-20'>
-                  <select value={order.status} onChange={(e) => handleStatusChange(order._id, e.target.value)}>
+                  <select value={order.status} onChange={(e) => confirmUpdateOrderStatus(order._id, e.target.value)}>
                     {orderStatusOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}

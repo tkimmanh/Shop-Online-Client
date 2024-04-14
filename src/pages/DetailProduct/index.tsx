@@ -67,7 +67,6 @@ const DetailProduct = () => {
   const handleQuantityChange = (quantity: number) => {
     setQuantity(quantity)
   }
-  console.log(detail)
 
   const handleAddToCart = async () => {
     try {

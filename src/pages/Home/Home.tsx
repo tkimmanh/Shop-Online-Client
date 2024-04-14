@@ -47,7 +47,7 @@ const Home = () => {
   const { data: listCategory } = useQuery({
     queryKey: ['CATEGORY'],
     queryFn: () => {
-      return categoryService.getAllCategory()
+      return categoryService.getAllCategoies()
     }
   })
   useEffect(() => {

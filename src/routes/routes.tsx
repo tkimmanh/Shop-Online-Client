@@ -81,11 +81,13 @@ export const routes: IRoutes = {
   },
   CounponPage: {
     path: '/admin/coupon',
+    access: ['admin'],
     element: CounponPage,
     layout: 'DashboardLayout'
   },
   CouponFormAdd: {
     path: '/admin/form-coupon',
+    access: ['admin'],
     element: CouponForm,
     layout: 'DashboardLayout'
   },
@@ -97,53 +99,54 @@ export const routes: IRoutes = {
   CouponFormEdit: {
     path: '/admin/form-coupon/:id',
     element: CouponForm,
+    access: ['admin', 'staff'],
     layout: 'DashboardLayout'
   },
   ListOrderAdmin: {
     path: '/admin/order-list',
-    access: ['admin', 'staff'],
+    access: ['admin'],
     element: ListOderAdmin,
     layout: 'DashboardLayout'
   },
   CategoriesAdmin: {
     path: '/admin/category-list',
-    access: ['admin', 'staff'],
+    access: ['admin'],
     element: CategoriesAdmin,
     layout: 'DashboardLayout'
   },
   CategoriesAddNew: {
     path: '/admin/category-add-new',
-    access: ['admin', 'staff'],
+    access: ['admin'],
     element: CategoriesAddNew,
     layout: 'DashboardLayout'
   },
   CategoriesEdit: {
     path: '/admin/category/:id',
-    access: ['admin', 'staff'],
+    access: ['admin'],
     element: CategoriesEdit,
     layout: 'DashboardLayout'
   },
   ProductsAdmin: {
     path: '/admin/products-list',
-    access: ['admin', 'staff'],
+    access: ['admin'],
     element: ProductsAdmin,
     layout: 'DashboardLayout'
   },
   ProductAddNew: {
     path: '/admin/products-add',
-    access: ['admin', 'staff'],
+    access: ['admin'],
     element: ProductAddNew,
     layout: 'DashboardLayout'
   },
   ProductView: {
     path: '/admin/products/:id',
-    access: ['admin', 'staff'],
+    access: ['admin'],
     element: ProductAddNew,
     layout: 'DashboardLayout'
   },
   VariantsManage: {
     path: '/admin/variants-manage',
-    access: ['admin', 'staff'],
+    access: ['admin'],
     element: VariantsManage,
     layout: 'DashboardLayout'
   },
