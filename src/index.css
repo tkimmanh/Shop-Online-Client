@@ -169,3 +169,36 @@ input[type='checkbox']:checked + span .checkbox-indicator {
   font-size: 0.875rem;
   color: #9ca3af;
 }
+
+.tagcloud {
+  color: #4e4e4e;
+  border: 1px solid #ededed;
+  overflow: hidden;
+  background: 0 0;
+  padding: 10px 20px;
+  position: relative;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.tagcloud:before {
+  position: absolute;
+  content: '';
+  background: #000;
+  width: 0;
+  height: 100%;
+  top: 0;
+  left: 0;
+  -webkit-transition: width 0.5s ease;
+  transition: width 0.5s ease;
+  z-index: -1;
+}
+
+.tagcloud:hover {
+  border-color: #000;
+  color: #fff;
+}
+
+.tagcloud:hover:before {
+  width: 100%;
+}
