@@ -1,3 +1,6 @@
+import { FaDribbble, FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
+
 const Blog = () => {
   return (
     <div className='w-[1440px] mx-auto max-[1440px]:px-[10px]'>
@@ -36,15 +39,15 @@ const Blog = () => {
             </button>
           </div>
         </div>
-        <div className='col-span-3'>
-          <div className="mb-[47px]">
+        <div className='col-span-3 pt-[30px]'>
+          <div className='mb-[47px]'>
             <p className='font-medium text-[16px] leading-[20px] text-[#000] mb-[19px] cursor-pointer'>CATEGORIES</p>
             <p className='text-[16px] leading-[27px] text-[#000] mb-[14px] cursor-pointer'>Accessories</p>
             <p className='text-[16px] leading-[27px] text-[#000] mb-[14px] cursor-pointer'>Beauty</p>
             <p className='text-[16px] leading-[27px] text-[#000] mb-[14px] cursor-pointer'>Collection</p>
             <p className='text-[16px] leading-[27px] text-[#000] mb-[14px] cursor-pointer'>Fashion Tips</p>
           </div>
-          <div>
+          <div className='mb-[25px]'>
             <p className='font-medium text-[16px] leading-[20px] text-[#000] mb-[19px]'>RECENT POST</p>
             {[1, 1, 1].map((x) => {
               return (
@@ -63,6 +66,32 @@ const Blog = () => {
                 </div>
               )
             })}
+          </div>
+          <div className='mb-[45px]'>
+            <p className='font-medium text-[16px] leading-[20px] text-[#000] mb-[19px]'>SOCIAL</p>
+            <div className='flex gap-x-5'>
+              <Link to='#' className='border border-[#ededed]  w-8 h-8 flex items-center justify-center'>
+                <FaTwitter color='black' fontSize={13} />
+              </Link>
+              <Link to='#' className='border border-[#ededed]  w-8 h-8 flex items-center justify-center'>
+                <FaInstagram color='black' fontSize={14} />
+              </Link>
+              <Link to='#' className='border border-[#ededed]  w-8 h-8 flex items-center justify-center'>
+                <FaFacebookF color='black' fontSize={14} />
+              </Link>
+              <Link to='#' className='border border-[#ededed]  w-8 h-8 flex items-center justify-center'>
+                <FaDribbble color='black' fontSize={14} />
+              </Link>
+            </div>
+          </div>
+          <div>
+            <p className='font-medium text-[16px] leading-[20px] text-[#000] mb-[19px]'>TAG</p>
+            <div className='flex flex-wrap gap-[10px]'>
+              <p className='tagcloud text-[12px] font-medium leading-[18px] cursor-pointer'>BABER </p>
+              <p className='tagcloud text-[12px] font-medium leading-[18px] cursor-pointer'>BABY</p>
+              <p className='tagcloud text-[12px] font-medium leading-[18px] cursor-pointer'>NEEDS</p>
+              <p className='tagcloud text-[12px] font-medium leading-[18px] cursor-pointer'>BEAUTY</p>
+            </div>
           </div>
         </div>
       </div>
