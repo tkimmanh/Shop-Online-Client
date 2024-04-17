@@ -17,7 +17,8 @@ const Logo = ({ location, isScroll }: Props) => {
   return (
     <>
       <Link to={routes.Home.path}>
-        <img className='w-36' srcSet={logoScroll} alt='logo' />
+        <p className="leading-[42px] text-[40px] font-['Sedan']">Aizy</p>
+        {/* <img className='w-36' srcSet={logoScroll} alt='logo' /> */}
       </Link>
     </>
   )
