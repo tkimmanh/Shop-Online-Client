@@ -107,22 +107,23 @@ function ListOrder() {
           <tbody>
             {data?.data?.orders.map((order: any, index: number) => (
               <tr className='bg-white border-b' key={index}>
-                <td className='px-6 py-4'>{order.user.full_name}</td>
-                <td className='px-6 py-4'>{order.user.address}</td>
-                <td className='px-6 py-4'>{order.user.phone}</td>
+                <td className='px-6 py-4'>{order?.user?.full_name || '(Trống)'}</td>
+                <td className='px-6 py-4'>{order?.user?.address || '(Trống)'}</td>
+                <td className='px-6 py-4'>{order?.user?.phone || '(Trống)'}</td>
 
                 <td className='px-6 py-4 w-1/3'>
                   {order.products.map((product: any, productIndex: number) => (
                     <div key={productIndex}>
-                      {product?.product?.title} - {product?.color?.name} - {product?.size?.name} x {product?.quantity}
+                      {product?.product?.title || '(Trống)'} - {product?.color?.name || '(Trống)'} -{' '}
+                      {product?.size?.name || '(Trống)'} x {product?.quantity || '(Trống)'}
                     </div>
                   ))}
                 </td>
                 <td className='px-6 py-4'>
-                  <span>{order.payment_method}</span>
+                  <span>{order.payment_method || '(Trống)'}</span>
                 </td>
                 <td className='px-6 py-4'>
-                  <span>{formatMoney(order.total_price)}</span>
+                  <span>{formatMoney(order.total_price) || '(Trống)'}</span>
                 </td>
                 <td className='px-6 py-4 w-20'>
                   <select value={order.status} onChange={(e) => confirmUpdateOrderStatus(order._id, e.target.value)}>

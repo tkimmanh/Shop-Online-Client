@@ -144,10 +144,12 @@ const VariantsManage = () => {
                   required: true
                 }}
               ></Input>
-              <Input type='text' name='color_code' placeholder='Color code' register={register}></Input>
-              <Button kind='secondary' type='submit' className='text-xs px-3 py-3'>
-                Add color
-              </Button>
+              <div className='flex items-center gap-x-5'>
+                <input className='h-[40px] w-[100px] px-1 border-2' type='color' {...register('color_code')}></input>
+                <Button kind='secondary' type='submit' className='text-xs px-3 py-3'>
+                  Add color
+                </Button>
+              </div>
             </form>
           </div>
 
@@ -199,7 +201,7 @@ const VariantsManage = () => {
                 <tr className='bg-white' key={index}>
                   <td className='px-6 py-4'>{color._id}</td>
                   <td className='px-6 py-4'>{color.name}</td>
-                  <td className='px-6 py-4'>{color.code || '(trống)'}</td>
+                  <td className='px-6 py-4'>{color.color_code || '(trống)'}</td>
                   <td className='px-6 py-4 text-right'>
                     <button
                       className='font-medium text-blue-600 hover:underline mr-[5px]'
