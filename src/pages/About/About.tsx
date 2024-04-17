@@ -12,7 +12,7 @@ const About = () => {
       <div className='min-[401px]:grid grid-cols-2 mb-[120px] max-[400px]:'>
         <div className='flex flex-col justify-center'>
           <div className='w-[80%] '>
-            <p className='text-[#000] text-[32px] mb-[44px]'>Hi. We’re Bedesk.</p>
+            <p className='text-[#000] text-[32px] mb-[44px]'>Hi. We’re Aizy.</p>
             <p className='text-[#4e4e4e] text-[16px] leading-[24px]'>
               As a global online fashion brand, we’re on a mission to empower our customers to feel confident and be
               their best selves – authentically & unapologetically. At Showpo, we value body positivity and are
