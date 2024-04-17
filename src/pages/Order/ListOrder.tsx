@@ -6,14 +6,15 @@ import { formatMoney } from 'src/utils/formatMoney'
 import { enqueueSnackbar } from 'notistack'
 import { messageOrder } from 'src/constants/order.constatns'
 import ModalInformation from '../Admin/Order/components/ModalInformation'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import classNames from 'src/utils/classNames'
+import { AppContext } from 'src/context/app.context'
 
 const ListOrder = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [currentOrderId, setCurrentOrderId] = useState<string | null>(null)
-
+  const { setUser } = useContext(AppContext)
   const queryClient = useQueryClient()
   const { data: myOrders } = useQuery({
     queryKey: ['ORDER'],
@@ -26,6 +27,7 @@ const ListOrder = () => {
     deleteOrderMutation.mutate(id, {
       onSuccess: () => {
         enqueueSnackbar('Xóa thành công', { variant: 'success' })
+        setUser((prev: any) => ({ ...prev, cart: prev?.cart - 1 }))
         queryClient.invalidateQueries('ORDER')
       }
     })
@@ -116,9 +118,9 @@ const ListOrder = () => {
                     </div>
                   ))}
                 </td>
-                <td className='py-5 border-l text-center px-2 text-sm'>{order.status}</td>
-                <td className='py-5 border-l text-center px-2 text-sm'>{order.status_payment}</td>
-                <td className='py-5 border-l text-left pl-3'>{formatMoney(order.total_price)}</td>
+                <td className='py-5 border-l text-center px-2 text-sm'>{order?.status}</td>
+                <td className='py-5 border-l text-center px-2 text-sm'>{order?.status_payment}</td>
+                <td className='py-5 border-l text-left pl-3'>{formatMoney(order?.total_price)}</td>
                 <td className='py-5 border-l text-center px-3 gap-y-4 flex flex-col'>
                   <p>
                     <button

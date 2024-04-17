@@ -10,7 +10,7 @@ import CardImage from 'src/assets/images/payment-product.png'
 import Star from 'src/components/Star'
 import { twMerge } from 'tailwind-merge'
 import Card from 'src/components/Card/CardMain'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Title from 'src/components/Card/Title'
 import Price from 'src/components/Card/Price'
 import { listProducts } from 'src/constants/data.constants'
@@ -23,19 +23,21 @@ import usersService from 'src/services/users.service'
 import classNames from 'src/utils/classNames'
 import { useSnackbar } from 'notistack'
 import { AppContext } from 'src/context/app.context'
+import { routes } from 'src/routes/routes'
 
 interface ReviewPayload {
   star: number
 }
 
 const DetailProduct = () => {
-  const { isAuthenticated } = useContext(AppContext)
+  const { isAuthenticated, user, setUser } = useContext(AppContext)
   const [valueTab, setValueTab] = useState(1)
   const { id } = useParams()
   const [quantity, setQuantity] = useState(1)
   const [selectedColor, setSelectedColor] = useState('')
   const [selectedSize, setSelectedSize] = useState('')
   const [rating, _setRating] = useState(0)
+  const navigate = useNavigate()
 
   const queryClient = useQueryClient()
   const { enqueueSnackbar } = useSnackbar()
@@ -61,7 +63,13 @@ const DetailProduct = () => {
 
   const { data: productDetail } = useQuery({
     queryKey: ['product', id],
-    queryFn: () => productsService.getProduct(id as string)
+    queryFn: async () => {
+      try {
+        return await productsService.getProduct(id as string)
+      } catch (error) {
+        navigate(routes.NotFound.path)
+      }
+    }
   })
   const detail = productDetail?.data.response || {}
   const handleQuantityChange = (quantity: number) => {
@@ -77,6 +85,7 @@ const DetailProduct = () => {
         size_id: selectedSize
       }
       await usersService.addToCart(body)
+      setUser((prev: any) => ({ ...prev, cart: prev?.cart + 1 }))
       enqueueSnackbar('Đã thêm sản phẩm vào giỏ hàng', { variant: 'success' })
     } catch (error) {
       console.error(error)

@@ -12,8 +12,8 @@ const productsService = {
   editProduct(body: any, id?: string) {
     return http.put(BASE_URL + `/${id}`, body)
   },
-  getAllProducts() {
-    return http.get(BASE_URL)
+  getAllProducts(params?: any) {
+    return http.get(BASE_URL, { params })
   },
   getProduct(id: string) {
     return http.get(`${BASE_URL}/${id}`)

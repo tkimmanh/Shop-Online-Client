@@ -1,25 +1,17 @@
 import { useSnackbar } from 'notistack'
 import { useForm } from 'react-hook-form'
 import { useMutation } from 'react-query'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import Heading from 'src/components/Heading'
 import Input from 'src/components/Input'
 import { routes } from 'src/routes/routes'
 import categoryService from 'src/services/category.service'
 
-
-
 const CategoriesAddNew = () => {
-
-
-
-  const {
-    register,
-    reset,
-    handleSubmit } = useForm()
+  const { register, reset, handleSubmit } = useForm()
   const { enqueueSnackbar } = useSnackbar()
-
+  const navigate = useNavigate()
   const addNewCateogyMutations = useMutation({
     mutationFn: (body) => categoryService.createCategoies(body)
   })
@@ -28,7 +20,8 @@ const CategoriesAddNew = () => {
     addNewCateogyMutations.mutate(value, {
       onSuccess() {
         enqueueSnackbar('Thêm danh mục mới thành công', { variant: 'success' })
-      }
+      },
+      onError() {}
     })
   }
 
