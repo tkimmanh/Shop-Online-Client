@@ -1,4 +1,3 @@
-import { enqueueSnackbar } from 'notistack'
 import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from 'react-query'
 import Button from 'src/components/Button'
@@ -21,25 +20,27 @@ const ModalInformation = (props: any) => {
       const data = { ...value, id: detail?._id }
       editColorMutation.mutate(data, {
         onSuccess() {
-          enqueueSnackbar('Sửa colors mới thành công', { variant: 'success' })
+          // enqueueSnackbar('Sửa màu thành công', { variant: 'success' }); // Uncomment or add enqueueSnackbar call if needed
           queryClient.invalidateQueries(['COLORS'])
         }
       })
       await refetch()
       setIsOpen(false)
-    } catch (error) {}
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
     <Modal
-      overlayClassName='flex items-end justify-end '
+      overlayClassName='flex items-end justify-end'
       className='w-[500px] h-screen p-4'
       isOpenModal={isOpen}
       setIsOpenModal={setIsOpen}
     >
       <div>
         <h1 className='mb-2'>Color</h1>
-        <form action='' onSubmit={handleSubmit(editColor)}>
+        <form onSubmit={handleSubmit(editColor)}>
           <Input
             type='text'
             name='name'
@@ -49,11 +50,19 @@ const ModalInformation = (props: any) => {
             rules={{
               required: true
             }}
-          ></Input>
-          <Input type='text' name='color_code' placeholder='Color code' register={register}></Input>
-          <Button kind='secondary' type='submit' className='text-xs px-3 py-3'>
-            Save
-          </Button>
+          />
+
+          <div className='flex items-center gap-x-5'>
+            <input
+              className='h-[40px] w-[100px] px-1 border-2'
+              type='color'
+              {...register('color_code')}
+              defaultValue={detail.color_code}
+            ></input>
+            <Button kind='secondary' type='submit' className='text-xs px-3 py-3'>
+              Save
+            </Button>
+          </div>
         </form>
       </div>
     </Modal>
