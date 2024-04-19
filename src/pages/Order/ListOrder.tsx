@@ -150,20 +150,37 @@ const ListOrder = () => {
                       <span className='text-gray-300 '>Return period expired</span>
                     )}
                   </p>
-                  <button
-                    className={classNames(
-                      'py-[5px]  w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid ',
-                      order.status === messageOrder.USER_CANCEL_ORDER
-                        ? 'border-gray-400 bg-gray-400 pointer-events-none'
-                        : 'border-[#d90000] bg-[#d90000] hover:bg-[#fff] hover:text-[#d90000]'
-                    )}
-                    disabled={
-                      order.status === messageOrder.ORDER_PEDDING || order.status === messageOrder.USER_CANCEL_ORDER
-                    }
-                    onClick={() => handleUpdateOrderStatus(order._id, messageOrder.USER_CANCEL_ORDER)}
-                  >
-                    Cancel Order
-                  </button>
+                  {order.status === messageOrder.USER_RETURN_ORDER ? (
+                    <button
+                      className={classNames(
+                        'py-[5px]  w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid ',
+                        order.status === messageOrder.USER_CANCEL_ORDER
+                          ? 'border-gray-400 bg-gray-400 pointer-events-none'
+                          : 'border-[#d90000] bg-[#d90000] hover:bg-[#fff] hover:text-[#d90000]'
+                      )}
+                      disabled={
+                        order.status === messageOrder.ORDER_PEDDING || order.status === messageOrder.USER_CANCEL_ORDER
+                      }
+                      onClick={() => handleUpdateOrderStatus(order._id, messageOrder.USER_CANCEL_ORDER)}
+                    >
+                      Cancel
+                    </button>
+                  ) : (
+                    <button
+                      className={classNames(
+                        'py-[5px]  w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid ',
+                        order.status === messageOrder.USER_CANCEL_ORDER
+                          ? 'border-gray-400 bg-gray-400 pointer-events-none'
+                          : 'border-[#d90000] bg-[#d90000] hover:bg-[#fff] hover:text-[#d90000]'
+                      )}
+                      disabled={
+                        order.status === messageOrder.ORDER_PEDDING || order.status === messageOrder.USER_CANCEL_ORDER
+                      }
+                      onClick={() => handleUpdateOrderStatus(order._id, messageOrder.USER_CANCEL_RETURN_ORDER)}
+                    >
+                      Cancel
+                    </button>
+                  )}
                 </td>
               </tr>
             )

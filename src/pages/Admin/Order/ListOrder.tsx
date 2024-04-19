@@ -1,23 +1,28 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { confirmAlert } from 'react-confirm-alert'
-import { orderStatusOptions } from 'src/constants/order.constatns'
+import { messageOrder, orderStatusOptions } from 'src/constants/order.constatns'
 import orderService from 'src/services/order.service'
 import { formatMoney } from 'src/utils/formatMoney'
 import './styles.css'
 import ModalInformation from './components/ModalInformation'
+import Input from 'src/components/Input'
+import { useForm } from 'react-hook-form'
 
 function ListOrder() {
   const [isOpen, setIsOpen] = useState(false)
   const [detail, setDetail] = useState('')
   const [sort, setSort] = useState('')
-  const [search, setSearch] = useState('')
-
-  const { data } = useQuery(['ORDER', { sort, search }], () => {
-    return orderService.listAdmin({ sort, search })
-  })
-
+  const [selectedStatus, setSelectedStatus] = useState('')
   const queryClient = useQueryClient()
+  const { register, watch } = useForm()
+  const search = watch('search')
+  const { data, refetch } = useQuery(
+    ['orders', selectedStatus],
+    () => orderService.listAdmin({ status: selectedStatus, sort, search: search }),
+    { keepPreviousData: true }
+  )
+
   const updateOrderStatusMutation = useMutation(orderService.updateStatus, {
     onSuccess: () => {
       queryClient.invalidateQueries(['ORDER'])
@@ -62,19 +67,43 @@ function ListOrder() {
     detailMutation.mutate(id)
   }
 
+  useEffect(() => {
+    refetch()
+  }, [selectedStatus, search, refetch])
+
   return (
     <div>
-      <div>
-        <select value={sort} onChange={(e) => setSort(e.target.value)}>
-          <option value='newest'>Latest</option>
-          <option value='oldest'>Oldest</option>
-        </select>
-        <input
-          type='text'
-          placeholder='Tìm kiếm theo tên...'
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      <div className='flex items-center'>
+        <div className='w-[70%]'>
+          <label htmlFor='status-select' className='block text-sm font-medium text-gray-700'>
+            Filter by status
+          </label>
+          <select
+            id='status-select'
+            className='mb-5 block border w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'
+            value={selectedStatus}
+            onChange={(e) => {
+              setSelectedStatus(e.target.value)
+              refetch()
+            }}
+          >
+            <option value=''>All Statuses</option>
+            {Object.entries(messageOrder).map(([key, value]) => (
+              <option key={key} value={value}>
+                {value}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className='w-[35%]'>
+          <Input
+            type='text'
+            className='pl-3 pr-10 py-2 flex items-center border-gray-300 '
+            name='search'
+            placeholder='Search name user'
+            register={register}
+          ></Input>
+        </div>
       </div>
       <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
         <table className='w-full text-sm text-left rtl:text-right text-gray-500'>
