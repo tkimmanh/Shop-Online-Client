@@ -19,6 +19,7 @@ const ProductAddNew = lazy(() => import('src/pages/Admin/Products/ProductsAddNew
 const VariantsManage = lazy(() => import('src/pages/Admin/Variants/VariantsManage'))
 const Profile = lazy(() => import('src/pages/Profile'))
 const ListOderAdmin = lazy(() => import('src/pages/Admin/Order/ListOrder'))
+const RefundsList = lazy(() => import('src/pages/Admin/RefundsList'))
 const PaymentSucess = lazy(() => import('src/pages/PaymentSuccess'))
 const ListOrder = lazy(() => import('src/pages/Order'))
 const CounponPage = lazy(() => import('src/pages/Admin/Coupon/Counpon'))
@@ -115,6 +116,12 @@ export const routes: IRoutes = {
     path: '/admin/order-list',
     access: ['admin'],
     element: ListOderAdmin,
+    layout: 'DashboardLayout'
+  },
+  ListRefundsAdmin: {
+    path: '/admin/refunds-list',
+    access: ['admin'],
+    element: RefundsList,
     layout: 'DashboardLayout'
   },
   UsersAdmin: {
