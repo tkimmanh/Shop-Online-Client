@@ -15,6 +15,7 @@ import Title from 'src/components/Card/Title'
 import Price from 'src/components/Card/Price'
 import { listProducts } from 'src/constants/data.constants'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+import Rating from 'react-rating-stars-component'
 import productsService from 'src/services/products.service'
 import { formatMoney } from 'src/utils/formatMoney'
 import DOMPurify from 'dompurify'
@@ -24,45 +25,44 @@ import classNames from 'src/utils/classNames'
 import { useSnackbar } from 'notistack'
 import { AppContext } from 'src/context/app.context'
 import { routes } from 'src/routes/routes'
-
-interface ReviewPayload {
-  star: number
-}
+import Button from 'src/components/Button'
 
 const DetailProduct = () => {
-  const { isAuthenticated, user, setUser } = useContext(AppContext)
+  const { isAuthenticated, setUser } = useContext(AppContext)
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [rating, setRating] = useState(0)
   const [valueTab, setValueTab] = useState(1)
   const { id } = useParams()
   const [quantity, setQuantity] = useState(1)
   const [selectedColor, setSelectedColor] = useState('')
   const [selectedSize, setSelectedSize] = useState('')
-  const [rating, _setRating] = useState(0)
+  const openModal = () => setModalIsOpen(true)
+  const closeModal = () => setModalIsOpen(false)
   const navigate = useNavigate()
 
   const queryClient = useQueryClient()
+
   const { enqueueSnackbar } = useSnackbar()
 
-  const addReviewMutation = useMutation(
-    ({ productId, review }: { productId: string; review: ReviewPayload }) =>
-      productsService.addReview(productId, review),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['product', id])
-        enqueueSnackbar('Đánh giá sản phẩm thành công', { variant: 'success' })
-      }
+  const reviewMutation = useMutation((newReview) => productsService.addReview(id as string, newReview as any), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['PRODUCT', id])
+      closeModal()
+      enqueueSnackbar('Đánh giá sản phẩm thành công', { variant: 'success' })
+    },
+    onError: (error) => {
+      console.error('Error submitting review:', error)
+      enqueueSnackbar('Đánh giá sản phẩm thất bại', { variant: 'error' })
     }
-  )
+  })
 
-  const handleRating = (rating: number) => {
-    if (!isAuthenticated) {
-      enqueueSnackbar('Bạn cần đăng nhập để đánh giá sản phẩm', { variant: 'warning' })
-      return
+  const submitReview = async () => {
+    if (rating > 0) {
+      reviewMutation.mutate({ star: rating } as any)
     }
-    addReviewMutation.mutate({ productId: id as string, review: { star: rating } })
   }
-
   const { data: productDetail } = useQuery({
-    queryKey: ['product', id],
+    queryKey: ['PRODUCT', id],
     queryFn: async () => {
       try {
         return await productsService.getProduct(id as string)
@@ -91,6 +91,7 @@ const DetailProduct = () => {
       console.error(error)
     }
   }
+
   return (
     <div className='max-w-[1440px] mx-auto'>
       <div className='grid grid-cols-5 gap-[115px]'>
@@ -130,6 +131,7 @@ const DetailProduct = () => {
               Only <span className='text-[#ff0000] text-[16px font-[400]'>{detail.quantity} item(s)</span> left in
               stock!
             </p>
+
             <div
               className='h-[3px]'
               style={{ backgroundImage: 'linear-gradient(to right,#FF0000 80%, #eee 20%)' }}
@@ -186,12 +188,7 @@ const DetailProduct = () => {
                 </div>
               </div>
             </div>
-            <button
-              className='w-full bg-[#fff] text-[#000] hover:bg-[#000] hover:text-[#fff] font-[400] text-[12px] h-[40px] mt-[10px]'
-              style={{ border: '1px solid #000' }}
-            >
-              BUY NOW
-            </button>
+
             <div className='flex my-[25px]'>
               <div className='flex items-center cursor-pointer'>
                 <p className='p-[8px] bg-[#f6f6f6] rounded-[100%] hover:bg-[#000] hover:text-[#fff]'>
@@ -267,13 +264,13 @@ const DetailProduct = () => {
             }}
           />
         ) : (
-          <div>
-            <p className='text-[25px] leading-[30px] mb-[31px]'>0 review for Laylin Floral Halter Cutout Mini Dress</p>
+          <div className='flex items-center justify-center'>
             <button
-              className=' bg-[#fff] text-[#000] hover:bg-[#000] hover:text-[#fff] font-[400] text-[12px] h-[47px] w-[151px] mt-[10px]'
+              onClick={openModal}
+              className=' bg-[#fff] text-[#000] hover:bg-[#000] text-xl hover:text-[#fff] font-[400] h-[47px] w-[151px] mt-[10px]'
               style={{ border: '1px solid #000' }}
             >
-              WRITE A REVIEW
+              Rating
             </button>
           </div>
         )}
@@ -293,6 +290,41 @@ const DetailProduct = () => {
             </div>
           )
         })}
+        {modalIsOpen && (
+          <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full'>
+            <div className='relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white'>
+              <div className='mt-3 text-center'>
+                <h3 className='text-lg leading-6 font-medium text-gray-900'>Product Review</h3>
+                <div className='mt-2'>
+                  <p className='text-sm text-gray-500'>Your rating is important for us.</p>
+                </div>
+                <div className='mt-4'>
+                  <div className='flex items-center justify-center'>
+                    <Rating
+                      count={5}
+                      onChange={(newRating: any) => setRating(newRating)}
+                      size={50}
+                      activeColor='#ffd700'
+                    />
+                  </div>
+                </div>
+                <div className='flex justify-center items-center px-4 py-3 gap-x-5'>
+                  <Button
+                    isLoading={reviewMutation.isLoading}
+                    kind='primary'
+                    onClick={submitReview}
+                    className='px-10 py-3 text-xs '
+                  >
+                    Submit Review
+                  </Button>
+                  <Button kind='secondary' onClick={closeModal} className='px-10 py-3 text-xs'>
+                    Close
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -37,8 +37,8 @@ const Products = () => {
 
   const queryConfig: any = omitBy(
     {
-      page: queryParams.page || 1,
-      limit: (queryParams.limit = 10),
+      page: queryParams.page || '1',
+      limit: queryParams.limit || '10',
       sort: queryParams.sort,
       priceFrom: queryParams.priceFrom,
       priceTo: queryParams.priceTo,
@@ -95,21 +95,17 @@ const Products = () => {
     })
   }
   useEffect(() => {
-    const shouldUpdate = queryParams.page !== '1' || queryParams.limit !== '10'
-
-    if (shouldUpdate) {
-      navigate(
-        {
-          pathname: routes.Product.path,
-          search: createSearchParams({
-            ...queryParams,
-            page: '1',
-            limit: '10'
-          }).toString()
-        },
-        { replace: true }
-      )
-    }
+    navigate(
+      {
+        pathname: routes.Product.path,
+        search: createSearchParams({
+          ...queryParams,
+          page: '1',
+          limit: '10'
+        }).toString()
+      },
+      { replace: true }
+    )
   }, [])
   const handlePageClick = (data = 1 as any) => {
     const selectedPage = data.selected + 1
@@ -117,8 +113,7 @@ const Products = () => {
       pathname: routes.Product.path,
       search: createSearchParams({
         ...queryConfig,
-        page: selectedPage.toString(),
-        limit: '10'
+        page: selectedPage.toString()
       }).toString()
     })
   }
