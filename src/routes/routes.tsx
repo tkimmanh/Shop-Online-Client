@@ -10,6 +10,7 @@ const About = lazy(() => import('src/pages/About'))
 const Blog = lazy(() => import('src/pages/Blog'))
 const CartPage = lazy(() => import('src/pages/Cart'))
 const UsersAdmin = lazy(() => import('src/pages/Admin/Users/UserList'))
+const UsersDetailAdmin = lazy(() => import('src/pages/Admin/Users/DetailUser'))
 const CategoriesAdmin = lazy(() => import('src/pages/Admin/Categories/CategoriesList'))
 const CategoriesAddNew = lazy(() => import('src/pages/Admin/Categories/CategoriesAddNew'))
 const CategoriesEdit = lazy(() => import('src/pages/Admin/Categories/CategoriesEdit'))
@@ -18,6 +19,7 @@ const ProductAddNew = lazy(() => import('src/pages/Admin/Products/ProductsAddNew
 const VariantsManage = lazy(() => import('src/pages/Admin/Variants/VariantsManage'))
 const Profile = lazy(() => import('src/pages/Profile'))
 const ListOderAdmin = lazy(() => import('src/pages/Admin/Order/ListOrder'))
+const RefundsList = lazy(() => import('src/pages/Admin/RefundsList'))
 const PaymentSucess = lazy(() => import('src/pages/PaymentSuccess'))
 const ListOrder = lazy(() => import('src/pages/Order'))
 const CounponPage = lazy(() => import('src/pages/Admin/Coupon/Counpon'))
@@ -116,10 +118,22 @@ export const routes: IRoutes = {
     element: ListOderAdmin,
     layout: 'DashboardLayout'
   },
+  ListRefundsAdmin: {
+    path: '/admin/refunds-list',
+    access: ['admin'],
+    element: RefundsList,
+    layout: 'DashboardLayout'
+  },
   UsersAdmin: {
     path: '/admin/user-list',
     access: ['admin', 'staff'],
     element: UsersAdmin,
+    layout: 'DashboardLayout'
+  },
+  UsersDetailAdmin: {
+    path: '/admin/user/:id',
+    access: ['admin', 'staff'],
+    element: UsersDetailAdmin,
     layout: 'DashboardLayout'
   },
   CategoriesAdmin: {

@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { enqueueSnackbar } from 'notistack'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { Link } from 'react-router-dom'
 import Heading from 'src/components/Heading'
 import userService from 'src/services/users.service'
 
@@ -81,9 +82,9 @@ const Userlist = () => {
                   </th>
 
                   <td className='px-6 py-4 text-right'>
-                    {/* <Link to={`${`/admin/user/${user._id}`}`} className='font-medium text-blue-600 hover:underline'>
-                    Edit
-                  </Link> */}
+                    <Link to={`${`/admin/user/${user._id}`}`} className='font-medium text-blue-600 hover:underline mr-[10px]'>
+                      Edit
+                    </Link>
                     <button
                       className='font-medium text-red-600 hover:underline'
                       // disabled={category.status === messageOrder.ORDER_PEDDING}
