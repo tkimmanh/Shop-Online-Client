@@ -14,7 +14,6 @@ import { AppContext } from 'src/context/app.context'
 const ListOrder = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [currentOrderId, setCurrentOrderId] = useState<string | null>(null)
-  const { setUser } = useContext(AppContext)
   const queryClient = useQueryClient()
   const { data: myOrders } = useQuery({
     queryKey: ['ORDER'],
@@ -26,9 +25,8 @@ const ListOrder = () => {
   const handleDeleteOrder = (id: string) => {
     deleteOrderMutation.mutate(id, {
       onSuccess: () => {
-        enqueueSnackbar('Xóa thành công', { variant: 'success' })
-        setUser((prev: any) => ({ ...prev, cart: prev?.cart - 1 }))
         queryClient.invalidateQueries('ORDER')
+        enqueueSnackbar('Xóa thành công', { variant: 'success' })
       }
     })
   }
@@ -138,34 +136,17 @@ const ListOrder = () => {
                       Delete
                     </button>
                   </p>
-                  <p>
-                    {canReturn ? (
-                      <button
-                        onClick={() => confirmReturnOrder(order._id)}
-                        className='py-2 px-4 w-full bg-blue-500 text-white rounded hover:bg-blue-700'
-                      >
-                        Returns
-                      </button>
-                    ) : (
-                      <span className='text-gray-300 '>Return period expired</span>
-                    )}
-                  </p>
-                  {order.status === messageOrder.USER_RETURN_ORDER ? (
+                  {canReturn ? (
                     <button
-                      className={classNames(
-                        'py-[5px]  w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid ',
-                        order.status === messageOrder.USER_CANCEL_ORDER
-                          ? 'border-gray-400 bg-gray-400 pointer-events-none'
-                          : 'border-[#d90000] bg-[#d90000] hover:bg-[#fff] hover:text-[#d90000]'
-                      )}
-                      disabled={
-                        order.status === messageOrder.ORDER_PEDDING || order.status === messageOrder.USER_CANCEL_ORDER
-                      }
-                      onClick={() => handleUpdateOrderStatus(order._id, messageOrder.USER_CANCEL_ORDER)}
+                      onClick={() => confirmReturnOrder(order._id)}
+                      className='py-2 px-4 w-full bg-blue-500 text-white rounded hover:bg-blue-700'
                     >
-                      Cancel
+                      Returns
                     </button>
                   ) : (
+                    <span className='text-gray-300 '>Return period expired</span>
+                  )}
+                  {order.status === messageOrder.USER_RETURN_ORDER && (
                     <button
                       className={classNames(
                         'py-[5px]  w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid ',
@@ -173,14 +154,20 @@ const ListOrder = () => {
                           ? 'border-gray-400 bg-gray-400 pointer-events-none'
                           : 'border-[#d90000] bg-[#d90000] hover:bg-[#fff] hover:text-[#d90000]'
                       )}
-                      disabled={
-                        order.status === messageOrder.ORDER_PEDDING || order.status === messageOrder.USER_CANCEL_ORDER
-                      }
-                      onClick={() => handleUpdateOrderStatus(order._id, messageOrder.USER_CANCEL_RETURN_ORDER)}
+                      onClick={() => handleUpdateOrderStatus(order._id, messageOrder.ORDER_SUCESS)}
                     >
-                      Cancel
+                      Cancel Return
                     </button>
                   )}
+                  {order.status === messageOrder.ORDER_WAIT_CONFIRM ||
+                    (order.status === messageOrder.ORDER_CONFIRM && (
+                      <button
+                        className='py-[5px] bg-[#d90000] w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid border-[#d90000] hover:bg-[#fff] hover:text-[#d90000]'
+                        onClick={() => handleUpdateOrderStatus(order._id, messageOrder.USER_CANCEL_ORDER)}
+                      >
+                        Canncel order
+                      </button>
+                    ))}
                 </td>
               </tr>
             )

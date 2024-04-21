@@ -11,6 +11,8 @@ interface AppContextInterface {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
   user: TUser | null
   setUser: React.Dispatch<React.SetStateAction<TUser | null>>
+  cartChanged: boolean
+  setCartChanged: React.Dispatch<React.SetStateAction<boolean>>
 }
 const initialAppContext: AppContextInterface = {
   user: null,
@@ -18,7 +20,9 @@ const initialAppContext: AppContextInterface = {
   isOpenModal: false,
   setIsOpenModal: () => {},
   isAuthenticated: false,
-  setIsAuthenticated: () => null
+  setIsAuthenticated: () => null,
+  cartChanged: false,
+  setCartChanged: () => {}
 }
 
 export const AppContext = createContext<AppContextInterface>(initialAppContext)
@@ -27,7 +31,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
   const [user, setUser] = useState<TUser | null>(initialAppContext.user)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(initialAppContext.isOpenModal)
-
+  const [cartChanged, setCartChanged] = useState<boolean>(initialAppContext.cartChanged)
   useEffect(() => {
     usersService
       .getCurrentUser()
@@ -39,11 +43,13 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated(false)
         setUser(null)
       })
-  }, [])
+  }, [cartChanged])
 
   return (
     <AppContext.Provider
       value={{
+        cartChanged,
+        setCartChanged,
         user,
         setUser,
         isAuthenticated,

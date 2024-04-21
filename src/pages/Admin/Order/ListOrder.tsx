@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { confirmAlert } from 'react-confirm-alert'
-import { messageOrder, orderStatusOptions } from 'src/constants/order.constatns'
+import { messageOrder, orderStatusAdminOptions, orderStatusOptions } from 'src/constants/order.constatns'
 import orderService from 'src/services/order.service'
 import { formatMoney } from 'src/utils/formatMoney'
 import './styles.css'
@@ -24,8 +24,22 @@ function ListOrder() {
   )
 
   const updateOrderStatusMutation = useMutation(orderService.updateStatus, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['ORDER'])
+    onSuccess: (_data, variables) => {
+      const { id, status } = variables
+      queryClient.setQueryData(['orders', selectedStatus], (oldData: any) => {
+        return {
+          ...oldData,
+          data: {
+            ...oldData.data,
+            orders: oldData.data.orders.map((order: any) => {
+              if (order._id === id) {
+                return { ...order, status }
+              }
+              return order
+            })
+          }
+        }
+      })
     }
   })
 
@@ -70,7 +84,13 @@ function ListOrder() {
   useEffect(() => {
     refetch()
   }, [selectedStatus, search, refetch])
-
+  const getOptionsWithDefault = (currentStatus: any) => {
+    const statusExists = orderStatusAdminOptions.some((option) => option.value === currentStatus)
+    if (!statusExists && currentStatus) {
+      return [...orderStatusAdminOptions, { label: currentStatus, value: currentStatus }]
+    }
+    return orderStatusAdminOptions
+  }
   return (
     <div>
       <div className='flex items-center'>
@@ -155,8 +175,12 @@ function ListOrder() {
                   <span>{formatMoney(order.total_price) || '(Trống)'}</span>
                 </td>
                 <td className='px-6 py-4 w-20'>
-                  <select value={order.status} onChange={(e) => confirmUpdateOrderStatus(order._id, e.target.value)}>
-                    {orderStatusOptions.map((option) => (
+                  <select
+                    value={order.status}
+                    onChange={(e) => confirmUpdateOrderStatus(order._id, e.target.value)}
+                    className='border-2 rounded py-2'
+                  >
+                    {getOptionsWithDefault(order.status).map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>

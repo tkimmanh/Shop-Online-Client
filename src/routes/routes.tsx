@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 
 const DetailProduct = lazy(() => import('src/pages/DetailProduct'))
-const Dashboard = lazy(() => import('src/pages/Dashboard'))
+const Dashboard = lazy(() => import('src/pages/Admin/Dashboard'))
 const ProductList = lazy(() => import('src/pages/Products'))
 const Register = lazy(() => import('src/pages/Register'))
 const Home = lazy(() => import('src/pages/Home'))
@@ -26,6 +26,7 @@ const CounponPage = lazy(() => import('src/pages/Admin/Coupon/Counpon'))
 const CouponForm = lazy(() => import('src/pages/Admin/Coupon/CouponForm'))
 const ListEmail = lazy(() => import('src/pages/Admin/ListEmail'))
 const NotFound = lazy(() => import('src/pages/NotFound'))
+const WishList = lazy(() => import('src/pages/WishList'))
 interface IRoute {
   path: string
   element: React.LazyExoticComponent<() => JSX.Element>
@@ -82,7 +83,12 @@ export const routes: IRoutes = {
     element: ListOrder,
     layout: 'MainLayout'
   },
-
+  WishList: {
+    path: '/wish-list',
+    element: WishList,
+    layout: 'MainLayout'
+  },
+  //Dashboard
   Dashboard: {
     path: '/admin',
     access: ['admin', 'staff'],
@@ -106,6 +112,7 @@ export const routes: IRoutes = {
     element: ListEmail,
     layout: 'DashboardLayout'
   },
+
   CouponFormEdit: {
     path: '/admin/form-coupon/:id',
     element: CouponForm,
@@ -178,13 +185,13 @@ export const routes: IRoutes = {
     element: VariantsManage,
     layout: 'DashboardLayout'
   },
+
   Login: {
     path: '/sigin',
     element: Login,
     layout: 'AuthLayout',
     redirectAuthenticatedToHome: true
   },
-
   Register: {
     path: '/register',
     element: Register,
