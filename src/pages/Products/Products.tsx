@@ -121,7 +121,9 @@ const Products = () => {
   const handleRemoveAllFilter = () => {
     navigate({
       pathname: routes.Product.path,
-      search: createSearchParams(omit(queryConfig, ['priceFrom', 'priceTo', 'sort', 'color', 'sizes'])).toString()
+      search: createSearchParams(
+        omit(queryConfig, ['priceFrom', 'priceTo', 'sort', 'color', 'sizes', 'cagegory'])
+      ).toString()
     })
   }
   const totalProducts = listProducts?.data.counts
@@ -223,6 +225,7 @@ const Products = () => {
               <option value=''>Select sort option</option>
               <option value='newest'>Newest</option>
               <option value='oldest'>Oldest</option>
+              <option value='sold'>Sold</option>
               <option value='min'>Price: Low to High</option>
               <option value='max'>Price: High to Low</option>
             </select>
@@ -231,7 +234,7 @@ const Products = () => {
             {filteredProducts?.map((product: any) => {
               return (
                 <div key={product._id}>
-                  <Card image={product.thumbnail?.url}></Card>
+                  <Card id={product._id} image={product.thumbnail?.url}></Card>
                   <Link className='inline-block' to={`${product._id}/${product.slug}`}>
                     <div className='mt-5 flex w-full flex-col gap-y-2'>
                       <Title>{product.title}</Title>

@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { IoEyeSharp } from 'react-icons/io5'
 import { BsBox2 } from 'react-icons/bs'
 import { CiHeart } from 'react-icons/ci'
@@ -13,7 +13,7 @@ import Card from 'src/components/Card/CardMain'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Title from 'src/components/Card/Title'
 import Price from 'src/components/Card/Price'
-import { listProducts } from 'src/constants/data.constants'
+
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import Rating from 'react-rating-stars-component'
 import productsService from 'src/services/products.service'
@@ -28,7 +28,7 @@ import { routes } from 'src/routes/routes'
 import Button from 'src/components/Button'
 
 const DetailProduct = () => {
-  const { isAuthenticated, setUser } = useContext(AppContext)
+  const { isAuthenticated, cartChanged, setCartChanged } = useContext(AppContext)
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [rating, setRating] = useState(0)
   const [valueTab, setValueTab] = useState(1)
@@ -71,6 +71,16 @@ const DetailProduct = () => {
       }
     }
   })
+  const { data: listProducts } = useQuery({
+    queryKey: ['PRODUCT'],
+    queryFn: async () => {
+      try {
+        return await productsService.getAllProducts()
+      } catch (error) {
+        navigate(routes.NotFound.path)
+      }
+    }
+  })
   const detail = productDetail?.data.response || {}
   const handleQuantityChange = (quantity: number) => {
     setQuantity(quantity)
@@ -85,13 +95,20 @@ const DetailProduct = () => {
         size_id: selectedSize
       }
       await usersService.addToCart(body)
-      setUser((prev: any) => ({ ...prev, cart: prev?.cart + 1 }))
       enqueueSnackbar('Đã thêm sản phẩm vào giỏ hàng', { variant: 'success' })
+      setCartChanged(!cartChanged)
     } catch (error) {
       console.error(error)
     }
   }
-
+  const filteredProducts = listProducts?.data.products?.filter((product: any) => product.status == true)
+  const currentCategory = detail?.category?._id || ''
+  const relatedProducts = filteredProducts?.filter(
+    (product: any) => product.category?._id === currentCategory && product.id !== id
+  )
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [detail])
   return (
     <div className='max-w-[1440px] mx-auto'>
       <div className='grid grid-cols-5 gap-[115px]'>
@@ -277,55 +294,55 @@ const DetailProduct = () => {
       </div>
       <p className='text-[32px] leading-[41px] font-[400] mt-[80px] mb-[50px] text-center'>Related Products</p>
       <div className='grid grid-cols-4 gap-[30px]'>
-        {listProducts.slice(0, 4).map((product) => {
+        {relatedProducts?.slice(0, 4)?.map((product: any) => {
           return (
-            <div key={product.id}>
-              <Card image={product.imageUrl}></Card>
-              <Link className='inline-block' to={`${product.id}`}>
+            <div key={product._id}>
+              <Card id={product._id} image={product.thumbnail?.url}></Card>
+              <Link className='inline-block' to={`/products/${product._id}/${product.slug}`}>
                 <div className='mt-5 flex w-full flex-col gap-y-2'>
-                  <Title>{product.name}</Title>
+                  <Title>{product?.title}</Title>
                   <Price>{Number(product?.price || 0)?.toLocaleString('en')}đ</Price>
                 </div>
               </Link>
             </div>
           )
         })}
-        {modalIsOpen && (
-          <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full'>
-            <div className='relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white'>
-              <div className='mt-3 text-center'>
-                <h3 className='text-lg leading-6 font-medium text-gray-900'>Product Review</h3>
-                <div className='mt-2'>
-                  <p className='text-sm text-gray-500'>Your rating is important for us.</p>
+      </div>
+      {modalIsOpen && (
+        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full'>
+          <div className='relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white'>
+            <div className='mt-3 text-center'>
+              <h3 className='text-lg leading-6 font-medium text-gray-900'>Product Review</h3>
+              <div className='mt-2'>
+                <p className='text-sm text-gray-500'>Your rating is important for us.</p>
+              </div>
+              <div className='mt-4'>
+                <div className='flex items-center justify-center'>
+                  <Rating
+                    count={5}
+                    onChange={(newRating: any) => setRating(newRating)}
+                    size={50}
+                    activeColor='#ffd700'
+                  />
                 </div>
-                <div className='mt-4'>
-                  <div className='flex items-center justify-center'>
-                    <Rating
-                      count={5}
-                      onChange={(newRating: any) => setRating(newRating)}
-                      size={50}
-                      activeColor='#ffd700'
-                    />
-                  </div>
-                </div>
-                <div className='flex justify-center items-center px-4 py-3 gap-x-5'>
-                  <Button
-                    isLoading={reviewMutation.isLoading}
-                    kind='primary'
-                    onClick={submitReview}
-                    className='px-10 py-3 text-xs '
-                  >
-                    Submit Review
-                  </Button>
-                  <Button kind='secondary' onClick={closeModal} className='px-10 py-3 text-xs'>
-                    Close
-                  </Button>
-                </div>
+              </div>
+              <div className='flex justify-center items-center px-4 py-3 gap-x-5'>
+                <Button
+                  isLoading={reviewMutation.isLoading}
+                  kind='primary'
+                  onClick={submitReview}
+                  className='px-10 py-3 text-xs '
+                >
+                  Submit Review
+                </Button>
+                <Button kind='secondary' onClick={closeModal} className='px-10 py-3 text-xs'>
+                  Close
+                </Button>
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

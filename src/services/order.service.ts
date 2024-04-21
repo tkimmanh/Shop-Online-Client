@@ -34,6 +34,9 @@ const orderService = {
   },
   applyCoupon(body: any) {
     return http.post(`${BASE_URL}/apply-coupon`, body)
+  },
+  listReturns() {
+    return http.get(`${BASE_URL}/returns`)
   }
 }
 

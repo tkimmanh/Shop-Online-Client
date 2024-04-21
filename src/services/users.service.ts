@@ -40,6 +40,15 @@ const usersService = {
   },
   delete(id: string) {
     return http.delete(`${BASE_URL}/delete-by-admin/${id}`)
+  },
+  addToWishList(body: { product_id: string }) {
+    return http.post(`${BASE_URL}/wishlist/add`, body)
+  },
+  removeToWishList(body: { product_id: string }) {
+    return http.post(`${BASE_URL}/wishlist/remove`, body)
+  },
+  getListWishList() {
+    return http.get(`${BASE_URL}/wishlist`)
   }
 }
 

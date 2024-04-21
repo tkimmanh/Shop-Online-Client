@@ -1,30 +1,33 @@
 import { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { messageOrder } from 'src/constants/order.constatns'
+import { messageOrder, orderStatusOptionsReturn } from 'src/constants/order.constatns'
 import orderService from 'src/services/order.service'
 import { formatMoney } from 'src/utils/formatMoney'
 import ModalInformation from '../Order/components/ModalInformation'
-
+import { confirmAlert } from 'react-confirm-alert'
 const RefundsList = () => {
   const [listData, setListData] = useState<any>(null)
+
   const [isOpen, setIsOpen] = useState(false)
   const [detail, setDetail] = useState('')
 
   const queryClient = useQueryClient()
-  const { data } = useQuery({
-    queryKey: ['CATEGORY'],
+  const { data, isSuccess } = useQuery({
+    queryKey: ['ORDER'],
     queryFn: () => {
-      return orderService.listAdmin('')
-    },
-    onSuccess: () => {
-      setListData(data?.data?.orders.filter((item: any) => item.status === messageOrder.USER_RETURN_ORDER))
+      return orderService.listReturns()
     }
   })
+  useEffect(() => {
+    if (isSuccess && data?.data?.orders) {
+      const filteredData = data.data.orders || []
+      setListData(filteredData)
+    }
+  }, [data, isSuccess])
 
   const detailMutation = useMutation(orderService.myOrderDetail, {
     onSuccess: (data) => {
       setDetail(data?.data?.order)
-      setIsOpen(true)
       queryClient.invalidateQueries(['ORDER'])
     }
   })
@@ -33,6 +36,57 @@ const RefundsList = () => {
     detailMutation.mutate(id)
   }
 
+  const updateOrderStatusMutation = useMutation(orderService.updateStatus, {
+    onSuccess: (_data, variables) => {
+      const { id, status } = variables
+      queryClient.setQueryData(['ORDER'], (oldData: any) => {
+        return {
+          ...oldData,
+          data: {
+            ...oldData.data,
+            orders: oldData.data.orders.map((order: any) => {
+              if (order._id === id) {
+                return { ...order, status }
+              }
+              return order
+            })
+          }
+        }
+      })
+    }
+  })
+  const handleUpdateOrderStatus = (id: string, newStatus: string) => {
+    updateOrderStatusMutation.mutate(
+      { id, status: newStatus },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['ORDER'])
+        }
+      }
+    )
+  }
+
+  const confirmUpdateOrderStatus = (id: string, newStatus: string) => {
+    confirmAlert({
+      message: 'Are you sure you want to update this order status?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => handleUpdateOrderStatus(id, newStatus)
+        },
+        {
+          label: 'No'
+        }
+      ]
+    })
+  }
+  const getOptionsWithDefault = (currentStatus: any) => {
+    const statusExists = orderStatusOptionsReturn.some((option) => option.value === currentStatus)
+    if (!statusExists && currentStatus) {
+      return [...orderStatusOptionsReturn, { label: currentStatus, value: currentStatus }]
+    }
+    return orderStatusOptionsReturn
+  }
   return (
     <div>
       <div>
@@ -55,6 +109,9 @@ const RefundsList = () => {
                 <th scope='col' className='px-6 py-3 w-[15%]'>
                   Total Price
                 </th>
+                <th scope='col' className='px-6 py-3 w-[15%]'>
+                  Status
+                </th>
                 <th scope='col' className='px-6 py-3 w-[3%]'>
                   Action
                 </th>
@@ -69,15 +126,29 @@ const RefundsList = () => {
 
                   <td className='px-6 py-4 w-1/3'>
                     {order.products.map((product: any, productIndex: number) => (
-                      <div key={productIndex}>
-                        {product?.product?.title || '(Trống)'} - {product?.color?.name || '(Trống)'} -{' '}
-                        {product?.size?.name || '(Trống)'} x {product?.quantity || '(Trống)'}
-                      </div>
+                      <>
+                        <div key={productIndex}>
+                          <p>{product?.product?.title || '(Trống)'} </p>
+                          <p>Color : {product?.color?.name || '(Trống)'}</p>
+                          <p>Size : {product?.size?.name || '(Trống)'}</p>
+                        </div>
+                        <div>Quantity : {product?.quantity || '(Trống)'}</div>
+                      </>
                     ))}
                   </td>
+                  <td></td>
 
                   <td className='px-6 py-4'>
                     <span>{formatMoney(order.total_price) || '(Trống)'}</span>
+                  </td>
+                  <td className='px-6 py-4'>
+                    <select value={order.status} onChange={(e) => confirmUpdateOrderStatus(order._id, e.target.value)}>
+                      {orderStatusOptionsReturn.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
                   </td>
                   <td className='px-6 py-4'>
                     <button

@@ -43,22 +43,27 @@ const ModalInformation = (props: any) => {
         <p className='text-lg font-bold mt-[15px]'>Products Information</p>
         {detail?.products?.map((_item: any) => {
           return (
-            <div className='py-[10px] border-b'>
-              <p className='font-medium mb-[8px]'>
-                Name: <span>{_item?.product?.title}</span>
-              </p>
-              <p className='font-medium mb-[8px]'>
-                Price: <span>{Number(_item?.product?.price || 0).toLocaleString('en')}</span>
-              </p>
-              <p className='font-medium mb-[8px]'>
-                Category: <span>{_item?.product?.category?.title}</span>
-              </p>
-              <p className='font-medium mb-[8px]'>
-                Size: <span>{_item?.size?.name}</span>
-              </p>
-              <p className='font-medium mb-[8px]'>
-                Color: <span>{_item?.color?.name}</span>
-              </p>
+            <div className='flex items-center justify-between'>
+              <div className='py-[10px] border-b'>
+                <p className='font-medium mb-[8px]'>
+                  Name: <span>{_item?.product?.title}</span>
+                </p>
+                <p className='font-medium mb-[8px]'>
+                  Price: <span>{Number(_item?.product?.price || 0).toLocaleString('en')}</span>
+                </p>
+                <p className='font-medium mb-[8px]'>
+                  Category: <span>{_item?.product?.category?.title}</span>
+                </p>
+                <p className='font-medium mb-[8px]'>
+                  Size: <span>{_item?.size?.name}</span>
+                </p>
+                <p className='font-medium mb-[8px]'>
+                  Color: <span>{_item?.color?.name}</span>
+                </p>
+              </div>
+              <div>
+                <img className='w-24 h-40' src={_item?.product?.thumbnail?.url} alt='' />
+              </div>
             </div>
           )
         })}
