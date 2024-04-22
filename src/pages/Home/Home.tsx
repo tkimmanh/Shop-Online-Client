@@ -174,7 +174,7 @@ const Home = () => {
           </div>
           <div className='col-span-6'>
             <img
-              className='h-full w-full object-cover'
+              className='h-full object-cover'
               src='https://wpbingosite.com/wordpress/bedesk/wp-content/uploads/2023/06/home-banner-3.jpg'
               alt=''
             />
