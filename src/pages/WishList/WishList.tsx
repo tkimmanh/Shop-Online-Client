@@ -46,7 +46,7 @@ const WishList = () => {
             <tbody>
               {data?.data?.wishlist?.map((item: any) => {
                 return (
-                  <tr className='bg-white'>
+                  <tr className='bg-white border-b'>
                     <td className='w-[40px] p-[5px]'>
                       <MdOutlineDelete className='text-[24px] cursor-pointer' onClick={() => handleDelete(item?._id)} />
                     </td>
