@@ -63,6 +63,9 @@ const ProductsList = () => {
                 Price
               </th>
               <th scope='col' className='px-6 py-3'>
+                Sold
+              </th>
+              <th scope='col' className='px-6 py-3'>
                 Allow display
               </th>
               <th scope='col' className='px-6 py-3'>
@@ -89,6 +92,7 @@ const ProductsList = () => {
                   </td>
                   <td className='px-6 py-4'>{_item?.category?.title}</td>
                   <td className='px-6 py-4'>{_item?.price}</td>
+                  <td className='px-6 py-4'>{_item?.sold}</td>
                   <td className='px-6 py-4'>
                     {_item?.status === false ? (
                       <span className='text-red-500 w-5 h-5 px-5 py-2 rounded-lg bg-red-200'>false</span>

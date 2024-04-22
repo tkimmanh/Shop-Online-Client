@@ -4,6 +4,8 @@ const BASE_URL = 'user'
 const ADD_TO_CART = 'user/add-to-cart'
 const UPDATE_CART = 'user/update-cart'
 const DELETE_CART = 'user/delete-cart'
+const DETAIL_USER = 'user/get-by-admin'
+const EDIT_USER = 'user/edit-by-admin'
 
 const usersService = {
   getAllUser() {
@@ -14,6 +16,12 @@ const usersService = {
   },
   edit(body: any) {
     return http.put(`${BASE_URL}/edit`, body)
+  },
+  detailUser(id: any) {
+    return http.get(`${DETAIL_USER}/${id}`)
+  },
+  editUser(id: any, body: any) {
+    return http.put(`${EDIT_USER}/${id}`, body)
   },
   addToCart(body: any) {
     return http.post(ADD_TO_CART, body)
@@ -32,6 +40,15 @@ const usersService = {
   },
   delete(id: string) {
     return http.delete(`${BASE_URL}/delete-by-admin/${id}`)
+  },
+  addToWishList(body: { product_id: string }) {
+    return http.post(`${BASE_URL}/wishlist/add`, body)
+  },
+  removeToWishList(body: { product_id: string }) {
+    return http.post(`${BASE_URL}/wishlist/remove`, body)
+  },
+  getListWishList() {
+    return http.get(`${BASE_URL}/wishlist`)
   }
 }
 

@@ -1,19 +1,26 @@
 import { CiHeart, CiSearch } from 'react-icons/ci'
 import classNames from 'src/utils/classNames'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { PiBagThin } from 'react-icons/pi'
 import useHover from 'src/hooks/useHover'
 import Option from './Option/Option'
 import { images } from 'src/assets'
-
+import usersService from 'src/services/users.service'
+import { enqueueSnackbar } from 'notistack'
+import { useQueryClient } from 'react-query'
+import { AppContext } from 'src/context/app.context'
+import { FaHeart } from 'react-icons/fa'
 interface Props {
   image: string
   discount?: string
+  id?: any
 }
-const Card = ({ image, discount }: Props) => {
+const Card = ({ image, discount, id }: Props) => {
   const { hovered, nodeRef } = useHover<HTMLDivElement>()
   const [isDesktop, setIsDesktop] = useState(false)
+  const queryClient = useQueryClient()
 
+  const { user, setCartChanged, cartChanged } = useContext(AppContext)
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1025px)')
     const handleChange = (e: MediaQueryListEvent) => {
@@ -26,6 +33,35 @@ const Card = ({ image, discount }: Props) => {
     return () => mediaQuery.removeListener(handleChange)
   }, [])
 
+  const handleAddToCart = async (id: any) => {
+    try {
+      await usersService.addToCart({ product_id: id })
+      enqueueSnackbar('Đã thêm sản phẩm vào giỏ hàng', { variant: 'success' })
+      queryClient.invalidateQueries('cart')
+      setCartChanged(!cartChanged)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  const handleAddToWishList = async () => {
+    try {
+      await usersService.addToWishList({ product_id: id })
+      enqueueSnackbar('Đã thêm sản phẩm vào danh sách yêu thích', { variant: 'success' })
+      setCartChanged(!cartChanged)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  const handleRemoveWishList = async () => {
+    try {
+      await usersService.removeToWishList({ product_id: id })
+      enqueueSnackbar('Đã xóa khỏi danh sách yêu thích', { variant: 'success' })
+      setCartChanged(!cartChanged)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  const isProductInWishlist = user?.wishlist.some((product: any) => (product as string) === id)
   return (
     <>
       <div className='relative lg:mx-0 lg:max-w-[338px] lg:h-[518px] md:h-[500px] h-[400px] ' ref={nodeRef}>
@@ -39,10 +75,14 @@ const Card = ({ image, discount }: Props) => {
           )}
         >
           <Option>
-            <CiHeart size={20} />
+            {isProductInWishlist ? (
+              <FaHeart onClick={() => handleRemoveWishList()} size={15} />
+            ) : (
+              <CiHeart onClick={() => handleAddToWishList()} size={20} />
+            )}
           </Option>
           <Option>
-            <PiBagThin size={20} />
+            <PiBagThin onClick={() => handleAddToCart(id)} size={20} />
           </Option>
           <Option>
             <CiSearch size={20} />

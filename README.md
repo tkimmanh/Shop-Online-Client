@@ -33,3 +33,27 @@ export default {
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+  {canReturn ? (
+                      <button
+                        onClick={() => confirmReturnOrder(order._id)}
+                        className='py-2 px-4 w-full bg-blue-500 text-white rounded hover:bg-blue-700'
+                      >
+                        Returns
+                      </button>
+                    ) : (
+                      <span className='text-gray-300 '>Return period expired</span>
+                    )}
+                  </p>
+                  {order.status === messageOrder.USER_RETURN_ORDER && (
+                    <button
+                      className={classNames(
+                        'py-[5px]  w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid ',
+                        order.status === messageOrder.USER_CANCEL_ORDER
+                          ? 'border-gray-400 bg-gray-400 pointer-events-none'
+                          : 'border-[#d90000] bg-[#d90000] hover:bg-[#fff] hover:text-[#d90000]'
+                      )}
+                      onClick={() => handleUpdateOrderStatus(order._id, messageOrder.ORDER_SUCESS)}
+                    >
+                      Cancel Order
+                    </button>
+                  )}

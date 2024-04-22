@@ -2,7 +2,7 @@ import { CiSearch, CiHeart, CiUser } from 'react-icons/ci'
 import { useState, useEffect, useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
 import { IoBagOutline } from 'react-icons/io5'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import classNames from 'src/utils/classNames'
 import { routes } from 'src/routes/routes'
 import { Link } from 'react-router-dom'
@@ -117,10 +117,14 @@ const Header = () => {
             </>
           </Popover>
         </div>
-        <button className='mx-2 relative'>
-          <CiHeart size={26} />
-          <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>3</span>
-        </button>
+        <Link to={routes.WishList.path}>
+          <button className='mx-2 relative'>
+            <CiHeart size={26} />
+            <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>
+              {user?.wishlist.length}
+            </span>
+          </button>
+        </Link>
         <Link to={routes.CartPayment.path}>
           <button className='mx-2 relative'>
             <IoBagOutline size={26} />

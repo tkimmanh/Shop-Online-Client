@@ -69,7 +69,7 @@ const Home = () => {
             {filteredProducts?.slice(0, 10).map((product: any) => {
               return (
                 <div key={product._id}>
-                  <Card image={product.thumbnail?.url}></Card>
+                  <Card id={product._id} image={product.thumbnail?.url}></Card>
                   <Link className='inline-block' to={`products/${product._id}/${product.slug}`}>
                     <div className='mt-5 flex w-full flex-col gap-y-2'>
                       <Title>{product.title}</Title>
@@ -174,7 +174,7 @@ const Home = () => {
           </div>
           <div className='col-span-6'>
             <img
-              className='h-full w-full object-cover'
+              className='h-full object-cover'
               src='https://wpbingosite.com/wordpress/bedesk/wp-content/uploads/2023/06/home-banner-3.jpg'
               alt=''
             />

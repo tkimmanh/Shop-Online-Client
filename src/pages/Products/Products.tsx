@@ -37,8 +37,8 @@ const Products = () => {
 
   const queryConfig: any = omitBy(
     {
-      page: queryParams.page || 1,
-      limit: (queryParams.limit = 10),
+      page: queryParams.page || '1',
+      limit: queryParams.limit || '10',
       sort: queryParams.sort,
       priceFrom: queryParams.priceFrom,
       priceTo: queryParams.priceTo,
@@ -95,21 +95,17 @@ const Products = () => {
     })
   }
   useEffect(() => {
-    const shouldUpdate = queryParams.page !== '1' || queryParams.limit !== '10'
-
-    if (shouldUpdate) {
-      navigate(
-        {
-          pathname: routes.Product.path,
-          search: createSearchParams({
-            ...queryParams,
-            page: '1',
-            limit: '10'
-          }).toString()
-        },
-        { replace: true }
-      )
-    }
+    navigate(
+      {
+        pathname: routes.Product.path,
+        search: createSearchParams({
+          ...queryParams,
+          page: '1',
+          limit: '10'
+        }).toString()
+      },
+      { replace: true }
+    )
   }, [])
   const handlePageClick = (data = 1 as any) => {
     const selectedPage = data.selected + 1
@@ -117,8 +113,7 @@ const Products = () => {
       pathname: routes.Product.path,
       search: createSearchParams({
         ...queryConfig,
-        page: selectedPage.toString(),
-        limit: '10'
+        page: selectedPage.toString()
       }).toString()
     })
   }
@@ -126,7 +121,9 @@ const Products = () => {
   const handleRemoveAllFilter = () => {
     navigate({
       pathname: routes.Product.path,
-      search: createSearchParams(omit(queryConfig, ['priceFrom', 'priceTo', 'sort', 'color', 'sizes'])).toString()
+      search: createSearchParams(
+        omit(queryConfig, ['priceFrom', 'priceTo', 'sort', 'color', 'sizes', 'cagegory'])
+      ).toString()
     })
   }
   const totalProducts = listProducts?.data.counts
@@ -228,6 +225,7 @@ const Products = () => {
               <option value=''>Select sort option</option>
               <option value='newest'>Newest</option>
               <option value='oldest'>Oldest</option>
+              <option value='sold'>Sold</option>
               <option value='min'>Price: Low to High</option>
               <option value='max'>Price: High to Low</option>
             </select>
@@ -236,7 +234,7 @@ const Products = () => {
             {filteredProducts?.map((product: any) => {
               return (
                 <div key={product._id}>
-                  <Card image={product.thumbnail?.url}></Card>
+                  <Card id={product._id} image={product.thumbnail?.url}></Card>
                   <Link className='inline-block' to={`${product._id}/${product.slug}`}>
                     <div className='mt-5 flex w-full flex-col gap-y-2'>
                       <Title>{product.title}</Title>
