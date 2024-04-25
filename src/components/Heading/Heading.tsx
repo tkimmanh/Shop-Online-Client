@@ -9,7 +9,13 @@ interface Props {
 
 const Heading: React.FC<Props> = ({ children, className, ...rest }) => {
   return (
-    <h1 className={`${className} font-americana leading-8 `} {...rest}>
+    <h1
+      style={{
+        fontFamily: 'americana'
+      }}
+      className={`${className} leading-8 `}
+      {...rest}
+    >
       {children}
     </h1>
   )

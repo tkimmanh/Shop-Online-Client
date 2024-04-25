@@ -1,13 +1,13 @@
 import { enqueueSnackbar } from 'notistack'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import orderService from 'src/services/order.service'
 
 const PaymentSuccessPage = () => {
   const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search)
     const orderId = queryParams.get('vnp_TxnRef')
     if (orderId) {
       orderService.paymentSuccess(orderId).then(() => {
@@ -18,7 +18,9 @@ const PaymentSuccessPage = () => {
 
   return (
     <div>
-      <h1 className='text-center text-2xl font-semibold my-20'>Payment sucess</h1>
+      <p className=''>
+        <h1 className='text-center text-2xl font-semibold my-20'>Thanh toán thành công</h1>
+      </p>
     </div>
   )
 }

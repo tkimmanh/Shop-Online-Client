@@ -27,10 +27,10 @@ const Userlist = () => {
   return (
     <div>
       <div className='flex items-center justify-between gap-x-5 mb-5'>
-        <Heading>User Manage</Heading>
+        <Heading>Quản lý người dùng</Heading>
         {/* <Link to={routes.UsersAddNew.path}>
           <Button className='py-2 px-6 text-xs' kind='primary'>
-            Add new
+            Thêm mới
           </Button>
         </Link> */}
       </div>
@@ -42,22 +42,16 @@ const Userlist = () => {
                 ID
               </th>
               <th scope='col' className='px-6 py-3'>
-                User Name
+                Tên
               </th>
               <th scope='col' className='px-6 py-3'>
                 Email
               </th>
               <th scope='col' className='px-6 py-3'>
-                Phone
+                Số điện thoại
               </th>
               <th scope='col' className='px-6 py-3'>
-                Create At
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Update At
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                <span className='sr-only'>Edit</span>
+                Ngày tạo
               </th>
             </tr>
           </thead>
@@ -82,15 +76,18 @@ const Userlist = () => {
                   </th>
 
                   <td className='px-6 py-4 text-right'>
-                    <Link to={`${`/admin/user/${user._id}`}`} className='font-medium text-blue-600 hover:underline mr-[10px]'>
-                      Edit
+                    <Link
+                      to={`${`/admin/user/${user._id}`}`}
+                      className='font-medium text-blue-600 hover:underline mr-[10px]'
+                    >
+                      Chỉnh sửa
                     </Link>
                     <button
                       className='font-medium text-red-600 hover:underline'
                       // disabled={category.status === messageOrder.ORDER_PEDDING}
                       onClick={() => handleDeleteUser(user._id)}
                     >
-                      delete
+                      Xóa
                     </button>
                   </td>
                 </tr>

@@ -10,6 +10,7 @@ import variantsService from 'src/services/variants.service'
 import ModalInformation from './components/ModalInformation'
 import { useState } from 'react'
 import ModalSize from './components/ModalSize'
+import classNames from 'src/utils/classNames'
 
 const VariantsManage = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -101,7 +102,7 @@ const VariantsManage = () => {
 
   const handleDelete = async (id: string | number) => {
     try {
-      if (confirm('Are you sure you want to delete?')) {
+      if (confirm('Bạn có chắc chắn muốn xóa?')) {
         await deleteColorMutations.mutateAsync(id)
       }
     } catch (error) {}
@@ -118,7 +119,7 @@ const VariantsManage = () => {
 
   const handleDeleteSize = async (id: string | number) => {
     try {
-      if (confirm('Are you sure you want to delete?')) {
+      if (confirm('Bạn có chắc chắn muốn xóa?')) {
         await deleteSizeMutations.mutateAsync(id, {
           onSuccess: () => {
             queryClient.invalidateQueries(['SIZE'])
@@ -133,7 +134,7 @@ const VariantsManage = () => {
       <div className='mb-2'>
         <div className='grid grid-cols-2 gap-x-5'>
           <div>
-            <h1 className='mb-2'>Color</h1>
+            <h1 className='mb-2'>Màu sắc</h1>
             <form action='' onSubmit={handleSubmit(addNewColor)}>
               <Input
                 type='text'
@@ -147,14 +148,14 @@ const VariantsManage = () => {
               <div className='flex items-center gap-x-5'>
                 <input className='h-[40px] w-[100px] px-1 border-2' type='color' {...register('color_code')}></input>
                 <Button kind='secondary' type='submit' className='text-xs px-3 py-3'>
-                  Add color
+                  Thêm màu
                 </Button>
               </div>
             </form>
           </div>
 
           <div>
-            <h2 className='mb-2'>Size</h2>
+            <h2 className='mb-2'>Kích cỡ</h2>
             <form action='' onSubmit={handleSubmitSize(addNewSize)}>
               <Input
                 type='text'
@@ -166,7 +167,7 @@ const VariantsManage = () => {
                 register={registerSize}
               ></Input>
               <Button kind='secondary' type='submit' className='text-xs px-3 py-3'>
-                Add Size
+                Thêm kích cỡ
               </Button>
             </form>
           </div>
@@ -174,7 +175,7 @@ const VariantsManage = () => {
       </div>
       <div>
         <div className='flex items-center justify-between gap-x-5 mb-5'>
-          <Heading>Variants Manage</Heading>
+          <Heading>Quản lý biến thể</Heading>
           <Link to={routes.ProductAddNew.path}></Link>
         </div>
         {/* color */}
@@ -186,13 +187,10 @@ const VariantsManage = () => {
                   ID
                 </th>
                 <th scope='col' className='px-6 py-3'>
-                  Name
+                  Tên màu
                 </th>
                 <th scope='col' className='px-6 py-3'>
-                  Code color
-                </th>
-                <th scope='col' className='px-6 py-3'>
-                  <span className='sr-only'>Edit</span>
+                  Mã màu
                 </th>
               </tr>
             </thead>
@@ -201,7 +199,19 @@ const VariantsManage = () => {
                 <tr className='bg-white' key={index}>
                   <td className='px-6 py-4'>{color._id}</td>
                   <td className='px-6 py-4'>{color.name}</td>
-                  <td className='px-6 py-4'>{color.color_code || '(trống)'}</td>
+                  <td className='px-6 py-4'>
+                    <div
+                      style={{
+                        backgroundColor: color.color_code,
+                        width: '50%',
+                        textAlign: 'center',
+                        color: 'white',
+                        height: '20px'
+                      }}
+                    >
+                      {color.color_code || '(trống)'}
+                    </div>
+                  </td>
                   <td className='px-6 py-4 text-right'>
                     <button
                       className='font-medium text-blue-600 hover:underline mr-[5px]'
@@ -209,7 +219,7 @@ const VariantsManage = () => {
                         handleDetailColor(color._id)
                       }}
                     >
-                      Edit
+                      Chỉnh sửa
                     </button>
                     <button
                       className='font-medium text-red-600 hover:underline'
@@ -217,7 +227,7 @@ const VariantsManage = () => {
                         handleDelete(color._id)
                       }}
                     >
-                      Delete
+                      Xóa
                     </button>
                   </td>
                 </tr>
@@ -235,11 +245,7 @@ const VariantsManage = () => {
                     ID
                   </th>
                   <th scope='col' className='px-6 py-3'>
-                    Sizes
-                  </th>
-
-                  <th scope='col' className='px-6 py-3'>
-                    <span className='sr-only'>Edit</span>
+                    Kích cỡ
                   </th>
                 </tr>
               </thead>
@@ -255,7 +261,7 @@ const VariantsManage = () => {
                           handleDetailSize(size._id)
                         }}
                       >
-                        Edit
+                        Chỉnh sửa
                       </button>
                       <button
                         className='font-medium text-red-600 hover:underline mr-[5px]'
@@ -263,7 +269,7 @@ const VariantsManage = () => {
                           handleDeleteSize(size._id)
                         }}
                       >
-                        Delete
+                        Xóa
                       </button>
                     </td>
                   </tr>

@@ -63,7 +63,7 @@ const Home = () => {
     <div>
       <SliderComponent></SliderComponent>
       <div className='mx-7'>
-        <Heading className='text-3xl pt-20 pb-16'>Recommended For You</Heading>
+        <Heading className='text-3xl pt-20 pb-16'>Sản phẩm mới</Heading>
         <div>
           <Slider {...settings}>
             {filteredProducts?.slice(0, 10).map((product: any) => {
@@ -84,17 +84,15 @@ const Home = () => {
 
         <div className='w-full bg-[#f7f4ef] h-[438px] mt-16'>
           <div className='flex flex-col items-center justify-center'>
-            <Heading className='text-3xl mt-20 pb-16 text-center'>Shop by categories</Heading>
-            <p className='text-xl'>
-              Your all-in-one spot for finding trends, occasion looks, featured styles and more!
-            </p>
+            <Heading className='text-3xl mt-20 pb-16 text-center'>Lựa chọn theo danh mục</Heading>
+            <p className='text-xl'>Rất nhiều các sản phẩm đa dạng, phong phú, đẹp mắt, chất lượng cao, giá cả hợp lý</p>
           </div>
           <div className='flex items-center justify-center gap-x-10 mt-4 '>
             {listCategory?.data.getallCategory.slice(0, 6).map((category: any) => {
               return (
                 <div
                   key={category._id}
-                  className='bg-white hover:bg-black hover:text-white text-black  py-5 px-20 transition-colors cursor-pointer'
+                  className='bg-white hover:bg-black hover:text-white text-black py-5 px-20 transition-colors cursor-pointer'
                 >
                   <span className='uppercase text-base font-normal'>{category.title}</span>
                 </div>
@@ -104,7 +102,7 @@ const Home = () => {
           <div className='flex items-center justify-center mt-10'>
             <Link className='inline-block' to={routes.Product.path}>
               <Button kind='primary' className='px-10 m-auto font-normal text-xs py-3'>
-                Show all categories
+                Tất cả danh mục
               </Button>
             </Link>
           </div>
@@ -127,7 +125,7 @@ const Home = () => {
             </div>
             <Link to={routes.Product.path}>
               <Button kind='primary' className='px-7 py-3 text-xs'>
-                Shop now
+                Mua sắm ngay
               </Button>
             </Link>
           </div>
@@ -144,14 +142,16 @@ const Home = () => {
               <p>Find Your Fashion Inspiration Here</p>
             </div>
             <Button kind='primary' className='px-7 py-3 text-xs'>
-              Shop now
+              Mua sắm ngay
             </Button>
           </div>
         </div>
 
         <div className='lg:mt-32 md:mt-30 mt-24 '>
           <div className='w-full bg-[#f7f4ef] h-[291px] flex flex-col items-center justify-center'>
-            <Heading className='lg:text-4xl md:text-3xl text-2xl mb-7'>Buy better. Buy less. Wear more.</Heading>
+            <Heading className='lg:text-4xl md:text-3xl text-2xl mb-7'>
+              Chất lượng cao. Hỗ trợ hoàn trả. Hình ảnh thật 100%.
+            </Heading>
             <p className='text-xs font-normal border-b py-1 border-black border-solid'>SHOP TRENDING COLLECTION</p>
           </div>
         </div>
@@ -159,15 +159,15 @@ const Home = () => {
         <div className='w-full   lg:h-[640px] bg-[#f7f4ef] mt-16 lg:grid lg:grid-cols-10'>
           <div className='col-span-4 flex lg:flex-col lg:justify-center items-center py-10 px-3 lg:p-0 md:p-0'>
             <div className='text-left w-[200px] flex flex-col gap-y-10'>
-              <Heading className='text-3xl'>Our Store</Heading>
+              <Heading className='text-3xl'>Liên hệ , hoặc gặp mặt trức tiếp</Heading>
               <div>
-                <p className='font-normal text-base text-[#4e4e4e]'>Hà Nội - Việt Nam</p>
-                <p className='font-normal text-base text-[#4e4e4e]'>info@jewelryshop.com</p>
-                <p className='font-normal text-base text-[#4e4e4e]'>0987654321</p>
+                <p className='font-normal text-base text-[#4e4e4e]'>Địa chỉ :Hà Nội - Việt Nam</p>
+                <p className='font-normal text-base text-[#4e4e4e]'>email :info@jewelryshop.com</p>
+                <p className='font-normal text-base text-[#4e4e4e]'>sđt : 0987654321</p>
               </div>
               <Link to={routes.AboutUs.path}>
                 <Button kind='primary' className='px-8 py-3 text-sm font-normal'>
-                  GET DIRECTION
+                  Giới thiệu
                 </Button>
               </Link>
             </div>

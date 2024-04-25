@@ -55,7 +55,7 @@ const Profile = () => {
           ></Input>
 
           <Button type='submit' kind='secondary' className='px-10 py-3 text-xs'>
-            Update Infor
+            Cập nhật thông tin
           </Button>
         </form>
       </div>

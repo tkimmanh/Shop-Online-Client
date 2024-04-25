@@ -201,10 +201,10 @@ const ProductsAddNew = () => {
   return (
     <div>
       <div className='flex items-center justify-between gap-x-5 mb-5'>
-        <Heading>Product Add New</Heading>
+        <Heading>Product Thêm mới</Heading>
         <Link to={routes.ProductsAdmin.path}>
           <Button className='py-2 px-6 text-xs' kind='primary'>
-            Product Manage
+            Quản lý sản phẩm
           </Button>
         </Link>
       </div>
@@ -334,7 +334,7 @@ const ProductsAddNew = () => {
           className='px-10 py-3 text-sm rounded mt-5'
           kind='secondary'
         >
-          {id ? 'Save' : 'Add new'}
+          {id ? 'Save' : 'Thêm mới'}
         </Button>
       </form>
     </div>

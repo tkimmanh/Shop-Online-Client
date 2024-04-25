@@ -4,6 +4,7 @@ import { enqueueSnackbar } from 'notistack'
 import { MdOutlineDelete } from 'react-icons/md'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
+import Heading from 'src/components/Heading'
 import { routes } from 'src/routes/routes'
 import usersService from 'src/services/users.service'
 
@@ -39,7 +40,7 @@ const WishList = () => {
 
   return (
     <div>
-      <p className='text-center mt-[40px] text-[40px] font-medium'>WishList</p>
+      <Heading className='text-center mt-[40px] text-[40px] font-medium'>WishList</Heading>
       <div className='w-[1440px] mx-auto mt-[40px]'>
         {!isEmpty(data?.data?.wishlist) ? (
           <table className='w-full text-sm text-left  text-gray-500 border'>
@@ -56,7 +57,7 @@ const WishList = () => {
                     <td className='w-[65%] p-[5px]'>
                       <p className='text-[18px] leading-[27px] text-[#000] font-medium'>{item?.title}</p>
                       <p className='text-[16px] leading-[31px] text-[#000]'>
-                        {Number(item?.price).toLocaleString('en')} $
+                        {Number(item?.price).toLocaleString('en')} đ
                       </p>
                       <p className='text-[16px] leading-[27px] text-[#000]'>
                         {moment(item?.createdAt).format('MMMM DD, YYYY')}
@@ -68,7 +69,7 @@ const WishList = () => {
                         className='w-[200px]  text-[#000] bg-[#fff] hover:bg-[#000] hover:text-[#fff] font-[400] text-[12px] col-span-9 h-[40px]'
                         style={{ border: '1px solid #000' }}
                       >
-                        ADD TO CARD
+                        Thêm vào giỏ hàng
                       </button>
                     </td>
                   </tr>

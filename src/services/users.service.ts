@@ -5,7 +5,7 @@ const ADD_TO_CART = 'user/add-to-cart'
 const UPDATE_CART = 'user/update-cart'
 const DELETE_CART = 'user/delete-cart'
 const DETAIL_USER = 'user/get-by-admin'
-const EDIT_USER = 'user/edit-by-admin'
+const edit_USER = 'user/edit-by-admin'
 
 const usersService = {
   getAllUser() {
@@ -21,7 +21,7 @@ const usersService = {
     return http.get(`${DETAIL_USER}/${id}`)
   },
   editUser(id: any, body: any) {
-    return http.put(`${EDIT_USER}/${id}`, body)
+    return http.put(`${edit_USER}/${id}`, body)
   },
   addToCart(body: any) {
     return http.post(ADD_TO_CART, body)

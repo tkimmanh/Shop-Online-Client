@@ -45,6 +45,9 @@ function createHttpInstance(): AxiosInstance {
         const message = data?.message || error?.message
         enqueueSnackbar(message, { variant: 'error' })
       }
+      if (error.response?.status === HttpStatusCode.Forbidden) {
+        window.location.href = routes.Forbidden.path
+      }
       return Promise.reject(error)
     }
   )

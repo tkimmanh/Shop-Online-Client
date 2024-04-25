@@ -33,10 +33,10 @@ const Counpon = () => {
   return (
     <div>
       <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
-        <div className='flex items-end'>
+        <div className='flex items-end justify-end mr-5'>
           <Link to={routes.CouponFormAdd.path} className='text-xs'>
             <Button kind='primary' className='py-2 px-3'>
-              Add new Coupon
+              Thêm mới Coupon
             </Button>
           </Link>
         </div>
@@ -47,19 +47,16 @@ const Counpon = () => {
                 ID
               </th>
               <th scope='col' className='px-6 py-3'>
-                Code
+                Mã
               </th>
               <th scope='col' className='px-6 py-3'>
-                Discount
+                % Giảm
               </th>
               <th scope='col' className='px-6 py-3'>
-                Expiration Date
+                Ngày hết hạn
               </th>
               <th scope='col' className='px-6 py-3'>
-                Created At
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                <span className='sr-only'>Edit</span>
+                Ngày tạo
               </th>
             </tr>
           </thead>
@@ -80,10 +77,10 @@ const Counpon = () => {
                     className='font-medium text-red-600 ml-[10px] hover:underline cursor-pointer'
                     onClick={() => handleDeleteCoupon(coupon?._id)}
                   >
-                    Delete
+                    Xóa
                   </button>
                   <Link to={`/admin/form-coupon/${coupon._id}`} className='font-medium text-blue-600 hover:underline'>
-                    Edit
+                    Chỉnh sửa
                   </Link>
                 </td>
               </tr>

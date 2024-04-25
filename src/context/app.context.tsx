@@ -43,7 +43,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated(false)
         setUser(null)
       })
-  }, [cartChanged])
+  }, [cartChanged, isAuthenticated])
 
   return (
     <AppContext.Provider

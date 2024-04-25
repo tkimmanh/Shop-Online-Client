@@ -83,7 +83,7 @@ const CustomSlider = () => {
                     data-aos-delay='1300'
                     data-aos-offset='-500'
                   >
-                    SHOP NOW
+                    Mua sắm ngay
                   </Button>
                 </Link>
               </div>

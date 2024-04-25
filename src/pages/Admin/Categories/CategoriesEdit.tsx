@@ -8,16 +8,8 @@ import Input from 'src/components/Input'
 import { routes } from 'src/routes/routes'
 import categoryService from 'src/services/category.service'
 
-
-
-const CategoriesEdit = () => {
-
-
-
-  const {
-    register,
-    reset,
-    handleSubmit } = useForm()
+const Categoriesedit = () => {
+  const { register, reset, handleSubmit } = useForm()
   const { enqueueSnackbar } = useSnackbar()
   const { id } = useParams()
   // const addNewCateogyMutations = useQuery({
@@ -28,30 +20,33 @@ const CategoriesEdit = () => {
     queryFn: () => {
       return categoryService.getCategory(id as string)
     },
-    onSuccess:()=>{
+    onSuccess: () => {
       reset(category?.data.getaCategory)
     }
   })
 
-  const editCategoryMutation = useMutation ({
+  const editCategoryMutation = useMutation({
     mutationFn: (body) => categoryService.editCategory(body)
   })
-  
+
   const onSubmit = (value: any) => {
-    editCategoryMutation.mutate({id,...value}, {
-      onSuccess() {
-        enqueueSnackbar('Sửa danh mục mới thành công', { variant: 'success' })
+    editCategoryMutation.mutate(
+      { id, ...value },
+      {
+        onSuccess() {
+          enqueueSnackbar('edit danh mục mới thành công', { variant: 'success' })
+        }
       }
-    })
+    )
   }
 
   return (
     <div>
       <div className='flex items-center justify-between gap-x-5 mb-5'>
-        <Heading>Category Edit</Heading>
+        <Heading>Chỉnh sửa danh mục</Heading>
         <Link to={routes.CategoriesAdmin.path}>
           <Button className='py-2 px-6 text-xs' kind='primary'>
-            Category Manage
+            Quản lý danh mục
           </Button>
         </Link>
       </div>
@@ -65,11 +60,11 @@ const CategoriesEdit = () => {
           className='px-10 py-3 text-sm rounded mt-5'
           kind='secondary'
         >
-          Edit
+          Chỉnh sửa
         </Button>
       </form>
     </div>
   )
 }
 
-export default CategoriesEdit
+export default Categoriesedit

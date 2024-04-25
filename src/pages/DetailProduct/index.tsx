@@ -1,11 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
-import { IoEyeSharp } from 'react-icons/io5'
 import { BsBox2 } from 'react-icons/bs'
 import { CiHeart } from 'react-icons/ci'
 import { GoClock } from 'react-icons/go'
 import { MdCompareArrows } from 'react-icons/md'
 import { CiShare2 } from 'react-icons/ci'
-import styles from './styles.module.scss'
 import CardImage from 'src/assets/images/payment-product.png'
 import Star from 'src/components/Star'
 import { twMerge } from 'tailwind-merge'
@@ -134,19 +132,15 @@ const DetailProduct = () => {
             <p className='font-[400] text-[21px] mb-[12px]'>{detail?.title}</p>
             <div className='flex mb-[12px]'>
               <Star rating={detail?.averageRating || 0} isInteractive={false} />
-              <p className='pl-[10px]'>({detail?.totalReviews || 0} customer review)</p>
+              <p className='pl-[10px]'>({detail?.totalReviews || 0} đánh giá của khách hàng)</p>
             </div>
             <p className='font-[500] text-[18px] mb-[20px]'>{formatMoney(detail?.price || 0)}</p>
           </div>
           <div className='mt-[20px]'>
-            <div className='flex items-center mb-[10px]'>
-              <IoEyeSharp className={styles.eyes} />
-              <span className='text-[16px] font-[500] ml-[10px]'>37 people are viewing this right now</span>
-            </div>
             <p className='font-[400] text-[16px] text-[#4e4e4e] mb-[20px] leading-[27px]'></p>
             <p className='text-[16px font-[400] mb-[15px]'>
-              Only <span className='text-[#ff0000] text-[16px font-[400]'>{detail.quantity} item(s)</span> left in
-              stock!
+              Chỉ còn <span className='text-[#ff0000] text-[16px font-[400]'>{detail.quantity} sản phẩm (s)</span> trong
+              kho hàng
             </p>
 
             <div
@@ -163,26 +157,28 @@ const DetailProduct = () => {
                 )}
                 style={{ border: '1px solid #000' }}
               >
-                ADD TO CARD
+                Thêm vào giỏ hàng
               </button>
             </div>
             <div>
               <div className='mt-[20px]'>
                 <div className='mb-[20px]'>
                   <p>Color:</p>
-                  <div className='flex'>
+                  <div className='flex gap-x-3 my-2'>
                     {detail.colors?.map((color: any) => {
                       return (
                         <div
                           key={color._id}
                           onClick={() => setSelectedColor(color._id)}
+                          style={{
+                            backgroundColor: color.color_code
+                          }}
                           className={classNames(
-                            'p-[10px] m-[5px] border-2 select-none cursor-pointer',
+                            `w-8 h-8  rounded-full border-2 select-none cursor-pointer`,
+
                             selectedColor === color._id ? 'ring-2 ring-offset-2 ring-blue-500' : ''
                           )}
-                        >
-                          {color.name}
-                        </div>
+                        ></div>
                       )
                     })}
                   </div>
@@ -211,29 +207,29 @@ const DetailProduct = () => {
                 <p className='p-[8px] bg-[#f6f6f6] rounded-[100%] hover:bg-[#000] hover:text-[#fff]'>
                   <CiHeart />
                 </p>
-                <p className='text-[16px] font-[400] ml-[10px]'>Add to wishlist</p>
+                <p className='text-[16px] font-[400] ml-[10px]'>Yêu thích</p>
               </div>
               <div className='flex items-center ml-[20px] cursor-pointer'>
                 <p className='p-[8px] bg-[#f6f6f6] rounded-[100%] cursor-pointer hover:bg-[#000] hover:text-[#fff]'>
                   <MdCompareArrows />
                 </p>
-                <p className='text-[16px] font-[400] ml-[10px]'>Compare</p>
+                <p className='text-[16px] font-[400] ml-[10px]'>So sánh</p>
               </div>
               <div className='flex items-center ml-[20px] cursor-pointer'>
                 <p className='p-[8px] bg-[#f6f6f6] rounded-[100%] cursor-pointer hover:bg-[#000] hover:text-[#fff]'>
                   <CiShare2 />
                 </p>
-                <p className='text-[16px] font-[400] ml-[10px]'>Share</p>
+                <p className='text-[16px] font-[400] ml-[10px]'>Chia sẻ</p>
               </div>
             </div>
             <div className='grid grid-cols-2 gap-[20px]'>
               <div className='bg-[#f6f6f6] p-[10px]'>
                 <BsBox2 className='w-[30px] h-auto mb-[10px]' />
-                <p className='leading-[27px]'>Free worldwide shipping on all orders over</p>
+                <p className='leading-[27px]'>Miễn phí vận chuyển khi đặt hàng</p>
               </div>
               <div className='bg-[#f6f6f6] p-[10px]'>
                 <GoClock className='w-[30px] h-auto mb-[10px]' />
-                <p className='leading-[27px]'>Delivers in: 3-7 Working Days Shipping & Return</p>
+                <p className='leading-[27px]'>Giao hàng trong: 3-7 ngày làm việc , Vận chuyển và trả lại</p>
               </div>
             </div>
             <div className='border border-[#e2e2e2] grid grid-cols-5 gap-[20px] py-[20px] px-[25px] mt-[15px]'>
@@ -256,7 +252,7 @@ const DetailProduct = () => {
               )}
               onClick={() => setValueTab(1)}
             >
-              Description
+              Mô tả
             </span>
           </li>
           <li className='me-[60px]'>
@@ -268,7 +264,7 @@ const DetailProduct = () => {
               )}
               onClick={() => setValueTab(2)}
             >
-              Reviews
+              Đánh giá
             </span>
           </li>
         </ul>
@@ -284,15 +280,15 @@ const DetailProduct = () => {
           <div className='flex items-center justify-center'>
             <button
               onClick={openModal}
-              className=' bg-[#fff] text-[#000] hover:bg-[#000] text-xl hover:text-[#fff] font-[400] h-[47px] w-[151px] mt-[10px]'
+              className=' bg-[#fff] text-[#000] hover:bg-[#000] text-xl hover:text-[#fff] font-[400] h-[47px] w-[251px] mt-[10px]'
               style={{ border: '1px solid #000' }}
             >
-              Rating
+              Xếp hạng sản phẩm
             </button>
           </div>
         )}
       </div>
-      <p className='text-[32px] leading-[41px] font-[400] mt-[80px] mb-[50px] text-center'>Related Products</p>
+      <p className='text-[32px] leading-[41px] font-[400] mt-[80px] mb-[50px] text-center'>Sản phầm cùng danh mục</p>
       <div className='grid grid-cols-4 gap-[30px]'>
         {relatedProducts?.slice(0, 4)?.map((product: any) => {
           return (
@@ -312,9 +308,9 @@ const DetailProduct = () => {
         <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full'>
           <div className='relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white'>
             <div className='mt-3 text-center'>
-              <h3 className='text-lg leading-6 font-medium text-gray-900'>Product Review</h3>
+              <h3 className='text-lg leading-6 font-medium text-gray-900'>Đánh giá sản phẩm</h3>
               <div className='mt-2'>
-                <p className='text-sm text-gray-500'>Your rating is important for us.</p>
+                <p className='text-sm text-gray-500'>Đánh giá của bạn rất quan trọng với chúng tôi</p>
               </div>
               <div className='mt-4'>
                 <div className='flex items-center justify-center'>
@@ -333,10 +329,10 @@ const DetailProduct = () => {
                   onClick={submitReview}
                   className='px-10 py-3 text-xs '
                 >
-                  Submit Review
+                  Gửi đánh giá
                 </Button>
                 <Button kind='secondary' onClick={closeModal} className='px-10 py-3 text-xs'>
-                  Close
+                  Đóng
                 </Button>
               </div>
             </div>

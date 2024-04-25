@@ -49,7 +49,7 @@ const Footer = () => {
               <div className='flex '>
                 <input type='text' className='border py-3 px-5 text-xs lg:w-[70%] w-full' />
                 <Button kind='secondary' className='lg:py-3 lg:px-5 py-2 px-3 lg:text-xs w-[30%]'>
-                  Sign Up
+                  Đăng nhập
                 </Button>
               </div>
             </li>

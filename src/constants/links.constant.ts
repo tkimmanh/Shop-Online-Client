@@ -29,42 +29,42 @@ export const linksDashboard = [
   },
   {
     id: 2,
-    text: 'Product Management',
+    text: 'Quản lý sản phẩm',
     path: '/admin/products-list'
   },
   {
     id: 3,
-    text: 'Category Management',
+    text: 'Quản lý danh mục',
     path: '/admin/category-list'
   },
   {
     id: 4,
-    text: 'Variants Management',
+    text: 'Quản lý biến thể',
     path: '/admin/variants-manage'
   },
   {
     id: 5,
-    text: 'Users Management',
+    text: 'Quản lý người dùng',
     path: '/admin/user-list'
   },
   {
     id: 6,
-    text: 'Order Management',
+    text: 'Quản lý đơn hàng',
     path: '/admin/order-list'
   },
   {
     id: 9,
-    text: 'List Refunds Order',
+    text: 'Danh sách đơn hàng hoàn',
     path: '/admin/refunds-list'
   },
   {
     id: 7,
-    text: 'Coupon Management',
+    text: 'Quản lý mã giảm giá',
     path: '/admin/coupon'
   },
   {
     id: 8,
-    text: 'Send Mail',
+    text: 'Gửi email đến khách hàng',
     path: '/admin/list-email'
   }
 ]

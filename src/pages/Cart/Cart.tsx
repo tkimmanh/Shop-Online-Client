@@ -142,9 +142,9 @@ const CartPage = () => {
         <table className='border border-gray-300 w-full mx-auto col-span-6'>
           <thead className='border border-gray-300 '>
             <tr>
-              <th className='p-3 w-[350px] font-semibold  text-left'>Product</th>
-              <th className='w-[208px] border-l border-gray-300'>Quantity</th>
-              <th className='w-[128px] border-l border-gray-300'>Subtotal</th>
+              <th className='p-3 w-[350px] font-semibold  text-left'>Sản phẩm</th>
+              <th className='w-[208px] border-l border-gray-300'>Số lượng</th>
+              <th className='w-[128px] border-l border-gray-300'>Tổng phụ</th>
               <th className='w-[80px] border-l border-gray-300'></th>
             </tr>
           </thead>
@@ -209,17 +209,17 @@ const CartPage = () => {
         <div className='col-span-4'>
           <div className='bg-[#f7f7f7] w-[460px] h-[476px] p-10'>
             <div className='w-full border-b border-black'>
-              <Heading className='text-left py-3 text-xl '>Cart totals</Heading>
+              <Heading className='text-left py-3 text-xl '>Tổng tiền trong giỏ hàng</Heading>
             </div>
             <div>
               <div className='flex justify-between mt-10'>
-                <span className='font-bold text-lg'>Total : </span>
+                <span className='font-bold text-lg'>Tổng : </span>
                 <span className='font-semibold'>{formatMoney(totalPriceAfterDiscount)}</span>
               </div>
               <div className='flex items-center justify-between mt-10'>
-                <span className='text-lg'>Ordering information : </span>
+                <span className='text-lg'>Thông tin người nhận: </span>
                 <div className='border-b border-black'>
-                  <button onClick={handleOnClick}>Change</button>
+                  <button onClick={handleOnClick}>Thay đổi</button>
                 </div>
               </div>
 
@@ -234,8 +234,8 @@ const CartPage = () => {
                       <option value='Thanh toán bằng thẻ tín dụng'>Thanh toán bằng thẻ tín dụng</option>
                     </select>
                     {errors.payment_method && <span>This field is required</span>}
-                    <Button kind='secondary' className='py-1 px-4 text-xs ' type='submit'>
-                      Payment confirmation
+                    <Button kind='secondary' className='py-1 px-4 text-xs w-[130px]' type='submit'>
+                      Xác nhận phương thức
                     </Button>
                   </div>
                 </form>
@@ -245,10 +245,10 @@ const CartPage = () => {
                   placeholder='Apply discount code'
                   {...register('payload_coupon')}
                   type='text'
-                  className='border py-3 px-5 text-base lg:w-[70%] w-full'
+                  className='border py-2 border-gray-300 px-4 text-base lg:w-[70%] w-full'
                 />
-                <Button kind='secondary' className='lg:py-3 lg:px-5 py-2 px-3 lg:text-xs w-[30%]'>
-                  Apply
+                <Button kind='secondary' className='lg:py-3 lg:px-5 py-1 px-4 lg:text-xs w-[130px]'>
+                  Áp dụng
                 </Button>
               </form>
             </div>
@@ -260,13 +260,13 @@ const CartPage = () => {
           isOpenModal={isOpen}
           setIsOpenModal={setIsOpen}
         >
-          <Heading className='text-xl text-center py-10'>Information</Heading>
+          <Heading className='text-xl text-center py-10'>Thông tin</Heading>
           <form action='' onSubmit={handleSubmit(hanldeUpdateInforUser)}>
-            <Input register={register} type='text' placeholder='Full name *' name='full_name'></Input>
-            <Input register={register} type='number' placeholder='Phone *' name='phone'></Input>
-            <Input register={register} type='text' placeholder='Address *' name='address'></Input>
+            <Input register={register} type='text' placeholder='Tên đầy đủ *' name='full_name'></Input>
+            <Input register={register} type='number' placeholder='Điện thoại *' name='phone'></Input>
+            <Input register={register} type='text' placeholder='Địa chỉ *' name='address'></Input>
             <Button type='submit' kind='secondary' className='w-full py-4 text-xs'>
-              Change infor
+              Thay đổi thông tin
             </Button>
           </form>
         </Modal>

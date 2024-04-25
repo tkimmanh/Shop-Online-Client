@@ -36,10 +36,10 @@ const ProductsList = () => {
   return (
     <div>
       <div className='flex items-center justify-between gap-x-5 mb-5'>
-        <Heading>Product Manage</Heading>
+        <Heading>Quản lý sản phẩm</Heading>
         <Link to={routes.ProductAddNew.path}>
           <Button className='py-2 px-6 text-xs' kind='primary'>
-            Add new
+            Thêm mới
           </Button>
         </Link>
       </div>
@@ -48,28 +48,25 @@ const ProductsList = () => {
           <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
             <tr>
               <th scope='col' className='px-6 py-3'>
-                Product name
+                Tên sản phẩm
               </th>
               <th scope='col' className='px-6 py-3'>
-                Color
+                Màu sắc
               </th>
               <th scope='col' className='px-6 py-3'>
-                Quantity
+                Số lượng
               </th>
               <th scope='col' className='px-6 py-3'>
-                Category
+                Danh mục
               </th>
               <th scope='col' className='px-6 py-3'>
-                Price
+                Giá
               </th>
               <th scope='col' className='px-6 py-3'>
-                Sold
+                Đã bán
               </th>
               <th scope='col' className='px-6 py-3'>
-                Allow display
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                <span className='sr-only'>Edit</span>
+                Đang hiển thị
               </th>
             </tr>
           </thead>
@@ -95,24 +92,25 @@ const ProductsList = () => {
                   <td className='px-6 py-4'>{_item?.sold}</td>
                   <td className='px-6 py-4'>
                     {_item?.status === false ? (
-                      <span className='text-red-500 w-5 h-5 px-5 py-2 rounded-lg bg-red-200'>false</span>
+                      <div className='w-3 h-3 rounded-full bg-red-500'></div>
                     ) : (
-                      <span className='text-green-500 w-5 h-5 px-5 py-2 rounded-lg bg-green-200'>true</span>
+                      <div className='w-3 h-3 rounded-full bg-green-500'></div>
                     )}
                   </td>
-                  <td className='px-6 py-4 text-right'>
-                    <span
+                  <td className='px-6 py-4 text-center'>
+                    <button
                       className='font-medium text-blue-600 hover:underline cursor-pointer'
                       onClick={() => navigate(routes.ProductView.path.replace(':id', _item?._id.toString()))}
                     >
-                      Edit
-                    </span>
-                    <span
+                      Chỉnh sửa
+                    </button>
+
+                    <button
                       className='font-medium text-red-600 ml-[10px] hover:underline cursor-pointer'
                       onClick={() => handleDelete(_item?._id)}
                     >
-                      Delete
-                    </span>
+                      Xóa sản phẩm
+                    </button>
                   </td>
                 </tr>
               )

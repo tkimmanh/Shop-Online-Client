@@ -38,10 +38,10 @@ const DetailUser = () => {
     }
   })
 
-  const handleEditUser = useMutation({
+  const handleeditUser = useMutation({
     mutationFn: (body: any) => usersService.editUser(id, body),
     onSuccess: () => {
-      enqueueSnackbar('Edit user successfuly', { variant: 'success' })
+      enqueueSnackbar('edit user successfuly', { variant: 'success' })
     }
   })
 
@@ -53,7 +53,7 @@ const DetailUser = () => {
     formData.append('address', data.address)
     formData.append('role', role?.value)
     try {
-      await handleEditUser.mutateAsync(formData)
+      await handleeditUser.mutateAsync(formData)
       navigate('/admin/user-list')
     } catch (error) {
       console.log('error:', error)
@@ -100,7 +100,7 @@ const DetailUser = () => {
           </div>
         </div>
         <Button
-          isLoading={handleEditUser.isLoading}
+          isLoading={handleeditUser.isLoading}
           type='submit'
           className='px-10 py-3 text-sm rounded mt-5'
           kind='secondary'

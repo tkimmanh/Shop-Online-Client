@@ -37,6 +37,7 @@ export const orderStatusAdminOptions = [
   { label: 'Giao hàng thất bại không thể liên lạc với người nhận', value: messageOrder.ORDER_CONFIRM_FAIL_2 }
 ]
 export const orderStatusOptionsReturn = [
+  { label: 'Hoàn trả', value: messageOrder.USER_RETURN_ORDER },
   { label: 'Đã xác nhận trả hàng', value: messageOrder.REUTRN_ORDER_CONFIRM },
   { label: 'Đang kiểm tra hàng', value: messageOrder.RETURN_ORDER_WAIT_CONFIRM },
   { label: 'Trả hàng thành công', value: messageOrder.RETURN_ORDER_SUCCESS },

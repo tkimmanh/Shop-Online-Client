@@ -20,7 +20,7 @@ const ModalInformation = (props: any) => {
       const data = { ...value, id: detail?._id }
       editColorMutation.mutate(data, {
         onSuccess() {
-          // enqueueSnackbar('Sửa màu thành công', { variant: 'success' }); // Uncomment or add enqueueSnackbar call if needed
+          // enqueueSnackbar('edit màu thành công', { variant: 'success' }); // Uncomment or add enqueueSnackbar call if needed
           queryClient.invalidateQueries(['COLORS'])
         }
       })

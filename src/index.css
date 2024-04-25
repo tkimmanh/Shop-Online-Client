@@ -1,14 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'americana';
+  src: local('americana'), url('./utils/font/Americana.ttf');
+  font-weight: bold;
+}
+
 *,
 *:before,
 *:after {
   box-sizing: border-box;
 }
 * {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Source Sans 3', sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;

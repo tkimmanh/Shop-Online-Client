@@ -21,7 +21,7 @@ const ModalSize = (props: any) => {
       const data = { ...value, id: detail?._id }
       editSizeMutation.mutate(data, {
         onSuccess() {
-          enqueueSnackbar('Sửa size mới thành công', { variant: 'success' })
+          enqueueSnackbar('edit size mới thành công', { variant: 'success' })
         },
         onSettled: () => {
           queryClient.refetchQueries(['COLORS'])

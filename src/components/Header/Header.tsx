@@ -79,32 +79,32 @@ const Header = () => {
               <div className='flex flex-col '>
                 {isAuthenticated ? (
                   <>
-                    <Link className='mt-3 px-10 py-3 inline-block cursor-pointer' to={routes.Profile.path}>
-                      My Account
+                    <Link className='mt-5 px-3 py-3 inline-block cursor-pointer' to={routes.Profile.path}>
+                      Tài khoản
                     </Link>
-                    <Link className='px-10 py-3' to={routes.Profile.path}>
-                      Wish List
+                    <Link className='px-3 py-3' to={routes.Profile.path}>
+                      Sản phẩm yêu thích
                     </Link>
-                    <Link className='px-10 py-3' to={routes.ListOrder.path}>
-                      My Order
+                    <Link className='px-3 py-3' to={routes.ListOrder.path}>
+                      Danh sách đơn hàng
                     </Link>
                     {user?.role === 'admin' && (
-                      <Link className='px-10 py-3' to={routes.Dashboard.path}>
+                      <Link className='px-3 py-3' to={routes.Dashboard.path}>
                         Dashboard
                       </Link>
                     )}
                     {user?.role === 'staff' && (
-                      <Link className='px-10 py-3' to={routes.ListOrderAdmin.path}>
-                        Check order
+                      <Link className='px-3 py-3' to={routes.ListOrderAdmin.path}>
+                        Kiểm tra đơn hàng '(staff)'
                       </Link>
                     )}
-                    <button onClick={handleLogout} className='px-8 py-3 mb-3'>
-                      Log Out
+                    <button onClick={handleLogout} className=' px-3 py-3 inline-block cursor-pointer text-left'>
+                      Đăng xuất
                     </button>
                   </>
                 ) : (
-                  <Link className='px-10 py-3' to={routes.Login.path}>
-                    Login
+                  <Link className='px-3 py-3' to={routes.Login.path}>
+                    Đăng nhập
                   </Link>
                 )}
               </div>

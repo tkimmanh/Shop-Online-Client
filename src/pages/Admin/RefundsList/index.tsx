@@ -32,7 +32,7 @@ const RefundsList = () => {
     }
   })
 
-  const handleEdit = (id: string) => {
+  const handleedit = (id: string) => {
     detailMutation.mutate(id)
   }
 
@@ -95,25 +95,24 @@ const RefundsList = () => {
             <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
               <tr>
                 <th scope='col' className='px-6 py-3 w-[25%]'>
-                  Full name
+                  Họ và tên
                 </th>
                 <th scope='col' className='px-6 py-3 w-[20%]'>
-                  Address
+                  Địa chỉ
                 </th>
                 <th scope='col' className='px-6 py-3 w-[10%]'>
-                  Phone
+                  Số điện thoại
                 </th>
                 <th scope='col' className='px-6 py-3 w-[25%]'>
-                  Products
+                  Sản phẩm
                 </th>
                 <th scope='col' className='px-6 py-3 w-[15%]'>
-                  Total Price
+                  Tổng tiền
                 </th>
-                <th scope='col' className='px-6 py-3 w-[15%]'>
-                  Status
-                </th>
+
+                <th scope='col' className='px-6 py-3 w-[3%]'></th>
                 <th scope='col' className='px-6 py-3 w-[3%]'>
-                  Action
+                  Trạng thái
                 </th>
               </tr>
             </thead>
@@ -129,10 +128,10 @@ const RefundsList = () => {
                       <>
                         <div key={productIndex}>
                           <p>{product?.product?.title || '(Trống)'} </p>
-                          <p>Color : {product?.color?.name || '(Trống)'}</p>
+                          <p>Màu : {product?.color?.name || '(Trống)'}</p>
                           <p>Size : {product?.size?.name || '(Trống)'}</p>
                         </div>
-                        <div>Quantity : {product?.quantity || '(Trống)'}</div>
+                        <div>Số lượng : {product?.quantity || '(Trống)'}</div>
                       </>
                     ))}
                   </td>
@@ -153,7 +152,7 @@ const RefundsList = () => {
                   <td className='px-6 py-4'>
                     <button
                       onClick={() => {
-                        handleEdit(order?._id)
+                        handleedit(order?._id)
                       }}
                       className='font-medium text-blue-600 hover:underline'
                     >

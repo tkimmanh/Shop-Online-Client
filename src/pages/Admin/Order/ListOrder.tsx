@@ -77,7 +77,7 @@ function ListOrder() {
     })
   }
 
-  const handleEdit = (id: string) => {
+  const handleedit = (id: string) => {
     detailMutation.mutate(id)
   }
 
@@ -96,7 +96,7 @@ function ListOrder() {
       <div className='flex items-center'>
         <div className='w-[70%]'>
           <label htmlFor='status-select' className='block text-sm font-medium text-gray-700'>
-            Filter by status
+            Lọc theo trạng thái
           </label>
           <select
             id='status-select'
@@ -107,7 +107,7 @@ function ListOrder() {
               refetch()
             }}
           >
-            <option value=''>All Statuses</option>
+            <option value=''>Tất cả trạng thái</option>
             {Object.entries(messageOrder).map(([key, value]) => (
               <option key={key} value={value}>
                 {value}
@@ -130,26 +130,26 @@ function ListOrder() {
           <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
             <tr>
               <th scope='col' className='px-6 py-3'>
-                Full name
+                Tên người mua
               </th>
               <th scope='col' className='px-6 py-3 w-1/2'>
-                Address
+                Địa chỉ
               </th>
               <th scope='col' className='px-6 py-3'>
-                Phone
+                Số điện thoại
               </th>
               <th scope='col' className='px-6 py-3 w-2/3'>
-                Products
+                Sản phẩm
               </th>
               <th scope='col' className='px-6 py-3 '>
-                Payment method
+                Phương thức thanh toán
               </th>
               <th scope='col' className='px-6 py-3'>
-                Total Price
+                Tổng tiền
               </th>
 
               <th scope='col' className='px-6 py-3'>
-                Action
+                Status
               </th>
             </tr>
           </thead>
@@ -163,8 +163,10 @@ function ListOrder() {
                 <td className='px-6 py-4 w-1/3'>
                   {order.products.map((product: any, productIndex: number) => (
                     <div key={productIndex}>
-                      {product?.product?.title || '(Trống)'} - {product?.color?.name || '(Trống)'} -{' '}
-                      {product?.size?.name || '(Trống)'} x {product?.quantity || '(Trống)'}
+                      <p>- Tên sản phầm : {product?.product?.title || '(Trống)'}</p>
+                      <p>- Màu sắc :{product?.color?.name || '(Trống)'}</p>
+                      <p>- Kích cỡ :{product?.size?.name || '(Trống)'} </p>
+                      <p>- Số lượng : {product?.quantity || '(Trống)'}</p>
                     </div>
                   ))}
                 </td>
@@ -191,11 +193,11 @@ function ListOrder() {
                   <button
                     onClick={() => {
                       // setIsOpen(true)
-                      handleEdit(order?._id)
+                      handleedit(order?._id)
                     }}
                     className='font-medium text-blue-600 hover:underline'
                   >
-                    View
+                    Xem
                   </button>
                 </td>
               </tr>
