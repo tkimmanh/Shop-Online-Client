@@ -1,13 +1,28 @@
 import { ReactNode, useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
 import Sidebar from './Sidebar'
-import Logo from 'src/components/Logo'
 
 type DashboardLayoutProps = {
   children: ReactNode
 }
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+  ;(function (_d, m) {
+    var kommunicateSettings = {
+      appId: '1f5ecc0ced6ace672750cb82d627dbb0b',
+      popupWidget: true,
+      automaticChatOpenOnNavigation: true
+    }
+    var s = document.createElement('script')
+    s.type = 'text/javascript'
+    s.async = true
+    s.src = 'https://widget.kommunicate.io/v2/kommunicate.app'
+    var h = document.getElementsByTagName('head')[0]
+    h.appendChild(s)
+    ;(window as any).kommunicate = m
+    m._globals = kommunicateSettings
+  })(document, (window as any).kommunicate || {})
+
   const { user } = useContext(AppContext)
   return (
     <div>
