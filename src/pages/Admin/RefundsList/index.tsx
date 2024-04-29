@@ -34,6 +34,7 @@ const RefundsList = () => {
 
   const handleedit = (id: string) => {
     detailMutation.mutate(id)
+    setIsOpen(true)
   }
 
   const updateOrderStatusMutation = useMutation(orderService.updateStatus, {
@@ -65,6 +66,7 @@ const RefundsList = () => {
       }
     )
   }
+  console.log('detail:', detail)
 
   const confirmUpdateOrderStatus = (id: string, newStatus: string) => {
     confirmAlert({
@@ -156,7 +158,7 @@ const RefundsList = () => {
                       }}
                       className='font-medium text-blue-600 hover:underline'
                     >
-                      View
+                      Xem
                     </button>
                   </td>
                 </tr>

@@ -14,18 +14,34 @@ import Button from 'src/components/Button'
 import { useForm } from 'react-hook-form'
 import { AppContext } from 'src/context/app.context'
 import { TUser } from 'src/types/auth'
+import addressService from 'src/services/address.service'
+import { useQuery } from 'react-query'
+export interface AdressType {
+  province_id?: string
+  district_id?: string
+  district_name?: string
+  province_name?: string
+  ward_name?: string
+  ward_id?: string
+}
 
 const CartPage = () => {
-  const { user } = useContext(AppContext)
-
+  const { user, setCartChanged } = useContext(AppContext)
   const { data: listItemCart } = useCartData()
   const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
   const [isOpen, setIsOpen] = useState(false)
+
+  const [selectedProvince, setSelectedProvince] = useState<string>('')
+  const [selectedDistrict, setSelectedDistrict] = useState<string>('')
+  const [selectedWard, setSelectedWard] = useState<string>('')
+  const [houseNumber, setHouseNumber] = useState('')
+
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors }
   } = useForm()
 
@@ -86,13 +102,7 @@ const CartPage = () => {
   const updateProfileMutation = useMutation({
     mutationFn: (body: any) => usersService.edit({ _id: user?._id, ...body })
   })
-  const hanldeUpdateInforUser = (values: any) => {
-    updateProfileMutation.mutate(values, {
-      onSuccess: () => {
-        enqueueSnackbar('Cập nhật thông tin thành công', { variant: 'success' })
-      }
-    })
-  }
+
   const handleCreateOrder = (body: any) => {
     createOrderMutation.mutate(body, {
       onSuccess: (data: any) => {
@@ -104,6 +114,7 @@ const CartPage = () => {
       }
     })
   }
+
   const [totalPriceAfterDiscount, setTotalPriceAfterDiscount] = useState(totalAmount)
 
   useEffect(() => {
@@ -129,12 +140,81 @@ const CartPage = () => {
     }
   })
 
+  const validateSelection = () => {
+    return selectedProvince && selectedDistrict && selectedWard && houseNumber
+  }
+
   const onSubmitApplyCoupon = (data: any) => {
     applyCouponMutation.mutate({
       coupon_code: data.payload_coupon,
       cartItems: listItemCart?.data.user?.cart
     })
   }
+
+  const { data: provinces, isLoading: loadingProvinces } = useQuery('provinces', addressService.getProvinces)
+
+  const { data: districts, isLoading: loadingDistricts } = useQuery(
+    ['districts', selectedProvince],
+    () => addressService.getDistricts(selectedProvince),
+    {
+      enabled: !!selectedProvince
+    }
+  )
+
+  const { data: wards, isLoading: loadingWards } = useQuery(
+    ['wards', selectedDistrict],
+    () => addressService.getWards(selectedDistrict),
+    {
+      enabled: !!selectedDistrict // Only run query if selectedDistrict is not empty
+    }
+  )
+
+  useEffect(() => {
+    if (!selectedProvince) {
+      setSelectedDistrict('')
+      setSelectedWard('')
+    }
+  }, [selectedProvince])
+
+  useEffect(() => {
+    if (!selectedDistrict) {
+      setSelectedWard('')
+    }
+  }, [selectedDistrict])
+
+  const handleAddressChange = (
+    newProvince = selectedProvince,
+    newDistrict = selectedDistrict,
+    newWard = selectedWard
+  ) => {
+    const provinceName = provinces?.find((p) => p.province_id === newProvince)?.province_name || ''
+    const districtName = districts?.find((d) => d.district_id === newDistrict)?.district_name || ''
+    const wardName = wards?.find((w) => w.ward_id === newWard)?.ward_name || ''
+
+    const fullAddress = [houseNumber, wardName, districtName, provinceName].filter(Boolean).join(' - ')
+    setValue('address', fullAddress)
+  }
+
+  useEffect(() => {
+    handleAddressChange()
+  }, [houseNumber])
+
+  const hanldeUpdateInforUser = (values: any) => {
+    updateProfileMutation.mutate(values, {
+      onSuccess: () => {
+        if (!validateSelection()) {
+          enqueueSnackbar('Vui lòng điền đấy đủ thôn tin.', { variant: 'error' })
+          return
+        }
+        enqueueSnackbar('Cập nhật thông tin thành công', { variant: 'success' })
+        setCartChanged((prev) => !prev)
+      },
+      onError: () => {
+        enqueueSnackbar('Cập nhật thông tin thất bại', { variant: 'error' })
+      }
+    })
+  }
+
   return (
     <div>
       <Heading className='text-4xl text-center py-10'>Cart</Heading>
@@ -256,15 +336,88 @@ const CartPage = () => {
         </div>
         <Modal
           overlayClassName='flex items-end justify-end '
-          className='w-[400px] h-screen p-4'
+          className='w-[600px] h-screen p-4'
           isOpenModal={isOpen}
           setIsOpenModal={setIsOpen}
         >
-          <Heading className='text-xl text-center py-10'>Thông tin</Heading>
+          <Heading className='text-2xl text-center py-10'>Thông tin</Heading>
           <form action='' onSubmit={handleSubmit(hanldeUpdateInforUser)}>
             <Input register={register} type='text' placeholder='Tên đầy đủ *' name='full_name'></Input>
             <Input register={register} type='number' placeholder='Điện thoại *' name='phone'></Input>
-            <Input register={register} type='text' placeholder='Địa chỉ *' name='address'></Input>
+            <h1 className='my-3 text-lg'>Địa chỉ</h1>
+            <div className='flex flex-col gap-y-5'>
+              <div className='flex gap-x-3'>
+                <select
+                  className='border w-1/2 border-gray-300 p-3 rounded-sm focus:shadow-sm focus:border-gray-500 outline-none'
+                  value={selectedProvince}
+                  onChange={(e) => {
+                    const newProvince = e.target.value
+                    setSelectedProvince(newProvince)
+                    handleAddressChange(newProvince)
+                  }}
+                  disabled={loadingProvinces}
+                >
+                  <option value=''>{loadingProvinces ? 'Đang tải...' : 'Chọn tỉnh'}</option>
+                  {provinces?.map((province) => (
+                    <option key={province.province_id} value={province.province_id}>
+                      {province.province_name}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  className='border border-gray-300 p-3 rounded-sm focus:shadow-sm focus:border-gray-500 outline-none w-[50%]'
+                  value={selectedDistrict}
+                  onChange={(e) => {
+                    const newDistrict = e.target.value
+                    setSelectedDistrict(newDistrict)
+                    handleAddressChange(selectedProvince, newDistrict, selectedWard)
+                  }}
+                  disabled={!selectedProvince || loadingDistricts}
+                >
+                  <option value=''>{loadingDistricts ? 'Đang tải...' : 'Chọn huyện'}</option>
+                  {districts?.map((district) => (
+                    <option key={district.district_id} value={district.district_id}>
+                      {district.district_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className='flex gap-x-3'>
+                <select
+                  className='border border-gray-300 p-3 rounded-sm focus:shadow-sm focus:border-gray-500 outline-none w-[50%]'
+                  value={selectedWard}
+                  onChange={(e) => {
+                    const newWard = e.target.value
+                    setSelectedWard(newWard)
+                    handleAddressChange(selectedProvince, selectedDistrict, newWard)
+                  }}
+                  disabled={!selectedDistrict || loadingWards}
+                >
+                  <option value=''>{loadingWards ? 'Đang tải...' : 'Chọn xã'}</option>
+                  {wards?.map((ward) => (
+                    <option key={ward.ward_id} value={ward.ward_id}>
+                      {ward.ward_name}
+                    </option>
+                  ))}
+                </select>
+
+                <input
+                  className='p-3 w-1/2 outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
+                  placeholder='Số nhà hoặc tên đường'
+                  value={houseNumber}
+                  onChange={(e) => setHouseNumber(e.target.value)}
+                  required
+                />
+              </div>
+
+              <input
+                className='p-3 mb-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
+                {...register('address')}
+                readOnly
+              />
+            </div>
             <Button type='submit' kind='secondary' className='w-full py-4 text-xs'>
               Thay đổi thông tin
             </Button>

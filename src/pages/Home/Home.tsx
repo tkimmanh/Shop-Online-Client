@@ -7,7 +7,7 @@ import Heading from 'src/components/Heading'
 import Button from 'src/components/Button'
 import { routes } from 'src/routes/routes'
 import { Link, useSearchParams } from 'react-router-dom'
-import Slider from 'react-slick'
+import Slider, { Settings } from 'react-slick'
 import productsService from 'src/services/products.service'
 import { useQuery } from 'react-query'
 import categoryService from 'src/services/category.service'
@@ -16,8 +16,9 @@ import { setAccessTokenToLocalStorage, setIsAuthenticated } from 'src/utils/loca
 
 const Home = () => {
   const [params] = useSearchParams()
-  const settings = {
+  const settings: Settings = {
     infinite: true,
+    autoplay: true,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 4,

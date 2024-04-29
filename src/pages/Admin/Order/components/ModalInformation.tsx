@@ -12,53 +12,59 @@ const ModalInformation = (props: any) => {
       setIsOpenModal={setIsOpen}
     >
       <div className='h-[100%] overflow-y-auto'>
-        <h1 className='text-2xl font-bold mb-[10px] pb-[5px] border-b'>Detail Order</h1>
+        <h1 className='text-2xl font-bold mb-[10px] pb-[5px] border-b'>Chi tiết đơn hàng</h1>
         <div className='pb-[10px] border-b'>
-          <p className='text-lg font-bold mb-[5px] mt-[15px]'>Status Order</p>
+          <p className='text-lg font-bold mb-[5px] mt-[15px]'>Trạng thái đơn hàng</p>
           <p className='font-medium mb-[8px]'>
-            Created At: <span>{moment(detail?.createdAt).format('DD/MM/YYYY HH:mm:ss')}</span>
+            Ngày tạo: <span>{moment(detail?.createdAt).format('DD/MM/YYYY HH:mm:ss')}</span>
           </p>
           <p className='font-medium mb-[8px]'>
-            Total Price: <span>{Number(detail?.total_price || 0).toLocaleString('en')} VNĐ</span>
+            Tổng tiền: <span>{Number(detail?.total_price || 0).toLocaleString('en')} VNĐ</span>
           </p>
           <p className='font-medium mb-[8px]'>
-            Status Payment: <span>{detail?.status_payment}</span>
+            Phương thức thanh toán: <span>{detail?.status_payment}</span>
           </p>
           <p className='font-medium mb-[8px]'>
-            Status: <span>{detail?.status}</span>
+            Trạng thái đơn hàng: <span>{detail?.status}</span>
           </p>
         </div>
         <div className='pb-[10px] border-b'>
-          <p className='text-lg font-bold mb-[5px]'>User Information</p>
+          <p className='text-lg font-bold mb-[5px]'>Thông tin người dùng</p>
           <p className='font-medium mb-[8px]'>
-            Full Name: <span>{detail?.user?.full_name}</span>
+            Họ và tên: <span>{detail?.user?.full_name}</span>
           </p>
           <p className='font-medium mb-[8px]'>
             Email: <span>{detail?.user?.email}</span>
           </p>
           <p className='font-medium mb-[8px]'>
-            Phone Number: <span>{detail?.user?.phone}</span>
+            Địa chỉ: <span>{detail?.user?.address}</span>
+          </p>
+          <p className='font-medium mb-[8px]'>
+            Số điện thoại: <span>{detail?.user?.phone}</span>
           </p>
         </div>
-        <p className='text-lg font-bold mt-[15px]'>Products Information</p>
+        <p className='text-lg font-bold mt-[15px]'>Thông tin sản phẩm đã đặt</p>
         {detail?.products?.map((_item: any) => {
           return (
             <div className='flex items-center justify-between'>
               <div className='py-[10px] border-b'>
                 <p className='font-medium mb-[8px]'>
-                  Name: <span>{_item?.product?.title}</span>
+                  Tên : <span>{_item?.product?.title}</span>
                 </p>
                 <p className='font-medium mb-[8px]'>
-                  Price: <span>{Number(_item?.product?.price || 0).toLocaleString('en')}</span>
+                  Giá: <span>{Number(_item?.product?.price || 0).toLocaleString('en')}</span>
                 </p>
                 <p className='font-medium mb-[8px]'>
-                  Category: <span>{_item?.product?.category?.title}</span>
+                  Danh mục: <span>{_item?.product?.category?.title || '(Trống)'}</span>
                 </p>
                 <p className='font-medium mb-[8px]'>
-                  Size: <span>{_item?.size?.name}</span>
+                  Kích cỡ: <span>{_item?.size?.name || '(Trống)'}</span>
                 </p>
                 <p className='font-medium mb-[8px]'>
-                  Color: <span>{_item?.color?.name}</span>
+                  Màu: <span>{_item?.color?.name || '(Trống)'}</span>
+                </p>
+                <p>
+                  Số lượng: <span>{_item?.quantity}</span>
                 </p>
               </div>
               <div>

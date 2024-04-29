@@ -40,7 +40,7 @@ const WishList = () => {
 
   return (
     <div>
-      <Heading className='text-center mt-[40px] text-[40px] font-medium'>WishList</Heading>
+      <Heading className='text-center mt-[40px] text-[40px] font-medium'>Sản phẩm yêu thích</Heading>
       <div className='w-[1440px] mx-auto mt-[40px]'>
         {!isEmpty(data?.data?.wishlist) ? (
           <table className='w-full text-sm text-left  text-gray-500 border'>
@@ -78,7 +78,7 @@ const WishList = () => {
             </tbody>
           </table>
         ) : (
-          <p className='text-center mt-[40px] text-[20px] font-bold'>No data products</p>
+          <p className='text-center mt-[40px] text-[20px] font-semibold'>Trống</p>
         )}
       </div>
     </div>

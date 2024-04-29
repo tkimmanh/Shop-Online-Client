@@ -82,7 +82,7 @@ const Header = () => {
                     <Link className='mt-5 px-3 py-3 inline-block cursor-pointer' to={routes.Profile.path}>
                       Tài khoản
                     </Link>
-                    <Link className='px-3 py-3' to={routes.Profile.path}>
+                    <Link className='px-3 py-3' to={routes.WishList.path}>
                       Sản phẩm yêu thích
                     </Link>
                     <Link className='px-3 py-3' to={routes.ListOrder.path}>
