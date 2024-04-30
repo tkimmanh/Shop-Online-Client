@@ -59,6 +59,7 @@ const Home = () => {
       window.location.href = routes.Home.path
     }
   }, [params])
+
   const filteredProducts = listProducts?.data.products?.filter((product: any) => product.status == true)
   return (
     <div>

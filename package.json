@@ -13,6 +13,7 @@
     "prettier:fix": "prettier --write \"src/**/(*.tsx|*.ts|*.css|*.scss)\""
   },
   "dependencies": {
+    "@firebase/messaging": "^0.12.8",
     "@floating-ui/react": "^0.26.9",
     "@kommunicate/kommunicate-chatbot-plugin": "^0.0.7",
     "@react-google-maps/api": "^2.19.3",
@@ -27,6 +28,7 @@
     "dayjs": "^1.11.10",
     "dompurify": "^3.0.10",
     "dotenv": "^16.4.5",
+    "firebase": "^10.11.1",
     "framer-motion": "^11.0.20",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",

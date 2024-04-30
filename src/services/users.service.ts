@@ -6,6 +6,7 @@ const UPDATE_CART = 'user/update-cart'
 const DELETE_CART = 'user/delete-cart'
 const DETAIL_USER = 'user/get-by-admin'
 const edit_USER = 'user/edit-by-admin'
+const SAVE_USER_TOKEN = 'user/save-token'
 
 const usersService = {
   getAllUser() {
@@ -49,6 +50,9 @@ const usersService = {
   },
   getListWishList() {
     return http.get(`${BASE_URL}/wishlist`)
+  },
+  saveUserTokenFirebase(token: string) {
+    return http.post(SAVE_USER_TOKEN, { token })
   }
 }
 
