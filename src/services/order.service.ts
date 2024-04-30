@@ -37,6 +37,12 @@ const orderService = {
   },
   listReturns() {
     return http.get(`${BASE_URL}/returns`)
+  },
+  categorySelling() {
+    return http.get(`${BASE_URL}/category-top-selling`)
+  },
+  topSelling(period: string, date: any) {
+    return http.get(`${BASE_URL}/top-selling/${period}?date=${date}`)
   }
 }
 

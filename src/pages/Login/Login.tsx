@@ -1,15 +1,15 @@
 import { useSnackbar } from 'notistack'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaGoogle } from 'react-icons/fa'
 import { useMutation } from 'react-query'
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import Checkbox from 'src/components/Checkbox'
 import Heading from 'src/components/Heading'
 import Input from 'src/components/Input'
 import { AppContext } from 'src/context/app.context'
-import http from 'src/lib/axios'
+
 import { routes } from 'src/routes/routes'
 import authService from 'src/services/auth.service'
 import { TLogin } from 'src/types/auth'
@@ -37,6 +37,7 @@ const Login = () => {
       access_type: 'offline'
     }
     const queryString = new URLSearchParams(query).toString()
+
     return `${url}?${queryString}`
   }
 

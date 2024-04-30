@@ -6,7 +6,7 @@ const Sidebar = () => {
   const location = useLocation()
 
   return (
-    <div className='h-full'>
+    <div className='max-h-screen'>
       <div
         className={twMerge(
           'flex-col text-[16px] font-medium rounded-[12px] flex gap-[20px] items-center cursor-pointer mt-[10px] mx-[10px]'
