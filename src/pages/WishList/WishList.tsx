@@ -69,7 +69,7 @@ const WishList = () => {
                         className='w-[200px]  text-[#000] bg-[#fff] hover:bg-[#000] hover:text-[#fff] font-[400] text-[12px] col-span-9 h-[40px]'
                         style={{ border: '1px solid #000' }}
                       >
-                        Thêm vào giỏ hàng
+                        Chi tiết sản phẩm
                       </button>
                     </td>
                   </tr>

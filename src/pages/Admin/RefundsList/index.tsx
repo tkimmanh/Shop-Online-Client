@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { messageOrder, orderStatusOptionsReturn } from 'src/constants/order.constatns'
+import { orderStatusOptionsReturn } from 'src/constants/order.constatns'
 import orderService from 'src/services/order.service'
 import { formatMoney } from 'src/utils/formatMoney'
 import ModalInformation from '../Order/components/ModalInformation'
@@ -66,11 +66,10 @@ const RefundsList = () => {
       }
     )
   }
-  console.log('detail:', detail)
 
   const confirmUpdateOrderStatus = (id: string, newStatus: string) => {
     confirmAlert({
-      message: 'Are you sure you want to update this order status?',
+      message: 'Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng?',
       buttons: [
         {
           label: 'Yes',
@@ -82,13 +81,7 @@ const RefundsList = () => {
       ]
     })
   }
-  const getOptionsWithDefault = (currentStatus: any) => {
-    const statusExists = orderStatusOptionsReturn.some((option) => option.value === currentStatus)
-    if (!statusExists && currentStatus) {
-      return [...orderStatusOptionsReturn, { label: currentStatus, value: currentStatus }]
-    }
-    return orderStatusOptionsReturn
-  }
+
   return (
     <div>
       <div>
@@ -102,17 +95,16 @@ const RefundsList = () => {
                 <th scope='col' className='px-6 py-3 w-[20%]'>
                   Địa chỉ
                 </th>
-                <th scope='col' className='px-6 py-3 w-[10%]'>
-                  Số điện thoại
+                <th scope='col' className='px-6 py-3 '>
+                  SĐT
                 </th>
-                <th scope='col' className='px-6 py-3 w-[25%]'>
-                  Sản phẩm
+                <th scope='col' className='px-6 py-3 w-[30%]'>
+                  Phương thức thanh toán
                 </th>
                 <th scope='col' className='px-6 py-3 w-[15%]'>
                   Tổng tiền
                 </th>
 
-                <th scope='col' className='px-6 py-3 w-[3%]'></th>
                 <th scope='col' className='px-6 py-3 w-[3%]'>
                   Trạng thái
                 </th>
@@ -124,21 +116,9 @@ const RefundsList = () => {
                   <td className='px-6 py-4'>{order?.user?.full_name || '(Trống)'}</td>
                   <td className='px-6 py-4'>{order?.user?.address || '(Trống)'}</td>
                   <td className='px-6 py-4'>{order?.user?.phone || '(Trống)'}</td>
-
-                  <td className='px-6 py-4 w-1/3'>
-                    {order.products.map((product: any, productIndex: number) => (
-                      <>
-                        <div key={productIndex}>
-                          <p>{product?.product?.title || '(Trống)'} </p>
-                          <p>Màu : {product?.color?.name || '(Trống)'}</p>
-                          <p>Size : {product?.size?.name || '(Trống)'}</p>
-                        </div>
-                        <div>Số lượng : {product?.quantity || '(Trống)'}</div>
-                      </>
-                    ))}
+                  <td className='px-6 py-4'>
+                    <span>{order.payment_method || '(Trống)'}</span>
                   </td>
-                  <td></td>
-
                   <td className='px-6 py-4'>
                     <span>{formatMoney(order.total_price) || '(Trống)'}</span>
                   </td>

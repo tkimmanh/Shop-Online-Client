@@ -130,18 +130,16 @@ function ListOrder() {
           <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
             <tr>
               <th scope='col' className='px-6 py-3'>
-                Tên người mua
+                Tên
               </th>
               <th scope='col' className='px-6 py-3 w-1/2'>
                 Địa chỉ
               </th>
               <th scope='col' className='px-6 py-3'>
-                Số điện thoại
+                SĐT
               </th>
-              <th scope='col' className='px-6 py-3 w-2/3'>
-                Sản phẩm
-              </th>
-              <th scope='col' className='px-6 py-3 '>
+
+              <th scope='col' className='px-6 py-3 w-[30%]'>
                 Phương thức thanh toán
               </th>
               <th scope='col' className='px-6 py-3'>
@@ -160,16 +158,6 @@ function ListOrder() {
                 <td className='px-6 py-4'>{order?.user?.address || '(Trống)'}</td>
                 <td className='px-6 py-4'>{order?.user?.phone || '(Trống)'}</td>
 
-                <td className='px-6 py-4 w-1/3'>
-                  {order.products.map((product: any, productIndex: number) => (
-                    <div key={productIndex}>
-                      <p>- Tên sản phầm : {product?.product?.title || '(Trống)'}</p>
-                      <p>- Màu sắc :{product?.color?.name || '(Trống)'}</p>
-                      <p>- Kích cỡ :{product?.size?.name || '(Trống)'} </p>
-                      <p>- Số lượng : {product?.quantity || '(Trống)'}</p>
-                    </div>
-                  ))}
-                </td>
                 <td className='px-6 py-4'>
                   <span>{order.payment_method || '(Trống)'}</span>
                 </td>

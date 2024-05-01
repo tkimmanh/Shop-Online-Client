@@ -171,56 +171,60 @@ const Dashboard = () => {
       </div>
 
       <div className='grid grid-cols-2 gap-x-10'>
-        <div className='mt-8'>
-          <h3 className='text-lg font-semibold mb-4'>Top 5 sản phẩm bán chạy theo ngày</h3>
-          <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl min-h-[496px]'>
-            {topDailyProducts?.data.products?.map((product: any) => {
-              console.log('product:', product)
-              return (
-                <div key={product._id} className='bg-white p-4 flex '>
-                  <div>
-                    <img
-                      className='w-20 h-20 object-contain gap-x-5'
-                      src={product.productDetails.thumbnail.url}
-                      alt=''
-                    />
+        {topDailyProducts?.data?.products?.length > 0 && (
+          <div className='mt-8'>
+            <h3 className='text-lg font-semibold mb-4'>Top 5 sản phẩm bán chạy theo ngày</h3>
+            <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl min-h-[496px]'>
+              {topDailyProducts?.data.products?.map((product: any) => {
+                console.log('product:', product)
+                return (
+                  <div key={product._id} className='bg-white p-4 flex '>
+                    <div>
+                      <img
+                        className='w-20 h-20 object-contain gap-x-5'
+                        src={product.productDetails.thumbnail.url}
+                        alt=''
+                      />
+                    </div>
+                    <div>
+                      <h4 className='text-lg font-semibold mt-2'>{product.productDetails.title}</h4>
+                      <p className='text-sm text-gray-500 mt-1'>
+                        <span className='font-bold'>{product.totalSold}</span> sản phẩm đã bán trong ngày hôm nay
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className='text-lg font-semibold mt-2'>{product.productDetails.title}</h4>
-                    <p className='text-sm text-gray-500 mt-1'>
-                      <span className='font-bold'>{product.totalSold}</span> sản phẩm đã bán trong ngày hôm nay
-                    </p>
-                  </div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className='mt-8'>
-          <h3 className='text-lg font-semibold mb-4'>Top 5 sản phẩm bán chạy theo tháng</h3>
-          <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl'>
-            {topMonthlyProducts?.data.products?.map((product: any) => {
-              return (
-                <div key={product._id} className='bg-white p-4 flex '>
-                  <div>
-                    <img
-                      className='w-20 h-20 object-contain gap-x-5'
-                      src={product.productDetails.thumbnail.url}
-                      alt=''
-                    />
+        {topMonthlyProducts?.data?.products?.length > 0 && (
+          <div className='mt-8'>
+            <h3 className='text-lg font-semibold mb-4'>Top 5 sản phẩm bán chạy theo tháng</h3>
+            <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl'>
+              {topMonthlyProducts?.data.products?.map((product: any) => {
+                return (
+                  <div key={product._id} className='bg-white p-4 flex '>
+                    <div>
+                      <img
+                        className='w-20 h-20 object-contain gap-x-5'
+                        src={product.productDetails.thumbnail.url}
+                        alt=''
+                      />
+                    </div>
+                    <div>
+                      <h4 className='text-lg font-semibold mt-2'>{product.productDetails.title}</h4>
+                      <p className='text-sm text-gray-500 mt-1'>
+                        <span className='font-bold'>{product.totalSold}</span> sản phẩm đã bán trong tháng này
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className='text-lg font-semibold mt-2'>{product.productDetails.title}</h4>
-                    <p className='text-sm text-gray-500 mt-1'>
-                      <span className='font-bold'>{product.totalSold}</span> sản phẩm đã bán trong tháng này
-                    </p>
-                  </div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <div className='grid grid-cols-2 gap-x-10'>

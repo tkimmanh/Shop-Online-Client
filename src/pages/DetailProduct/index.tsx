@@ -11,7 +11,6 @@ import Card from 'src/components/Card/CardMain'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Title from 'src/components/Card/Title'
 import Price from 'src/components/Card/Price'
-
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import Rating from 'react-rating-stars-component'
 import productsService from 'src/services/products.service'

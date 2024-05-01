@@ -20,8 +20,9 @@ const orderService = {
   paymentSuccess(orderId: string) {
     return http.get(`/order/payment-success?vnp_TxnRef=${orderId}`)
   },
-  myOrder() {
-    return http.get(MY_ORDER)
+  myOrder(status: any) {
+    const params = status ? { status } : {}
+    return http.get(MY_ORDER, { params })
   },
   myOrderDetail(id: string) {
     return http.get(`${BASE_URL}/${id}/detail`)
@@ -43,6 +44,9 @@ const orderService = {
   },
   topSelling(period: string, date: any) {
     return http.get(`${BASE_URL}/top-selling/${period}?date=${date}`)
+  },
+  getOrderCountsByStatus() {
+    return http.get(`${BASE_URL}/get-counts-status`)
   }
 }
 

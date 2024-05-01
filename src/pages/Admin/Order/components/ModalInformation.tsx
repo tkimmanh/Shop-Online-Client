@@ -1,8 +1,10 @@
 import moment from 'moment'
 import Modal from 'src/components/Modal'
+import { formatMoney } from 'src/utils/formatMoney'
 
 const ModalInformation = (props: any) => {
   const { isOpen, setIsOpen, detail } = props
+  console.log('detail', detail)
 
   return (
     <Modal
@@ -67,12 +69,16 @@ const ModalInformation = (props: any) => {
                   Số lượng: <span>{_item?.quantity}</span>
                 </p>
               </div>
+
               <div>
                 <img className='w-24 h-40' src={_item?.product?.thumbnail?.url} alt='' />
               </div>
             </div>
           )
         })}
+        <h1 className='my-5 text-lg'>
+          <span className='text-black font-bold '>Tổng tiền</span> : {formatMoney(detail?.total_price)}
+        </h1>
       </div>
     </Modal>
   )
