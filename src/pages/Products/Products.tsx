@@ -116,6 +116,7 @@ const Products = () => {
       { replace: true }
     )
   }, [])
+
   const handlePageClick = (data: any) => {
     const selectedPage = data.selected + 1
     navigate({
@@ -141,7 +142,9 @@ const Products = () => {
   const pageCount = Math.ceil(totalProducts / limit)
 
   const filteredProducts = listProducts?.data.products?.filter((product: any) => product.status == true)
-
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [pageCount])
   return (
     <div className='mt-10'>
       <div className='grid lg:grid-cols-10 min'>

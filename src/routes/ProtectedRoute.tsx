@@ -6,9 +6,14 @@ import { routes } from './routes'
 interface ProtectedRouteProps {
   children: ReactNode
   redirectAuthenticatedToHome?: boolean
+  redirectAuthenticatedToHomeIsAuthenticated?: boolean
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, redirectAuthenticatedToHome = false }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  redirectAuthenticatedToHome = false,
+  redirectAuthenticatedToHomeIsAuthenticated = false
+}) => {
   const { isAuthenticated, user } = useContext(AppContext)
 
   const location = useLocation()
@@ -16,6 +21,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, redirectAuthe
   const currentRoute = Object.values(routes).find((route) => route.path === location.pathname)
 
   if (isAuthenticated && redirectAuthenticatedToHome) {
+    return <Navigate to={routes.Home.path} replace />
+  }
+
+  if (!isAuthenticated && redirectAuthenticatedToHomeIsAuthenticated) {
     return <Navigate to={routes.Home.path} replace />
   }
 

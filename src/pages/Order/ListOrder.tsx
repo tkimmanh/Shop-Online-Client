@@ -6,7 +6,7 @@ import { formatMoney } from 'src/utils/formatMoney'
 import { enqueueSnackbar } from 'notistack'
 import { messageOrder } from 'src/constants/order.constatns'
 import ModalInformation from '../Admin/Order/components/ModalInformation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import classNames from 'src/utils/classNames'
 
@@ -14,24 +14,13 @@ const ListOrder = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [currentOrderId, setCurrentOrderId] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
-  const [statusCounts, setStatusCounts] = useState({})
 
   const queryClient = useQueryClient()
   const { data: myOrders, refetch } = useQuery({
     queryKey: ['ORDER', statusFilter],
     queryFn: () => orderService.myOrder(statusFilter)
   })
-  const deleteOrderMutation = useMutation({
-    mutationFn: (id: string) => orderService.deleteOrder(id)
-  })
-  const handleDeleteOrder = (id: string) => {
-    deleteOrderMutation.mutate(id, {
-      onSuccess: () => {
-        queryClient.invalidateQueries('ORDER')
-        enqueueSnackbar('Xóa thành công', { variant: 'success' })
-      }
-    })
-  }
+
   const updateOrderStatusMutation = useMutation({
     mutationFn: (body: any) => orderService.updateOrder(body)
   })
@@ -80,21 +69,6 @@ const ListOrder = () => {
     refetch()
   }
 
-  useEffect(() => {
-    const fetchStatusCounts = async () => {
-      const response = await orderService.getOrderCountsByStatus()
-
-      setStatusCounts(
-        response.data?.counts.reduce((acc: any, curr: any) => {
-          acc[curr.status] = curr.count
-          return acc
-        }, {})
-      )
-    }
-
-    fetchStatusCounts()
-  }, [])
-
   const isActive = (status?: string) => {
     return status === statusFilter ? 'bg-black text-white' : 'bg-white text-black'
   }
@@ -133,7 +107,7 @@ const ListOrder = () => {
               isActive(item.value)
             )}
           >
-            {item.label} ({statusCounts[item.value as keyof typeof statusCounts] || 0})
+            {item.label}
           </button>
         ))}
       </div>
@@ -166,10 +140,10 @@ const ListOrder = () => {
                         <strong>Sản phẩm:</strong> {product.product.title}
                       </div>
                       <div className='py-[2px]'>
-                        <strong>Kích cỡ:</strong> {product.size.name || '(Trống)'}
+                        <strong>Kích cỡ:</strong> {product.size?.name || '(Trống)'}
                       </div>
                       <div className='py-[2px]'>
-                        <strong>Màu:</strong> {product.color.name || '(Trống)'}
+                        <strong>Màu:</strong> {product.color?.name || '(Trống)'}
                       </div>
                       <div className='py-[2px]'>
                         <strong>Số lượng:</strong> {product.quantity}
@@ -188,16 +162,6 @@ const ListOrder = () => {
                     >
                       Xem
                     </button>
-                  </p>
-                  <p>
-                    {order.status === messageOrder.USER_CANCEL_ORDER && (
-                      <button
-                        className='py-[5px] bg-[#d90000] w-full text-[#fff] mb-[5px] rounded-[8px] border border-solid border-[#d90000] hover:bg-[#fff] hover:text-[#d90000]'
-                        onClick={() => handleDeleteOrder(order._id)}
-                      >
-                        Xóa đơn hàng
-                      </button>
-                    )}
                   </p>
                   {canReturn ? (
                     <button

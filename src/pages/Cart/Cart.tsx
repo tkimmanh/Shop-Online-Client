@@ -26,7 +26,7 @@ export interface AdressType {
 }
 
 const CartPage = () => {
-  const { user, setCartChanged } = useContext(AppContext)
+  const { user, setCartChanged, cartChanged } = useContext(AppContext)
   const { data: listItemCart } = useCartData()
   const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
@@ -106,10 +106,11 @@ const CartPage = () => {
   const handleCreateOrder = (body: any) => {
     createOrderMutation.mutate(body, {
       onSuccess: (data: any) => {
+        enqueueSnackbar('Đặt hàng thành công', { variant: 'success' })
         if (data.data?.paymentUrl) {
           window.location.href = data?.data.paymentUrl
         }
-        enqueueSnackbar('Đặt hàng thành công', { variant: 'success' })
+        setCartChanged(!cartChanged)
         queryClient.invalidateQueries('cart')
       }
     })
@@ -123,8 +124,8 @@ const CartPage = () => {
   }, [listItemCart])
 
   const calculateTotalPrice = () => {
-    const total = listItemCart?.data.user?.cart?.reduce(
-      (acc: any, item: any) => acc + item.product.price * item.quantity,
+    const total = listItemCart?.data?.user?.cart?.reduce(
+      (acc: any, item: any) => acc + item?.product?.price * item.quantity,
       0
     )
     setTotalPriceAfterDiscount(total || 0)
@@ -136,7 +137,7 @@ const CartPage = () => {
       enqueueSnackbar('Áp dụng mã giảm giá thành công', { variant: 'success' })
     },
     onError: (error: any) => {
-      enqueueSnackbar(error.response.data.message, { variant: 'error' })
+      enqueueSnackbar(error?.response?.data?.message, { variant: 'error' })
     }
   })
 
@@ -229,61 +230,68 @@ const CartPage = () => {
             </tr>
           </thead>
           <tbody>
-            {listItemCart?.data.user?.cart?.map((item: any, index: number) => {
-              return (
-                <tr className='border-b border-gray-300 '>
-                  <td className='border-r border-gray-300 p-3' key={index + 1}>
-                    <div className='flex gap-x-5 items-start'>
-                      <img className='w-24 h-40 object-contain' src={item?.product?.thumbnail.url as string} alt='' />
-                      <div className='flex flex-col mt-5 '>
-                        <span className='uppercase text-xs font-medium '>{item?.product.title}</span>
-                        <span className='my-3'>{formatMoney(item?.product.price)}</span>
-                        {item.product.colors?.length > 0 && (
-                          <span className='uppercase text-xs font-medium'>
-                            Color - {item?.product.colors?.map((color: any) => color?.name)}
-                          </span>
-                        )}
-                        {item.product.sizes?.length > 0 && (
-                          <span className='uppercase text-xs font-medium'>
-                            Size - {item?.product?.sizes?.map((sizes: any) => sizes?.name)}
-                          </span>
-                        )}
+            {listItemCart?.data?.user?.cart?.length > 0 &&
+              listItemCart?.data.user?.cart?.map((item: any, index: number) => {
+                return (
+                  <tr className='border-b border-gray-300 '>
+                    <td className='border-r border-gray-300 p-3' key={index + 1}>
+                      <div className='flex gap-x-5 items-center'>
+                        <img
+                          className='w-24 h-40 object-contain'
+                          src={item?.product?.thumbnail?.url as string}
+                          alt=''
+                        />
+                        <div className='flex flex-col mt-5 '>
+                          <span className='uppercase text-xs font-medium '>{item?.product?.title || ''}</span>
+                          <span className='my-3'>{formatMoney(item?.product?.price || '')}</span>
+                          {item?.product?.colors?.length > 0 && (
+                            <span className='uppercase text-xs font-medium'>
+                              Color -
+                              {item?.product?.colors?.length > 0 &&
+                                item?.product?.colors?.map((color: any) => color?.name)}
+                            </span>
+                          )}
+                          {item?.product?.sizes?.length > 0 && item?.product?.sizes?.length > 0 && (
+                            <span className='uppercase text-xs font-medium'>
+                              Size - {item?.product?.sizes?.map((sizes: any) => sizes?.name)}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className='flex items-center justify-center'>
-                      <QuantitySelector
-                        initialQuantity={item?.quantity}
-                        onQuantityChange={(newQuantity) =>
-                          handleQuantityChange(item.product._id, item.color, item.size, newQuantity)
-                        }
-                      ></QuantitySelector>
-                    </div>
-                  </td>
-                  <td className='border-l border-gray-300'>
-                    <span className='flex items-center justify-center '>
-                      {formatMoney(item?.product?.subtotal) || 0}
-                    </span>
-                  </td>
-                  <td className='border-l border-gray-300'>
-                    <div className='flex items-center justify-center '>
-                      <button
-                        onClick={() =>
-                          handleDeleteCartItem({
-                            product_id: item.product._id,
-                            color_id: item.color,
-                            size_id: item.size
-                          })
-                        }
-                      >
-                        <FiTrash size={20}></FiTrash>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              )
-            })}
+                    </td>
+                    <td>
+                      <div className='flex items-center justify-center'>
+                        <QuantitySelector
+                          initialQuantity={item?.quantity}
+                          onQuantityChange={(newQuantity) =>
+                            handleQuantityChange(item.product._id, item.color, item.size, newQuantity)
+                          }
+                        ></QuantitySelector>
+                      </div>
+                    </td>
+                    <td className='border-l border-gray-300'>
+                      <span className='flex items-center justify-center '>
+                        {formatMoney(item?.product?.subtotal) || 0}
+                      </span>
+                    </td>
+                    <td className='border-l border-gray-300'>
+                      <div className='flex items-center justify-center '>
+                        <button
+                          onClick={() =>
+                            handleDeleteCartItem({
+                              product_id: item.product._id,
+                              color_id: item.color,
+                              size_id: item.size
+                            })
+                          }
+                        >
+                          <FiTrash size={20}></FiTrash>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
           </tbody>
         </table>
         <div className='col-span-4'>

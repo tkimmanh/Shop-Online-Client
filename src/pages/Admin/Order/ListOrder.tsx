@@ -138,7 +138,6 @@ function ListOrder() {
               <th scope='col' className='px-6 py-3'>
                 SĐT
               </th>
-
               <th scope='col' className='px-6 py-3 w-[30%]'>
                 Phương thức thanh toán
               </th>

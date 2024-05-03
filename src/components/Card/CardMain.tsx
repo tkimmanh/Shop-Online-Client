@@ -65,7 +65,7 @@ const Card = ({ image, discount, id }: Props) => {
   return (
     <>
       <div className='relative lg:mx-0 lg:max-w-[338px] lg:h-[518px] md:h-[500px] h-[400px] ' ref={nodeRef}>
-        <img className='w-full h-full object-cover' src={image || images.placeholderImage} alt='image-product' />
+        <img className='w-full h-full object-cover ' src={image || images.placeholderImage} alt='image-product' />
         <div
           className={classNames(
             'absolute bottom-8 right-0 flex gap-x-3',

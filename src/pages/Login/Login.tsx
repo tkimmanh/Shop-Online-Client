@@ -15,12 +15,13 @@ import authService from 'src/services/auth.service'
 import { TLogin } from 'src/types/auth'
 import { ErrorResponse } from 'src/types/utils'
 import { isAxiosUnprocessableEntityError } from 'src/utils/common'
+import { setAccessTokenToLocalStorage } from 'src/utils/localStorage'
 
 const Login = () => {
   const { register, handleSubmit, setError } = useForm<TLogin>()
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, cartChanged, setCartChanged } = useContext(AppContext)
   const { VITE_CLIENT_GOOGLE_ID, VITE_GOOGLE_REDIRECT_URI } = import.meta.env
 
   const getGoogleAuthUrl = () => {
@@ -45,11 +46,15 @@ const Login = () => {
     mutationFn: (body: TLogin) => authService.login(body)
   })
   const onSubmit = (values: TLogin) => {
+    if (!values.email || !values.password) {
+      enqueueSnackbar('Vui lòng nhập email và mật khẩu', { variant: 'error' })
+      return
+    }
     loginAccountMutation.mutate(values, {
       onSuccess: () => {
         enqueueSnackbar('Đăng nhập thành công', { variant: 'success' })
         setIsAuthenticated(true)
-        navigate(routes.Home.path)
+        window.location.href = routes.Home.path
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<TLogin>>(error)) {

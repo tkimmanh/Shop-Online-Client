@@ -241,3 +241,7 @@ input[type='checkbox']:checked + span .checkbox-indicator {
 .pagination li.disabled a {
   color: grey;
 }
+
+.slick-slide-item {
+  padding: 0 7px;
+}

@@ -12,12 +12,6 @@ import { routes } from 'src/routes/routes'
 const CustomSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
 
-  const slideContents = [
-    { subHeading1: 'Summer Style ', subHeading2: 'Sensations' },
-    { subHeading1: 'Unleash Inner', subHeading2: ' Fashionista' },
-    { subHeading1: 'Effortless Denim ', subHeading2: 'Delights' }
-  ]
-
   const settings = {
     dots: true,
     infinite: true,
@@ -64,17 +58,6 @@ const CustomSlider = () => {
             <img src={slide} alt={`Slide ${index}`} className={`w-full h-full object-cover absolute`} />
             <div className='center-inline'>
               <div className='max-w-[500px] w-full text-center'>
-                <p data-aos='fade-down' className='text-white font-normal text-[15px]'>
-                  EXPRESS YOUR UNIQUE STYLE
-                </p>
-                <div className='my-8' data-aos='fade-down' data-aos-delay='1100'>
-                  <Heading className='text-[60px] mb-5 text-white text-center'>
-                    {slideContents[currentSlide].subHeading1}
-                  </Heading>
-                  <Heading className='text-[60px] text-white text-center'>
-                    {slideContents[currentSlide].subHeading2}
-                  </Heading>
-                </div>
                 <Link to={routes.Product.path}>
                   <Button
                     className='text-[11px] px-7 py-3'

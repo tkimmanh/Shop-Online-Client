@@ -18,6 +18,10 @@ const Register = () => {
     mutationFn: (body: TRegister) => authService.registerAccount(body)
   })
   const onSubmit = async (values: TRegister) => {
+    if (!values.full_name || !values.email || !values.password || !values.confirm_password || !values.phone) {
+      enqueueSnackbar('Vui lòng nhập đầy đủ thông tin', { variant: 'error' })
+      return
+    }
     registerAccountMutation.mutate(values, {
       onSuccess: () => {
         enqueueSnackbar('Đăng ký thành công', { variant: 'success' })

@@ -43,7 +43,7 @@ const Dashboard = () => {
   const { data: listProducts } = useQuery({
     queryKey: ['PRODUCTS'],
     queryFn: () => {
-      return productsService.getAllProducts()
+      return productsService.getAllProducts('')
     }
   })
 
@@ -178,7 +178,7 @@ const Dashboard = () => {
               {topDailyProducts?.data.products?.map((product: any) => {
                 console.log('product:', product)
                 return (
-                  <div key={product._id} className='bg-white p-4 flex '>
+                  <div key={product._id} className='bg-white p-4 flex gap-x-5'>
                     <div>
                       <img
                         className='w-20 h-20 object-contain gap-x-5'
@@ -205,7 +205,7 @@ const Dashboard = () => {
             <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl'>
               {topMonthlyProducts?.data.products?.map((product: any) => {
                 return (
-                  <div key={product._id} className='bg-white p-4 flex '>
+                  <div key={product._id} className='bg-white p-4 flex gap-x-5'>
                     <div>
                       <img
                         className='w-20 h-20 object-contain gap-x-5'
@@ -233,7 +233,7 @@ const Dashboard = () => {
           <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl min-h-[496px]'>
             {topYearlyProducts?.data.products?.map((product: any) => {
               return (
-                <div key={product._id} className='bg-white p-4 flex '>
+                <div key={product._id} className='bg-white p-4 flex gap-x-5'>
                   <div>
                     <img
                       className='w-20 h-20 object-contain gap-x-5'

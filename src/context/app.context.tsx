@@ -1,8 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
 import usersService from 'src/services/users.service'
 import { TUser } from 'src/types/auth'
-import { getAccessTokenFromLocalStorage } from 'src/utils/localStorage'
 
 interface AppContextInterface {
   isOpenModal: boolean

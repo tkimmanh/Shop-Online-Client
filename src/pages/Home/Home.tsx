@@ -66,11 +66,11 @@ const Home = () => {
       <SliderComponent></SliderComponent>
       <div className='mx-7'>
         <Heading className='text-3xl pt-20 pb-16'>Sản phẩm mới</Heading>
-        <div>
+        <div className='mx-5 '>
           <Slider {...settings}>
             {filteredProducts?.slice(0, 10).map((product: any) => {
               return (
-                <div key={product._id}>
+                <div className='slick-slide-item' key={product._id}>
                   <Card id={product._id} image={product.thumbnail?.url}></Card>
                   <Link className='inline-block' to={`products/${product._id}/${product.slug}`}>
                     <div className='mt-5 flex w-full flex-col gap-y-2'>
@@ -116,7 +116,7 @@ const Home = () => {
               <div>
                 <img
                   className='h-[729px] w-full object-cover overflow-hidden '
-                  src='https://images.unsplash.com/photo-1616003618788-413cd29e3f1a?q=80&w=1889&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                  src='https://plus.unsplash.com/premium_photo-1665664652418-91f260a84842?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
                   alt=''
                 />
               </div>
@@ -135,7 +135,7 @@ const Home = () => {
             <Link to={routes.Product.path}>
               <img
                 className='h-[729px] w-full object-cover'
-                src='https://images.unsplash.com/photo-1601056645510-77f6d98cf7d9?q=80&w=1889&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                src='https://images.unsplash.com/photo-1523779105320-d1cd346ff52b?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
                 alt=''
               />
             </Link>

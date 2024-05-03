@@ -76,6 +76,10 @@ const Profile = () => {
   }, [])
 
   const hanldeUpdateUserProfile = (values: any) => {
+    if (!values.full_name || !values.phone || !values.address || !values.old_password || !values.password) {
+      enqueueSnackbar('Vui lòng điền đầy đủ thông tin', { variant: 'error' })
+      return
+    }
     const { confirm_password, ...updateValues } = values
     updateProfileMutation.mutate(updateValues, {
       onSuccess: () => {

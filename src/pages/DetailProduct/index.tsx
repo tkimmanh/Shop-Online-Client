@@ -23,6 +23,8 @@ import { useSnackbar } from 'notistack'
 import { AppContext } from 'src/context/app.context'
 import { routes } from 'src/routes/routes'
 import Button from 'src/components/Button'
+import ImageZoom from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css'
 
 const DetailProduct = () => {
   const { isAuthenticated, cartChanged, setCartChanged } = useContext(AppContext)
@@ -115,14 +117,18 @@ const DetailProduct = () => {
               detail?.images?.map((img: any) => {
                 return (
                   <div className='w-full h-[147px]'>
-                    <img src={img?.url} alt='' className='w-full h-full object-cover' />
+                    <ImageZoom>
+                      <img src={img?.url} alt='' className='w-full h-full object-cover' />
+                    </ImageZoom>
                   </div>
                 )
               })}
           </div>
           <div className='col-span-6'>
-            <div className='w-full h-[1110px]'>
-              <img src={detail?.thumbnail?.url} alt='' className='w-full h-full object-cover' />
+            <div className='w-full '>
+              <ImageZoom>
+                <img src={detail?.thumbnail?.url} alt='' className='w-full h-[680px] object-cover' />
+              </ImageZoom>
             </div>
           </div>
         </div>
@@ -271,6 +277,7 @@ const DetailProduct = () => {
       <div className='py-[46px] border-b border-gray-200'>
         {valueTab == 1 ? (
           <div
+            className='text-gray-500 px-5'
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(detail?.description)
             }}

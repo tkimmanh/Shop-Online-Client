@@ -4,7 +4,6 @@ import { formatMoney } from 'src/utils/formatMoney'
 
 const ModalInformation = (props: any) => {
   const { isOpen, setIsOpen, detail } = props
-  console.log('detail', detail)
 
   return (
     <Modal
@@ -70,8 +69,8 @@ const ModalInformation = (props: any) => {
                 </p>
               </div>
 
-              <div>
-                <img className='w-24 h-40' src={_item?.product?.thumbnail?.url} alt='' />
+              <div className='my-4'>
+                <img className='w-24 h-40 object-cover' src={_item?.product?.thumbnail?.url} alt='' />
               </div>
             </div>
           )

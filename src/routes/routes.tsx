@@ -28,12 +28,12 @@ const ListEmail = lazy(() => import('src/pages/Admin/ListEmail'))
 const NotFound = lazy(() => import('src/pages/NotFound'))
 const WishList = lazy(() => import('src/pages/WishList'))
 const Forbidden = lazy(() => import('src/pages/_403'))
-
 interface IRoute {
   path: string
   element: React.LazyExoticComponent<() => JSX.Element>
   layout: 'AuthLayout' | 'DashboardLayout' | 'MainLayout'
   redirectAuthenticatedToHome?: boolean
+  redirectAuthenticatedToHomeIsAuthenticated?: boolean
   protected?: boolean
   access?: string[]
 }
@@ -75,10 +75,12 @@ export const routes: IRoutes = {
     element: PaymentSucess,
     layout: 'MainLayout'
   },
+
   Profile: {
     path: '/profile',
     element: Profile,
-    layout: 'MainLayout'
+    layout: 'MainLayout',
+    protected: true
   },
   ListOrder: {
     path: '/list-order',
@@ -95,97 +97,112 @@ export const routes: IRoutes = {
     path: '/admin',
     access: ['admin', 'staff'],
     element: Dashboard,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   CounponPage: {
     path: '/admin/coupon',
     access: ['admin'],
     element: CounponPage,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   CouponFormAdd: {
     path: '/admin/form-coupon',
     access: ['admin'],
     element: CouponForm,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   ListEmail: {
     path: '/admin/list-email',
     element: ListEmail,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
-
   CouponFormedit: {
     path: '/admin/form-coupon/:id',
     element: CouponForm,
     access: ['admin', 'staff'],
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   ListOrderAdmin: {
     path: '/admin/order-list',
     access: ['admin'],
     element: ListOderAdmin,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   ListRefundsAdmin: {
     path: '/admin/refunds-list',
     access: ['admin'],
     element: RefundsList,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   UsersAdmin: {
     path: '/admin/user-list',
     access: ['admin', 'staff'],
     element: UsersAdmin,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   UsersDetailAdmin: {
     path: '/admin/user/:id',
     access: ['admin', 'staff'],
     element: UsersDetailAdmin,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   CategoriesAdmin: {
     path: '/admin/category-list',
     access: ['admin'],
     element: CategoriesAdmin,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   CategoriesAddNew: {
     path: '/admin/category-add-new',
     access: ['admin'],
     element: CategoriesAddNew,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   Categoriesedit: {
     path: '/admin/category/:id',
     access: ['admin'],
     element: CategoriesEdit,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   ProductsAdmin: {
     path: '/admin/products-list',
     access: ['admin'],
     element: ProductsAdmin,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   ProductAddNew: {
     path: '/admin/products-add',
     access: ['admin'],
     element: ProductAddNew,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   ProductView: {
     path: '/admin/products/:id',
     access: ['admin'],
     element: ProductAddNew,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
   VariantsManage: {
     path: '/admin/variants-manage',
     access: ['admin'],
     element: VariantsManage,
-    layout: 'DashboardLayout'
+    layout: 'DashboardLayout',
+    protected: true
   },
 
   Login: {

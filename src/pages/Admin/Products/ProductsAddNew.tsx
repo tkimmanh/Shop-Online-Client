@@ -19,7 +19,10 @@ interface FileWithPreview extends File {
 }
 
 const ProductsAddNew = () => {
-  const [value, setValue] = useState('')
+  const dataValue =
+    'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+
+  const [value, setValue] = useState(dataValue)
   const [thumbnail, setThumbnail] = useState<FileWithPreview[]>([])
   const [images, setImages] = useState<FileWithPreview[]>([])
   const { id } = useParams()
