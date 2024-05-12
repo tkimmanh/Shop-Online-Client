@@ -6,21 +6,28 @@ import Heading from 'src/components/Heading'
 import { routes } from 'src/routes/routes'
 import productsService from 'src/services/products.service'
 
-const ProductsList = () => {
+const ProductsDeleted = () => {
   const { enqueueSnackbar } = useSnackbar()
-  const navigate = useNavigate()
+
   const queryClient = useQueryClient()
   const { data: listProducts } = useQuery({
-    queryKey: ['list-products', { status: true }],
+    queryKey: 'list-products',
     queryFn: () => {
-      return productsService.getAllProducts({ status: true })
+      return productsService.getAllProducts({ status: false })
     }
   })
 
-  console.log(listProducts)
+  const restoreProductMutations = useMutation({
+    mutationFn: (body: any) => productsService.setStatusProduct(body),
+    onSuccess: () => {
+      enqueueSnackbar('Đã khôi phục sản phẩm', { variant: 'success' })
+      queryClient.invalidateQueries('list-products')
+    },
+    mutationKey: 'list-products'
+  })
 
   const deleteProductMutations = useMutation({
-    mutationFn: (body: any) => productsService.setStatusProduct(body),
+    mutationFn: (body: any) => productsService.deleteProduct(body),
     onSuccess: () => {
       enqueueSnackbar('Xoá thành công', { variant: 'success' })
       queryClient.invalidateQueries('list-products')
@@ -28,10 +35,18 @@ const ProductsList = () => {
     mutationKey: 'list-products'
   })
 
-  const handleDelete = async (body: { id: string | number; status: boolean }) => {
+  const handleDelete = async (id: string | number) => {
     try {
-      if (confirm('Bạn có muốn tạm thời xóa sản phẩm?')) {
-        await deleteProductMutations.mutateAsync(body)
+      if (confirm('Xóa sản phẩm?')) {
+        await deleteProductMutations.mutateAsync(id)
+      }
+    } catch (error) {}
+  }
+
+  const handleRestore = async (body: { id: string | number; status: boolean }) => {
+    try {
+      if (confirm('Khôi phục sản phẩm?')) {
+        await restoreProductMutations.mutateAsync(body)
       }
     } catch (error) {}
   }
@@ -39,7 +54,7 @@ const ProductsList = () => {
   return (
     <div>
       <div className='flex items-center justify-between gap-x-5 mb-5'>
-        <Heading>Quản lý sản phẩm</Heading>
+        <Heading>Quản lý sản phẩm đã xoá</Heading>
         <Link to={routes.ProductAddNew.path}>
           <Button className='py-2 px-6 text-xs' kind='primary'>
             Thêm mới
@@ -102,15 +117,15 @@ const ProductsList = () => {
                   </td>
                   <td className='px-6 py-4 text-center'>
                     <button
+                      onClick={() => handleRestore({ id: _item?._id, status: true })}
                       className='font-medium text-blue-600 hover:underline cursor-pointer'
-                      onClick={() => navigate(routes.ProductView.path.replace(':id', _item?._id.toString()))}
                     >
-                      Chỉnh sửa
+                      Khôi phục sản phẩm
                     </button>
 
                     <button
                       className='font-medium text-red-600 ml-[10px] hover:underline cursor-pointer'
-                      onClick={() => handleDelete({ id: _item?._id, status: false })}
+                      onClick={() => handleDelete(_item?._id)}
                     >
                       Xóa sản phẩm
                     </button>
@@ -125,4 +140,4 @@ const ProductsList = () => {
   )
 }
 
-export default ProductsList
+export default ProductsDeleted

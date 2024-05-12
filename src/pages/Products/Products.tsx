@@ -16,7 +16,6 @@ import { routes } from 'src/routes/routes'
 import { useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate'
 import classNames from 'src/utils/classNames'
-import { sizes } from 'src/constants/variants.constants'
 const Products = () => {
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -56,6 +55,7 @@ const Products = () => {
       return productsService.getAllProducts(queryConfig)
     }
   })
+
   const { data: listCategory } = useQuery({
     queryKey: ['CATEGORY'],
     queryFn: () => {
@@ -141,7 +141,8 @@ const Products = () => {
   const limit = parseInt(queryParams.limit || '10', 10)
   const pageCount = Math.ceil(totalProducts / limit)
 
-  const filteredProducts = listProducts?.data.products?.filter((product: any) => product.status == true)
+  const filteredProducts = listProducts?.data.products
+  
   useEffect(() => {
     document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [pageCount])

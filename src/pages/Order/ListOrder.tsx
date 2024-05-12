@@ -36,6 +36,7 @@ const ListOrder = () => {
       }
     )
   }
+
   const confirmReturnOrder = (orderId: string) => {
     confirmAlert({
       title: 'Confirm to return',
@@ -59,6 +60,7 @@ const ListOrder = () => {
       enabled: !!currentOrderId
     }
   )
+
   const handleDetailOrder = (id: string) => {
     setCurrentOrderId(id)
     setIsOpen(true)
@@ -87,6 +89,7 @@ const ListOrder = () => {
   const canCancelOrder = (status: string) => {
     return status === messageOrder.ORDER_WAIT_CONFIRM || status === messageOrder.ORDER_CONFIRM
   }
+
   return (
     <div className='w-full '>
       <div className='flex items-center justify-center my-10 space-x-4 mb-4'>
@@ -125,6 +128,8 @@ const ListOrder = () => {
         </thead>
         <tbody>
           {myOrders?.data?.orders?.map((order: any) => {
+            console.log('order:', order)
+
             const canReturn =
               order.status === messageOrder.ORDER_SUCESS && dayjs().diff(dayjs(order.deliveredAt), 'day') <= 3
 
@@ -137,16 +142,16 @@ const ListOrder = () => {
                   {order.products.map((product: any) => (
                     <div key={product._id} className='my-2'>
                       <div className='py-[2px]'>
-                        <strong>Sản phẩm:</strong> {product.product.title}
+                        <strong>Sản phẩm:</strong> {product?.name}
                       </div>
                       <div className='py-[2px]'>
-                        <strong>Kích cỡ:</strong> {product.size?.name || '(Trống)'}
+                        <strong>Kích cỡ:</strong> {product?.size_name || '(Trống)'}
                       </div>
                       <div className='py-[2px]'>
-                        <strong>Màu:</strong> {product.color?.name || '(Trống)'}
+                        <strong>Màu:</strong> {product?.color_name || '(Trống)'}
                       </div>
                       <div className='py-[2px]'>
-                        <strong>Số lượng:</strong> {product.quantity}
+                        <strong>Số lượng:</strong> {product?.quantity}
                       </div>
                     </div>
                   ))}

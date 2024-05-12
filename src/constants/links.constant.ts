@@ -33,6 +33,11 @@ export const linksDashboard = [
     path: '/admin/products-list'
   },
   {
+    id: 15,
+    text: 'Sản phẩm đã xoá',
+    path: '/admin/products-deleted'
+  },
+  {
     id: 3,
     text: 'Quản lý danh mục',
     path: '/admin/category-list'

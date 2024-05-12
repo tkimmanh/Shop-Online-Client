@@ -20,6 +20,9 @@ const productsService = {
   },
   addReview(productId: string, review: { star: number }) {
     return http.post(`${BASE_URL}/${productId}/reviews`, review)
+  },
+  setStatusProduct(body: { id: string | number; status: string }) {
+    return http.post(`${BASE_URL}/${body.id}/status`, body)
   }
 }
 

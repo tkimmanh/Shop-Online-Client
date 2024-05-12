@@ -94,6 +94,7 @@ const DetailProduct = () => {
         size_id: selectedSize
       }
       await usersService.addToCart(body)
+      queryClient.invalidateQueries('cart')
       enqueueSnackbar('Đã thêm sản phẩm vào giỏ hàng', { variant: 'success' })
       setCartChanged(!cartChanged)
     } catch (error) {
@@ -168,41 +169,49 @@ const DetailProduct = () => {
             <div>
               <div className='mt-[20px]'>
                 <div className='mb-[20px]'>
-                  <p>Color:</p>
-                  <div className='flex gap-x-3 my-2'>
-                    {detail.colors?.map((color: any) => {
-                      return (
-                        <div
-                          key={color._id}
-                          onClick={() => setSelectedColor(color._id)}
-                          style={{
-                            backgroundColor: color.color_code
-                          }}
-                          className={classNames(
-                            `w-8 h-8  rounded-full border-2 select-none cursor-pointer`,
+                  {detail.colors?.length > 0 && (
+                    <>
+                      <p>Color:</p>
+                      <div className='flex gap-x-3 my-2'>
+                        {detail.colors?.map((color: any) => {
+                          return (
+                            <div
+                              key={color._id}
+                              onClick={() => setSelectedColor(color._id)}
+                              style={{
+                                backgroundColor: color.color_code
+                              }}
+                              className={classNames(
+                                `w-8 h-8  rounded-full border-2 select-none cursor-pointer`,
 
-                            selectedColor === color._id ? 'ring-2 ring-offset-2 ring-blue-500' : ''
-                          )}
-                        ></div>
-                      )
-                    })}
-                  </div>
+                                selectedColor === color._id ? 'ring-2 ring-offset-2 ring-blue-500' : ''
+                              )}
+                            ></div>
+                          )
+                        })}
+                      </div>
+                    </>
+                  )}
                 </div>
                 <div>
-                  <p>Sizes:</p>
-                  <div className='flex'>
-                    {detail.sizes?.map((size: any) => (
-                      <div
-                        key={size._id}
-                        onClick={() => setSelectedSize(size._id)}
-                        className={`m-[5px] border-2 px-3 py-2 cursor-pointer ${
-                          selectedSize === size._id ? 'ring-2 ring-offset-2 ring-blue-500' : ''
-                        }`}
-                      >
-                        {size.name}
+                  {detail.sizes?.length > 0 && (
+                    <>
+                      <p>Sizes:</p>
+                      <div className='flex'>
+                        {detail.sizes?.map((size: any) => (
+                          <div
+                            key={size._id}
+                            onClick={() => setSelectedSize(size._id)}
+                            className={`m-[5px] border-2 px-3 py-2 cursor-pointer ${
+                              selectedSize === size._id ? 'ring-2 ring-offset-2 ring-blue-500' : ''
+                            }`}
+                          >
+                            {size.name}
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

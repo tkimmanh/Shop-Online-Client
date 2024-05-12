@@ -88,14 +88,16 @@ const ProductsAddNew = () => {
         ...item
       })
       setSelectedColorOptions(
-        item?.colors?.map((_item: any) => {
-          return { value: _item?._id, label: _item?.name }
-        })
+        item?.colors?.map((color: any) => ({
+          value: color._id,
+          label: color.name
+        }))
       )
       setSelectedSizeOptions(
-        item?.sizes?.map((_item: any) => {
-          return { value: _item?._id, label: _item?.name }
-        })
+        item?.sizes?.map((size: any) => ({
+          value: size._id,
+          label: size.name
+        }))
       )
       setSelectedCategoryOptions({
         value: item?.category?._id,
@@ -108,14 +110,14 @@ const ProductsAddNew = () => {
           preview: item?.thumbnail?.url
         } as any
       ])
-
       setImages(
-        item?.images?.map((_item: any) => {
-          return {
-            name: _item?._id,
-            preview: _item?.url
-          } as any
-        })
+        item?.images?.map(
+          (image: any) =>
+            ({
+              name: image._id,
+              preview: image.url
+            } as unknown as FileWithPreview[])
+        )
       )
     }
   })
@@ -201,6 +203,10 @@ const ProductsAddNew = () => {
     }
   }
 
+  const customFilterOption = (option: any, inputValue: any) => {
+    return option.label.toLowerCase().includes(inputValue.toLowerCase())
+  }
+
   return (
     <div>
       <div className='flex items-center justify-between gap-x-5 mb-5'>
@@ -226,26 +232,22 @@ const ProductsAddNew = () => {
         <div className='grid grid-cols-2 gap-x-5 mb-5'>
           <ReactSelect
             options={colorOptions}
-            isMulti
-            key={JSON.stringify(detailProduct)}
-            defaultValue={detailProduct?.data?.findProduct?.colors?.map((_item: any) => {
-              return { value: _item?._id, label: _item?.name }
-            })}
-            closeMenuOnSelect={false}
+            isMulti={true}
+            value={selectedColors}
             onChange={setSelectedColorOptions as any}
             placeholder='Select colors'
+            // isSearchable={true}
+            // filterOption={customFilterOption}
           />
 
           <ReactSelect
             options={sizeOptions}
-            isMulti
-            key={JSON.stringify(detailProduct)}
-            defaultValue={detailProduct?.data?.findProduct?.sizes?.map((_item: any) => {
-              return { value: _item?._id, label: _item?.name }
-            })}
-            closeMenuOnSelect={false}
+            isMulti={true}
+            value={selectedSizes}
             onChange={setSelectedSizeOptions as any}
             placeholder='Select sizes'
+            // filterOption={customFilterOption}
+            // isSearchable={true}
           />
         </div>
         <div>
@@ -254,15 +256,10 @@ const ProductsAddNew = () => {
 
         <div className='mt-5'>
           <ReactSelect
-            defaultInputValue=''
             options={categoryOptions}
-            key={JSON.stringify(detailProduct)}
-            defaultValue={{
-              value: detailProduct?.data?.findProduct?.category?._id,
-              label: detailProduct?.data?.findProduct?.category?.title
-            }}
-            closeMenuOnSelect={false}
-            onChange={setSelectedCategoryOptions as any}
+            isMulti={false}
+            value={selectdCategory}
+            onChange={setSelectedCategoryOptions}
             placeholder='Select category'
           />
         </div>

@@ -18,6 +18,9 @@ const RefundsList = () => {
       return orderService.listReturns()
     }
   })
+
+  console.log('data', data)
+
   useEffect(() => {
     if (isSuccess && data?.data?.orders) {
       const filteredData = data.data.orders || []

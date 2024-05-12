@@ -26,6 +26,12 @@ const ModalInformation = (props: any) => {
             Phương thức thanh toán: <span>{detail?.status_payment}</span>
           </p>
           <p className='font-medium mb-[8px]'>
+            Mã giảm giá:
+            <span>
+              {detail?.coupon || '(Trống)'} - {detail?.discount + '%' || '0%'}
+            </span>
+          </p>
+          <p className='font-medium mb-[8px]'>
             Trạng thái đơn hàng: <span>{detail?.status}</span>
           </p>
         </div>
@@ -50,27 +56,27 @@ const ModalInformation = (props: any) => {
             <div className='flex items-center justify-between'>
               <div className='py-[10px] border-b'>
                 <p className='font-medium mb-[8px]'>
-                  Tên : <span>{_item?.product?.title}</span>
+                  Tên : <span>{_item?.name}</span>
                 </p>
                 <p className='font-medium mb-[8px]'>
-                  Giá: <span>{Number(_item?.product?.price || 0).toLocaleString('en')}</span>
+                  Giá: <span>{Number(_item?.price || 0).toLocaleString('en')}</span>
                 </p>
                 <p className='font-medium mb-[8px]'>
-                  Danh mục: <span>{_item?.product?.category?.title || '(Trống)'}</span>
-                </p>
-                <p className='font-medium mb-[8px]'>
-                  Kích cỡ: <span>{_item?.size?.name || '(Trống)'}</span>
-                </p>
-                <p className='font-medium mb-[8px]'>
-                  Màu: <span>{_item?.color?.name || '(Trống)'}</span>
-                </p>
-                <p>
                   Số lượng: <span>{_item?.quantity}</span>
+                </p>
+                {/* <p className='font-medium mb-[8px]'>
+                  Danh mục: <span>{_item?.category?.title || '(Trống)'}</span>
+                </p> */}
+                <p className='font-medium mb-[8px]'>
+                  Kích cỡ: <span>{_item?.size_name || '(Trống)'}</span>
+                </p>
+                <p className='font-medium mb-[8px]'>
+                  Màu: <span>{_item?.color_name || '(Trống)'}</span>
                 </p>
               </div>
 
               <div className='my-4'>
-                <img className='w-24 h-40 object-cover' src={_item?.product?.thumbnail?.url} alt='' />
+                {_item?.image && <img className='w-24 h-40 object-cover' src={_item?.image} alt='' />}
               </div>
             </div>
           )

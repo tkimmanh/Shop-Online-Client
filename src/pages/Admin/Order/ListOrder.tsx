@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { confirmAlert } from 'react-confirm-alert'
-import { messageOrder, orderStatusAdminOptions, orderStatusOptions } from 'src/constants/order.constatns'
+import { messageOrder, orderStatusAdminOptions } from 'src/constants/order.constatns'
 import orderService from 'src/services/order.service'
 import { formatMoney } from 'src/utils/formatMoney'
 import './styles.css'
@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form'
 function ListOrder() {
   const [isOpen, setIsOpen] = useState(false)
   const [detail, setDetail] = useState('')
-  const [sort, setSort] = useState('')
+  const [sort] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('')
   const queryClient = useQueryClient()
   const { register, watch } = useForm()
@@ -84,6 +84,7 @@ function ListOrder() {
   useEffect(() => {
     refetch()
   }, [selectedStatus, search, refetch])
+  
   const getOptionsWithDefault = (currentStatus: any) => {
     const statusExists = orderStatusAdminOptions.some((option) => option.value === currentStatus)
     if (!statusExists && currentStatus) {

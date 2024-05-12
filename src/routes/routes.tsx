@@ -27,7 +27,7 @@ const CouponForm = lazy(() => import('src/pages/Admin/Coupon/CouponForm'))
 const ListEmail = lazy(() => import('src/pages/Admin/ListEmail'))
 const NotFound = lazy(() => import('src/pages/NotFound'))
 const WishList = lazy(() => import('src/pages/WishList'))
-const Forbidden = lazy(() => import('src/pages/_403'))
+const ProductDeleted = lazy(() => import('src/pages/Admin/Products/ProductDeleted'))
 interface IRoute {
   path: string
   element: React.LazyExoticComponent<() => JSX.Element>
@@ -204,7 +204,13 @@ export const routes: IRoutes = {
     layout: 'DashboardLayout',
     protected: true
   },
-
+  ProductDeleted: {
+    path: '/admin/products-deleted',
+    access: ['admin'],
+    element: ProductDeleted,
+    layout: 'DashboardLayout',
+    protected: true
+  },
   Login: {
     path: '/sigin',
     element: Login,
@@ -220,11 +226,6 @@ export const routes: IRoutes = {
   NotFound: {
     path: '/not-found',
     element: NotFound,
-    layout: 'MainLayout'
-  },
-  Forbidden: {
-    path: '/page-403',
-    element: Forbidden,
     layout: 'MainLayout'
   }
 }

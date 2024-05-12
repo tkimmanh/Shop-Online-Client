@@ -139,7 +139,7 @@ const Dashboard = () => {
             {topSoldProducts?.map((product: any) => (
               <div key={product._id} className='bg-white p-4 flex '>
                 <div>
-                  <img className='w-20 h-20 object-contain gap-x-5' src={product.thumbnail.url} alt='' />
+                  <img className='w-20 h-20 object-contain gap-x-5' src={product?.thumbnail?.url} alt='' />
                 </div>
                 <div>
                   <h4 className='text-lg font-semibold mt-2'>{product.title}</h4>
