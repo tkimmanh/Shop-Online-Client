@@ -9,9 +9,17 @@ import Heading from 'src/components/Heading'
 import Input from 'src/components/Input'
 import { routes } from 'src/routes/routes'
 import authService from 'src/services/auth.service'
+import { registerSchema } from 'src/lib/yup/resgister.schema'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 const Register = () => {
-  const { register, handleSubmit } = useForm<TRegister>()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<TRegister>({
+    resolver: yupResolver(registerSchema)
+  })
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const registerAccountMutation = useMutation({
@@ -29,10 +37,11 @@ const Register = () => {
       }
     })
   }
+
   return (
     <div className='flex lg:inline-block items-center justify-center'>
       <div className='w-[445px] text-left mx-0'>
-        <Heading className='text-4xl my-10'>My account</Heading>
+        <Heading className='text-4xl my-10'>My Account</Heading>
         <h1 className='lg:text-2xl text-xl lg:mt-20 mb-6'>Register</h1>
         <form action='' onSubmit={handleSubmit(onSubmit)}>
           <div className='mb-5'>
@@ -41,6 +50,7 @@ const Register = () => {
               type='text'
               placeholder='Enter your user name *'
               name='full_name'
+              errorMessage={errors.full_name?.message}
               register={register}
             ></Input>
           </div>
@@ -51,6 +61,7 @@ const Register = () => {
               placeholder='Enter your email adress *'
               name='email'
               register={register}
+              errorMessage={errors.email?.message}
             ></Input>
           </div>
           <div className='mb-5'>
@@ -72,6 +83,7 @@ const Register = () => {
               name='phone'
               placeholder='Your phone number *'
               register={register}
+              errorMessage={errors.phone?.message}
             ></Input>
           </div>
           <div className='mb-5'>

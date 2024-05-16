@@ -16,7 +16,6 @@ import { TLogin } from 'src/types/auth'
 import { ErrorResponse } from 'src/types/utils'
 import { isAxiosUnprocessableEntityError } from 'src/utils/common'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 
 const Login = () => {
   const {
