@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation, useQuery } from 'react-query'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -7,15 +7,17 @@ import Input from 'src/components/Input'
 import usersService from 'src/services/users.service'
 import ReactSelect from 'react-select'
 import Button from 'src/components/Button'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { profileSchema } from 'src/lib/yup/profile.schema'
 
 const optionRole = [
   {
     value: 'admin',
-    label: 'admin'
+    label: 'Admin'
   },
   {
     value: 'user',
-    label: 'user'
+    label: 'User'
   }
 ]
 
@@ -23,20 +25,33 @@ const DetailUser = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const [role, setRole] = useState<any>(null)
-  const { register, reset, handleSubmit } = useForm()
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(profileSchema)
+  })
   const { enqueueSnackbar } = useSnackbar()
 
   const { data: user } = useQuery({
-    queryKey: ['CATEGORY'],
-    queryFn: () => {
-      return usersService.detailUser(id as string)
-    },
-    onSuccess: () => {
+    queryKey: ['USER'],
+    queryFn: () => usersService.detailUser(id as string),
+    onSuccess: (data) => {
+      reset(data?.data?.result)
+      const role = optionRole.find((x: any) => x?.value === data?.data?.result?.role)
+      setRole(role)
+    }
+  })
+
+  useEffect(() => {
+    if (user) {
       reset(user?.data?.result)
       const role = optionRole.find((x: any) => x?.value === user?.data?.result?.role)
       setRole(role)
     }
-  })
+  }, [user, reset])
 
   const handleeditUser = useMutation({
     mutationFn: (body: any) => usersService.editUser(id, body),
@@ -66,7 +81,13 @@ const DetailUser = () => {
         <div className='grid grid-cols-12'>
           <div className='col-span-5'>
             <p className='mb-[2px]'>Full name</p>
-            <Input type='text' name='full_name' register={register} placeholder='Full name'></Input>
+            <Input
+              type='text'
+              name='full_name'
+              register={register}
+              placeholder='Full name'
+              errorMessage={errors.full_name?.message}
+            ></Input>
           </div>
           <div className='col-span-2'></div>
           <div className='col-span-5'>
@@ -77,12 +98,24 @@ const DetailUser = () => {
         <div className='grid grid-cols-12'>
           <div className='col-span-5'>
             <p className='mb-[2px]'>Phone</p>
-            <Input type='text' name='phone' register={register} placeholder='Phone'></Input>
+            <Input
+              type='text'
+              name='phone'
+              register={register}
+              placeholder='Phone'
+              errorMessage={errors.phone?.message}
+            ></Input>
           </div>
           <div className='col-span-2'></div>
           <div className='col-span-5'>
             <p className='mb-[2px]'>Address</p>
-            <Input type='text' name='address' register={register} placeholder='Address'></Input>
+            <Input
+              type='text'
+              name='address'
+              register={register}
+              placeholder='Address'
+              errorMessage={errors.address?.message}
+            ></Input>
           </div>
         </div>
         <div className='grid grid-cols-12'>
@@ -105,7 +138,7 @@ const DetailUser = () => {
           className='px-10 py-3 text-sm rounded mt-5'
           kind='secondary'
         >
-          Save
+          Lưu
         </Button>
       </form>
     </div>
