@@ -8,5 +8,5 @@ export const registerSchema = yup.object().shape({
   phone: yup
     .string()
     .required(VALIDATE_MESSAGES.REQUIRED)
-    .matches(/^[0-9]+$/, 'Số điện thoại không hợp lệ')
+    .matches(/^[0-9]+$/, VALIDATE_MESSAGES.PHONE)
 })
