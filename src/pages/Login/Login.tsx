@@ -9,19 +9,26 @@ import Checkbox from 'src/components/Checkbox'
 import Heading from 'src/components/Heading'
 import Input from 'src/components/Input'
 import { AppContext } from 'src/context/app.context'
-
+import { loginSchema } from 'src/lib/yup/login.schema'
 import { routes } from 'src/routes/routes'
 import authService from 'src/services/auth.service'
 import { TLogin } from 'src/types/auth'
 import { ErrorResponse } from 'src/types/utils'
 import { isAxiosUnprocessableEntityError } from 'src/utils/common'
-import { setAccessTokenToLocalStorage } from 'src/utils/localStorage'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 
 const Login = () => {
-  const { register, handleSubmit, setError } = useForm<TLogin>()
-  const navigate = useNavigate()
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors }
+  } = useForm<TLogin>({
+    resolver: yupResolver(loginSchema)
+  })
   const { enqueueSnackbar } = useSnackbar()
-  const { setIsAuthenticated, cartChanged, setCartChanged } = useContext(AppContext)
+  const { setIsAuthenticated } = useContext(AppContext)
   const { VITE_CLIENT_GOOGLE_ID, VITE_GOOGLE_REDIRECT_URI } = import.meta.env
 
   const getGoogleAuthUrl = () => {
@@ -86,10 +93,18 @@ const Login = () => {
               placeholder='Enter your email adress *'
               name='email'
               register={register}
+              errorMessage={errors.email?.message}
             ></Input>
           </div>
           <div className='mb-5'>
-            <Input className='h-10' type='password' name='password' placeholder='Password*' register={register}></Input>
+            <Input
+              className='h-10'
+              type='password'
+              name='password'
+              placeholder='Password*'
+              register={register}
+              errorMessage={errors.password?.message}
+            ></Input>
           </div>
           <div className='mb-5'>
             <Checkbox name='re-member' label='Remember me' className='text-sm'></Checkbox>
