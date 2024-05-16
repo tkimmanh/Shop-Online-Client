@@ -15,13 +15,11 @@ const Categoriesedit = () => {
   // const addNewCateogyMutations = useQuery({
   //   mutationFn: () => categoryService.getCategoies(id as string)
   // })
-  const { data: category } = useQuery({
-    queryKey: ['CATEGORY'],
-    queryFn: () => {
-      return categoryService.getCategory(id as string)
-    },
-    onSuccess: () => {
-      reset(category?.data.getaCategory)
+  useQuery({
+    queryKey: ['CATEGORY', id],
+    queryFn: () => categoryService.getCategory(id as string),
+    onSuccess: (data) => {
+      reset(data?.data?.getaCategory)
     }
   })
 
@@ -55,7 +53,7 @@ const Categoriesedit = () => {
           <Input className='col-span-5' type='text' name='title' register={register} placeholder='Title'></Input>
         </div>
         <Button
-          // isLoading={addNewCateogyMutations.isLoading}
+          isLoading={editCategoryMutation.isLoading}
           type='submit'
           className='px-10 py-3 text-sm rounded mt-5'
           kind='secondary'
