@@ -2,7 +2,7 @@ import { ErrorResponse } from 'react-router-dom'
 
 export type TRegister = {
   email: string
-  confirm_password: string
+  confirm_password?: string
   password: string
   full_name: string
   phone: string

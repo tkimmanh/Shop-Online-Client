@@ -10,10 +10,20 @@ import usersService from 'src/services/users.service'
 import { TUser } from 'src/types/auth'
 import { useQuery } from 'react-query'
 import addressService from 'src/services/address.service'
+import { profileSchema } from 'src/lib/yup/profile.schema'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 const Profile = () => {
   const { user } = useContext(AppContext)
-  const { reset, handleSubmit, register, setValue } = useForm()
+  const {
+    reset,
+    handleSubmit,
+    register,
+    setValue,
+    formState: { errors }
+  } = useForm<any>({
+    resolver: yupResolver(profileSchema)
+  })
   const [selectedProvince, setSelectedProvince] = useState<string>('')
   const [selectedDistrict, setSelectedDistrict] = useState<string>('')
   const [selectedWard, setSelectedWard] = useState<string>('')
@@ -76,7 +86,7 @@ const Profile = () => {
   }, [])
 
   const hanldeUpdateUserProfile = (values: any) => {
-    if (!values.full_name || !values.phone || !values.address || !values.old_password || !values.password) {
+    if (!values.full_name || !values.phone || !values.address) {
       enqueueSnackbar('Vui lòng điền đầy đủ thông tin', { variant: 'error' })
       return
     }
@@ -93,13 +103,20 @@ const Profile = () => {
       <Heading className='text-4xl text-center mb-5'>Profile</Heading>
       <div className='flex items-center flex-col justify-center'>
         <form className='w-[500px]' action='' onSubmit={handleSubmit(hanldeUpdateUserProfile)}>
-          <Input type='text' name='full_name' register={register} placeholder='Enter your full name *'></Input>
+          <Input
+            type='text'
+            name='full_name'
+            register={register}
+            placeholder='Enter your full name *'
+            errorMessage={errors.full_name?.message as any}
+          ></Input>
           <Input
             className='mb-1'
             type='number'
             name='phone'
             register={register}
             placeholder='Enter your phone *'
+            errorMessage={errors.phone?.message as any}
           ></Input>
           <div className='flex flex-col gap-y-5 mb-1'>
             <div className='flex gap-x-3'>
@@ -164,7 +181,6 @@ const Profile = () => {
                 placeholder='Số nhà hoặc tên đường'
                 value={houseNumber}
                 onChange={(e) => setHouseNumber(e.target.value)}
-                required
               />
             </div>
 
