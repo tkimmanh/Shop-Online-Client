@@ -1,4 +1,4 @@
-import { CiSearch, CiHeart, CiUser } from 'react-icons/ci'
+import { CiBellOn, CiHeart, CiUser } from 'react-icons/ci'
 import { useState, useEffect, useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
 import { IoBagOutline } from 'react-icons/io5'
@@ -10,12 +10,89 @@ import { FiMenu } from 'react-icons/fi'
 import { links } from 'src/constants'
 import Logo from '../Logo'
 import Popover from '../Popover'
+import { io } from 'socket.io-client'
 import { clearLocalStorage } from 'src/utils/localStorage'
+import usersService from 'src/services/users.service'
+import { enqueueSnackbar } from 'notistack'
+import NotificationModal from 'src/components/NotificationModal/NotificationModal'
+import { useQuery } from 'react-query'
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const { user, isAuthenticated, setIsAuthenticated } = useContext(AppContext)
   const location = useLocation()
+  const [_showNotifications, setShowNotifications] = useState(false)
+  const [notifications, setNotifications] = useState([])
+  const [activePopover, setActivePopover] = useState<string | null>(null)
+  const [unreadCount, setUnreadCount] = useState(0)
+
+  const handlePopoverToggle = (popoverId: string) => {
+    if (activePopover === popoverId) {
+      setActivePopover(null)
+    } else {
+      setActivePopover(popoverId)
+    }
+  }
+
+  const { data, error, isLoading } = useQuery(['notifications', user?._id], () => usersService.notifyUser(), {
+    enabled: !!user?._id && isAuthenticated,
+    onSuccess: (response) => {
+      setNotifications(response?.data?.notifications)
+    },
+    onError: (error) => {
+      console.error('Lỗi lấy thông báo:', error)
+    }
+  })
+
+  useEffect(() => {
+    if (data) {
+      setNotifications(data?.data?.notifications)
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const userId = user?._id
+      const socket = io('http://localhost:8001', { query: { userId } })
+
+      socket.on('notification', (notification) => {
+        if (notification.user_id === userId) {
+          enqueueSnackbar(notification.message, { variant: 'info' })
+          setUnreadCount((prev) => prev + 1)
+        }
+      })
+      return () => {
+        socket.disconnect()
+      }
+    }
+  }, [user?._id])
+
+  const markNotificationAsRead = (notificationId: string) => {
+    // Gọi API để đánh dấu thông báo là đã đọc
+    usersService
+      .readNotify(notificationId)
+      .then(() => {
+        setNotifications((currentNotifications: any) =>
+          currentNotifications.map((notif: any) => {
+            if (notif._id === notificationId) {
+              return { ...notif, read: true }
+            }
+            return notif
+          })
+        )
+        // Cập nhật số lượng thông báo chưa đọc
+        setUnreadCount((prev) => Math.max(0, prev - 1))
+      })
+      .catch((error) => {
+        console.error('Lỗi đánh dấu thông báo:', error)
+      })
+  }
+
+  // Cập nhật số thông báo chưa đọc
+  useEffect(() => {
+    setUnreadCount(notifications.filter((notif: any) => !notif?.read).length)
+  }, [notifications])
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -70,11 +147,30 @@ const Header = () => {
         <div className='flex-1 flex items-center justify-center '>
           <Logo isScroll={isScrolled} location={location.pathname} />
         </div>
+        {/* Popover thông báo */}
         <div className='relative flex-1 flex justify-end'>
-          <button className='mx-2 relative'>
-            <CiSearch size={26} />
-          </button>
           <Popover
+            isOpen={activePopover === 'notifications'}
+            onToggle={() => handlePopoverToggle('notifications')}
+            renderPopover={
+              <NotificationModal
+                notifications={notifications}
+                onNotificationClick={markNotificationAsRead}
+              ></NotificationModal>
+            }
+          >
+            <button className='relative' onClick={() => setShowNotifications(true)}>
+              <CiBellOn size={26} />
+              <span className={classNames(badgeBgClass, 'absolute -right-2 -top-1 text-xs rounded-full px-1')}>
+                {unreadCount}
+              </span>
+            </button>
+          </Popover>
+
+          {/* Popover menu */}
+          <Popover
+            isOpen={activePopover === 'userMenu'}
+            onToggle={() => handlePopoverToggle('userMenu')}
             renderPopover={
               <div className='flex flex-col '>
                 {isAuthenticated ? (

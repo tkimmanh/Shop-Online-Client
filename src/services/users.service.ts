@@ -53,6 +53,12 @@ const usersService = {
   },
   saveUserTokenFirebase(token: string) {
     return http.post(SAVE_USER_TOKEN, { token })
+  },
+  notifyUser(page?: number, limit?: number) {
+    return http.get('/notify', { params: { page, limit } })
+  },
+  readNotify(notificationId: string) {
+    return http.patch(`/notify/${notificationId}`)
   }
 }
 

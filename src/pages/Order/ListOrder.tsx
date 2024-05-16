@@ -128,8 +128,6 @@ const ListOrder = () => {
         </thead>
         <tbody>
           {myOrders?.data?.orders?.map((order: any) => {
-            console.log('order:', order)
-
             const canReturn =
               order.status === messageOrder.ORDER_SUCESS && dayjs().diff(dayjs(order.deliveredAt), 'day') <= 3
 
