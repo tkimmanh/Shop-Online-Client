@@ -1,6 +1,6 @@
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useMutation, useQuery } from 'react-query'
 import ReactQuill from 'react-quill'
 import { Link, useParams } from 'react-router-dom'
@@ -14,6 +14,10 @@ import productsService from 'src/services/products.service'
 import variantsService from 'src/services/variants.service'
 import { useDropzone } from 'react-dropzone'
 import { CiTrash } from 'react-icons/ci'
+
+import { yupResolver } from '@hookform/resolvers/yup'
+import { productsSchema } from 'src/lib/yup/products.schema'
+
 interface FileWithPreview extends File {
   preview: string
 }
@@ -75,7 +79,15 @@ const ProductsAddNew = () => {
     setImages(images.filter((_, i) => i !== index))
   }
 
-  const { register, reset, handleSubmit } = useForm()
+  const {
+    register,
+    reset,
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(productsSchema)
+  })
   const { enqueueSnackbar } = useSnackbar()
 
   const { data: detailProduct } = useQuery({
@@ -219,14 +231,29 @@ const ProductsAddNew = () => {
       </div>
       <form action='' onSubmit={handleSubmit(onSubmit)}>
         <div className='w-full grid grid-cols-10 gap-x-2'>
-          <Input className='col-span-5' type='text' name='title' register={register} placeholder='Title'></Input>
-          <Input className='col-span-3' type='number' name='price' register={register} placeholder='Price'></Input>
+          <Input
+            className='col-span-5'
+            type='text'
+            name='title'
+            register={register}
+            placeholder='Title'
+            errorMessage={errors.title?.message as any}
+          ></Input>
+          <Input
+            className='col-span-3'
+            type='number'
+            name='price'
+            register={register}
+            placeholder='Price'
+            errorMessage={errors.price?.message as any}
+          ></Input>
           <Input
             className='col-span-2'
             type='number'
             name='quantity'
             register={register}
             placeholder='Quantity'
+            errorMessage={errors.quantity?.message as any}
           ></Input>
         </div>
         <div className='grid grid-cols-2 gap-x-5 mb-5'>
@@ -255,13 +282,24 @@ const ProductsAddNew = () => {
         </div>
 
         <div className='mt-5'>
-          <ReactSelect
-            options={categoryOptions}
-            isMulti={false}
-            value={selectdCategory}
-            onChange={setSelectedCategoryOptions}
-            placeholder='Select category'
+          <Controller
+            name='category'
+            control={control}
+            render={({ field }) => (
+              <ReactSelect
+                {...field}
+                options={categoryOptions}
+                isMulti={false}
+                value={selectdCategory}
+                onChange={(selectedOption) => {
+                  setSelectedCategoryOptions(selectedOption)
+                  field.onChange(selectedOption)
+                }}
+                placeholder='Select category'
+              />
+            )}
           />
+          {errors.category && <p className='text-red-500'>{errors.category?.value?.message}</p>}
         </div>
         <div className='mt-5 grid grid-cols-10 gap-x-5'>
           <div className='col-span-3'>
@@ -315,18 +353,6 @@ const ProductsAddNew = () => {
               )}
             </div>
           </div>
-
-          <div className='flex items-center w-full mt-5'>
-            <input
-              {...register('status')}
-              id='link-checkbox'
-              type='checkbox'
-              className='w-6 h-6 text-gray-500 bg-gray-100 border-gray-300 rounded '
-            />
-            <label htmlFor='link-checkbox' className='ms-2 w-full text-xs font-medium text-gray-900 '>
-              Allow display ?
-            </label>
-          </div>
         </div>
         <Button
           isLoading={addNewProductMutations.isLoading}
@@ -334,7 +360,7 @@ const ProductsAddNew = () => {
           className='px-10 py-3 text-sm rounded mt-5'
           kind='secondary'
         >
-          {id ? 'Save' : 'Thêm mới'}
+          {id ? 'Lưu' : 'Thêm mới'}
         </Button>
       </form>
     </div>
