@@ -102,7 +102,7 @@ export const routes: IRoutes = {
   },
   CounponPage: {
     path: '/admin/coupon',
-    access: ['admin'],
+    access: ['admin', 'staff'],
     element: CounponPage,
     layout: 'DashboardLayout',
     protected: true
@@ -117,40 +117,41 @@ export const routes: IRoutes = {
   ListEmail: {
     path: '/admin/list-email',
     element: ListEmail,
+    access: ['admin', 'staff'],
     layout: 'DashboardLayout',
     protected: true
   },
   CouponFormedit: {
     path: '/admin/form-coupon/:id',
     element: CouponForm,
-    access: ['admin', 'staff'],
+    access: ['admin'],
     layout: 'DashboardLayout',
     protected: true
   },
   ListOrderAdmin: {
     path: '/admin/order-list',
-    access: ['admin'],
+    access: ['admin', 'staff'],
     element: ListOderAdmin,
     layout: 'DashboardLayout',
     protected: true
   },
   ListRefundsAdmin: {
     path: '/admin/refunds-list',
-    access: ['admin'],
+    access: ['admin', 'staff'],
     element: RefundsList,
     layout: 'DashboardLayout',
     protected: true
   },
   UsersAdmin: {
     path: '/admin/user-list',
-    access: ['admin', 'staff'],
+    access: ['admin'],
     element: UsersAdmin,
     layout: 'DashboardLayout',
     protected: true
   },
   UsersDetailAdmin: {
     path: '/admin/user/:id',
-    access: ['admin', 'staff'],
+    access: ['admin'],
     element: UsersDetailAdmin,
     layout: 'DashboardLayout',
     protected: true

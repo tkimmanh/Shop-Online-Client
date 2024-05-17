@@ -10,8 +10,7 @@ function createHttpInstance(): AxiosInstance {
   const accessToken = getAccessTokenFromLocalStorage()
 
   const instance = axios.create({
-    baseURL: BASE_URL,
-    timeout: 10000
+    baseURL: BASE_URL
   })
 
   instance.interceptors.request.use(

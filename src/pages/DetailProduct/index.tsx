@@ -269,18 +269,20 @@ const DetailProduct = () => {
               Mô tả
             </span>
           </li>
-          <li className='me-[60px]'>
-            <span
-              className={twMerge(
-                'inline-block p-2  cursor-pointer text-[22px] text-[#000] leading-[37px]',
-                valueTab == 2 && 'border-[#000] border-b-2',
-                valueTab != 2 && 'hover:text-gray-600 hover:border-gray-300'
-              )}
-              onClick={() => setValueTab(2)}
-            >
-              Đánh giá
-            </span>
-          </li>
+          {isAuthenticated && (
+            <li className='me-[60px]'>
+              <span
+                className={twMerge(
+                  'inline-block p-2  cursor-pointer text-[22px] text-[#000] leading-[37px]',
+                  valueTab == 2 && 'border-[#000] border-b-2',
+                  valueTab != 2 && 'hover:text-gray-600 hover:border-gray-300'
+                )}
+                onClick={() => setValueTab(2)}
+              >
+                Đánh giá
+              </span>
+            </li>
+          )}
         </ul>
       </div>
       <div className='py-[46px] border-b border-gray-200'>
