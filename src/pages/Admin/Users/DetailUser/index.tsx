@@ -18,6 +18,10 @@ const optionRole = [
   {
     value: 'user',
     label: 'User'
+  },
+  {
+    value: 'staff',
+    label: 'Staff'
   }
 ]
 

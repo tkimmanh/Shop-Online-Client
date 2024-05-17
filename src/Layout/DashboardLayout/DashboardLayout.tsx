@@ -1,6 +1,7 @@
 import { ReactNode, useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
 import Sidebar from './Sidebar'
+import Logo from 'src/components/Logo'
 
 type DashboardLayoutProps = {
   children: ReactNode
@@ -37,7 +38,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <div className='col-span-1 shadow-xl'>
           <Sidebar />
         </div>
-        <div className='col-span-6 pt-[30px] px-[20px]'>{children}</div>
+        <div className='col-span-6 pt-[30px] px-[20px] h-screen'>{children}</div>
       </div>
     </div>
   )
