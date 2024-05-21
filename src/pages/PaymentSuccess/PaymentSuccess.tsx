@@ -1,17 +1,29 @@
+import dayjs from 'dayjs'
 import { enqueueSnackbar } from 'notistack'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { DATE_FORMAT } from 'src/config'
+import { AppContext } from 'src/context/app.context'
 import { routes } from 'src/routes/routes'
 
 import orderService from 'src/services/order.service'
+import { formatMoney } from 'src/utils/formatMoney'
 
 const PaymentSuccessPage = () => {
   const location = useLocation()
+  const { setCartChanged, cartChanged } = useContext(AppContext)
   const queryParams = new URLSearchParams(location.search)
   const navigate = useNavigate()
   const orderId = queryParams.get('vnp_TxnRef')
   const vnpResponseCode = queryParams.get('vnp_ResponseCode')
+  const vnpAmount = queryParams.get('vnp_Amount')
+  const vnpBankCode = queryParams.get('vnp_BankCode')
+  const vnpBankTranNo = queryParams.get('vnp_BankTranNo')
+  const vnpCardType = queryParams.get('vnp_CardType')
+  const vnpOrderInfo = queryParams.get('vnp_OrderInfo')
+  const vnpPayDate = queryParams.get('vnp_PayDate')
+  const vnpTransactionNo = queryParams.get('vnp_TransactionNo')
   useEffect(() => {
     if (!orderId || !vnpResponseCode) {
       navigate(routes.Home.path)
@@ -27,11 +39,23 @@ const PaymentSuccessPage = () => {
   }, [orderId, vnpResponseCode, navigate])
   useQuery(
     ['paymentSuccess', orderId, vnpResponseCode],
-    () => orderService.paymentSuccess(orderId as any, vnpResponseCode as any),
+    () =>
+      orderService.paymentSuccess({
+        vnp_TxnRef: orderId,
+        vnp_ResponseCode: vnpResponseCode,
+        vnp_Amount: vnpAmount,
+        vnp_BankCode: vnpBankCode,
+        vnp_BankTranNo: vnpBankTranNo,
+        vnp_CardType: vnpCardType,
+        vnp_OrderInfo: vnpOrderInfo,
+        vnp_PayDate: vnpPayDate,
+        vnp_TransactionNo: vnpTransactionNo
+      }),
     {
       enabled: !!orderId && !!vnpResponseCode,
       onSuccess: () => {
         enqueueSnackbar('Thanh toán thành công', { variant: 'success' })
+        setCartChanged(!cartChanged)
       },
       retry: false, // Không tự động thử lại khi gặp lỗi
       staleTime: Infinity, // Thời gian dữ liệu bị lỗi sẽ được lấy lại
@@ -44,7 +68,22 @@ const PaymentSuccessPage = () => {
   return (
     <div>
       <p className=''>
-        <h1 className='text-center text-2xl font-semibold my-20'>Hoàn tất quá trình thanh toán</h1>
+        <h1 className='text-center text-2xl font-semibold mt-10 mb-20'>
+          {vnpResponseCode === '00' ? 'Thanh toán thành công' : 'Thanh toán thất bại'}
+        </h1>
+        <div className='flex items-center flex-col gap-y-5'>
+          {vnpResponseCode === '00' && (
+            <>
+              <p>Số tiền: {formatMoney(parseInt(vnpAmount as string) / 100) || 0}</p>
+              <p>Ngân hàng: {vnpBankCode}</p>
+              <p>Mã giao dịch ngân hàng: {vnpBankTranNo}</p>
+              <p>Loại thẻ: {vnpCardType}</p>
+              <p>Thông tin đơn hàng: {vnpOrderInfo}</p>
+              <p>Thời gian thanh toán: {dayjs(vnpPayDate).format(DATE_FORMAT.DDMMYYYYHHmmss)}</p>
+              <p>Mã giao dịch: {vnpTransactionNo}</p>
+            </>
+          )}
+        </div>
       </p>
     </div>
   )

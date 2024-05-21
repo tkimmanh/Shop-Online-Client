@@ -191,7 +191,7 @@ const Header = () => {
                     )}
                     {user?.role === 'staff' && (
                       <Link className='px-3 py-3' to={routes.ListOrderAdmin.path}>
-                        Kiểm tra đơn hàng '(staff)'
+                        Kiểm tra đơn hàng
                       </Link>
                     )}
                     <button onClick={handleLogout} className=' px-3 py-3 inline-block cursor-pointer text-left'>
