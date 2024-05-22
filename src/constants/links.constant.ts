@@ -81,5 +81,11 @@ export const linksDashboard = [
     text: 'Gửi email đến khách hàng',
     path: '/admin/list-email',
     role: ['admin', 'staff']
+  },
+  {
+    id: 11,
+    text: 'Quản lý chủ đề',
+    path: '/admin/topic-list',
+    role: ['admin', 'staff']
   }
 ]
