@@ -15,8 +15,6 @@ import usersService from 'src/services/users.service'
 import { useDropzone } from 'react-dropzone'
 import { CiTrash } from 'react-icons/ci'
 
-import { yupResolver } from '@hookform/resolvers/yup'
-import { postsSchema } from 'src/lib/yup/posts.schema'
 
 interface FileWithPreview extends File {
   preview: string
@@ -64,9 +62,9 @@ const PostsAddNew = () => {
     reset,
     control,
     handleSubmit,
-    formState: { errors }
+    // formState: { errors }
   } = useForm({
-    resolver: yupResolver(postsSchema)
+    // resolver: yupResolver(postsSchema)
   })
   const { enqueueSnackbar } = useSnackbar()
 
@@ -139,7 +137,7 @@ const PostsAddNew = () => {
             name='title'
             register={register}
             placeholder='Title'
-            errorMessage={errors.title?.message as any}
+            // errorMessage={errors.title?.message as any}
           ></Input>
         </div>
         <div className='grid grid-cols-2 gap-x-5 mb-5'>
@@ -160,7 +158,7 @@ const PostsAddNew = () => {
               />
             )}
           />
-          {errors.author && <p className='text-red-500'>{errors.author.message}</p>}
+          {/* {errors.author && <p className='text-red-500'>{errors.author.message}</p>} */}
 
           <Controller
             name='topic'
@@ -179,7 +177,7 @@ const PostsAddNew = () => {
               />
             )}
           />
-          {errors.topic && <p className='text-red-500'>{errors.topic.message}</p>}
+          {/* {errors.topic && <p className='text-red-500'>{errors.topic.message}</p>} */}
 
         </div>
         <div>
@@ -190,7 +188,7 @@ const PostsAddNew = () => {
               <ReactQuill theme="snow" value={field.value} onChange={field.onChange} />
             )}
           />
-          {errors.content && <p className='text-red-500'>{errors.content?.message}</p>}
+          {/* {errors.content && <p className='text-red-500'>{errors.content?.message}</p>} */}
         </div>
 
 

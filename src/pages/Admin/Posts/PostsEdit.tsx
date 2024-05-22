@@ -15,18 +15,15 @@ import usersService from 'src/services/users.service'
 import { useDropzone } from 'react-dropzone'
 import { CiTrash } from 'react-icons/ci'
 
-import { yupResolver } from '@hookform/resolvers/yup'
-import { postsSchema } from 'src/lib/yup/posts.schema'
+
 
 interface FileWithPreview extends File {
   preview: string
 }
 
 const PostsEdit = () => {
-  const dataValue =
-    'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
 
-  const [value, setValue] = useState(dataValue)
+  const [value, setValue] = useState()
   const [thumbnail, setThumbnail] = useState<FileWithPreview[]>([])
   const { id } = useParams()
 
@@ -68,9 +65,7 @@ const PostsEdit = () => {
     control,
     handleSubmit,
     formState: { errors }
-  } = useForm({
-    resolver: yupResolver(postsSchema)
-  })
+  } = useForm()
   const { enqueueSnackbar } = useSnackbar()
 
   const { data: detailPosts } = useQuery({
@@ -167,7 +162,6 @@ const PostsEdit = () => {
             name='title'
             register={register}
             placeholder='Title'
-            errorMessage={errors.title?.message as any}
           ></Input>
         </div>
         <div className='grid grid-cols-2 gap-x-5 mb-5'>
@@ -188,7 +182,6 @@ const PostsEdit = () => {
               />
             )}
           />
-          {errors.author && <p className='text-red-500'>{errors.author.message}</p>}
 
           <Controller
             name='topic'
@@ -207,7 +200,6 @@ const PostsEdit = () => {
               />
             )}
           />
-          {errors.topic && <p className='text-red-500'>{errors.topic.message}</p>}
 
         </div>
         <div>
@@ -218,7 +210,6 @@ const PostsEdit = () => {
               <ReactQuill theme="snow" value={field.value} onChange={field.onChange} />
             )}
           />
-          {errors.content && <p className='text-red-500'>{errors.content?.message}</p>}
         </div>
 
 

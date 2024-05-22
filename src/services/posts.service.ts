@@ -18,8 +18,8 @@ const postsService = {
   getPosts(id: string) {
     return http.get(`${BASE_URL}/${id}`)
   },
-  comment(postId: string) {
-    return http.post(`${BASE_URL}/${postId}/comment`)
+  comment(body: any, postId: string) {
+    return http.post(`${BASE_URL}/${postId}/comment`, body);
   },
 }
 

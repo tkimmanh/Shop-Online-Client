@@ -1,6 +1,7 @@
 import { lazy } from 'react'
 
 const DetailProduct = lazy(() => import('src/pages/DetailProduct'))
+const DetailPost = lazy(() => import('src/pages/Blog/DetailPost'))
 const Dashboard = lazy(() => import('src/pages/Admin/Dashboard'))
 const ProductList = lazy(() => import('src/pages/Products'))
 const Register = lazy(() => import('src/pages/Register'))
@@ -59,6 +60,11 @@ export const routes: IRoutes = {
   ProductDetail: {
     path: '/products/:id/:slug',
     element: DetailProduct,
+    layout: 'MainLayout'
+  },
+  PostDetail: {
+    path: '/blog/posts/:id/:slug',
+    element: DetailPost,
     layout: 'MainLayout'
   },
   CartPayment: {
@@ -191,14 +197,14 @@ export const routes: IRoutes = {
     protected: true
   },
   PostsAddNew: {
-    path: '/admin/category-add-new',
+    path: '/admin/post-add-new',
     access: ['admin'],
     element: PostsAddNew,
     layout: 'DashboardLayout',
     protected: true
   },
   PostsEdit: {
-    path: '/admin/category/:id',
+    path: '/admin/posts/:id',
     access: ['admin'],
     element: PostsEdit,
     layout: 'DashboardLayout',
