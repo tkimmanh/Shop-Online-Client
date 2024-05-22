@@ -87,5 +87,11 @@ export const linksDashboard = [
     text: 'Quản lý chủ đề',
     path: '/admin/topic-list',
     role: ['admin', 'staff']
+  },
+  {
+    id: 10,
+    text: 'Quản lý bài viết',
+    path: '/admin/posts-list',
+    role: ['admin', 'staff']
   }
 ]
