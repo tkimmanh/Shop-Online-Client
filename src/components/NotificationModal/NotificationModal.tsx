@@ -2,6 +2,8 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 import 'dayjs/locale/vi'
+import { Link } from 'react-router-dom'
+import { routes } from 'src/routes/routes'
 dayjs.extend(relativeTime)
 dayjs.locale('vi')
 
@@ -24,7 +26,9 @@ const NotificationModal = ({ notifications, onNotificationClick }: any) => {
             </div>
             <div className='my-2 w-full'>
               <div className='flex justify-between items-center pb-2'>
-                <span className='font-medium'> {notification?.product_title}</span>
+                <Link to={routes.ListOrder.path} className='font-medium'>
+                  {notification?.product_title}
+                </Link>
                 <span className='text-sm text-gray-400 font-semibold italic'>
                   {dayjs(notification.createdAt).fromNow()} {notification?.read ? '✓' : ''}
                 </span>

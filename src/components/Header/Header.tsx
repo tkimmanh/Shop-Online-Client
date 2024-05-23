@@ -34,7 +34,7 @@ const Header = () => {
     }
   }
 
-  const { data, error, isLoading } = useQuery(['notifications', user?._id], () => usersService.notifyUser(), {
+  const { data } = useQuery(['notifications', user?._id], () => usersService.notifyUser(), {
     enabled: !!user?._id && isAuthenticated,
     onSuccess: (response) => {
       setNotifications(response?.data?.notifications)

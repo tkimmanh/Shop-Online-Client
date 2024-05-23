@@ -1,6 +1,6 @@
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useMutation, useQuery } from 'react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import Input from 'src/components/Input'
@@ -9,6 +9,7 @@ import ReactSelect from 'react-select'
 import Button from 'src/components/Button'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { profileSchema } from 'src/lib/yup/profile.schema'
+import { userSchema } from 'src/lib/yup/user.schema'
 
 const optionRole = [
   {
@@ -33,9 +34,10 @@ const DetailUser = () => {
     register,
     reset,
     handleSubmit,
+    control,
     formState: { errors }
   } = useForm({
-    resolver: yupResolver(profileSchema)
+    resolver: yupResolver(userSchema)
   })
   const { enqueueSnackbar } = useSnackbar()
 
@@ -57,27 +59,23 @@ const DetailUser = () => {
     }
   }, [user, reset])
 
-  const handleeditUser = useMutation({
-    mutationFn: (body: any) => usersService.editUser(id, body),
-    onSuccess: () => {
-      enqueueSnackbar('edit user successfuly', { variant: 'success' })
-    }
-  })
-
-  const onSubmit = async (data: any) => {
-    const formData = new FormData()
-    formData.append('full_name', data.full_name)
-    formData.append('email', data.email)
-    formData.append('phone', data.phone)
-    formData.append('address', data.address)
-    formData.append('role', role?.value)
+  const onSubmit = async (values: any) => {
     try {
-      await handleeditUser.mutateAsync(formData)
+      await handleeditUser.mutateAsync({ ...values, role: role?.value })
       navigate('/admin/user-list')
     } catch (error) {
       console.log('error:', error)
     }
   }
+
+  const handleeditUser = useMutation({
+    mutationFn: (body: any) => {
+      return usersService.editUser(id, body)
+    },
+    onSuccess: () => {
+      enqueueSnackbar('edit user successfully', { variant: 'success' })
+    }
+  })
 
   return (
     <div>
@@ -111,28 +109,26 @@ const DetailUser = () => {
             ></Input>
           </div>
           <div className='col-span-2'></div>
-          <div className='col-span-5'>
-            <p className='mb-[2px]'>Address</p>
-            <Input
-              type='text'
-              name='address'
-              register={register}
-              placeholder='Address'
-              errorMessage={errors.address?.message}
-            ></Input>
-          </div>
         </div>
         <div className='grid grid-cols-12'>
           <div className='col-span-5'>
             <p className='mb-[2px]'>Role</p>
-            <ReactSelect
-              key={JSON.stringify(role)}
-              options={optionRole}
+            <Controller
+              name='role'
+              control={control}
               defaultValue={role}
-              onChange={(e: any) => {
-                setRole(e)
-              }}
-              placeholder='Select role'
+              render={({ field }) => (
+                <ReactSelect
+                  {...field}
+                  options={optionRole}
+                  value={role}
+                  onChange={(selectedOption) => {
+                    setRole(selectedOption)
+                    field.onChange(selectedOption)
+                  }}
+                  placeholder='Select role'
+                />
+              )}
             />
           </div>
         </div>

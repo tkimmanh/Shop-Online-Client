@@ -9,14 +9,13 @@ import { formatMoney } from 'src/utils/formatMoney'
 
 const ModalInformation = (props: any) => {
   const { isOpen, setIsOpen, detail } = props
-  const { isAuthenticated } = useContext(AppContext)
 
   const { data: bills } = useQuery({
     queryKey: ['bill'],
     queryFn: () => {
       return billService.getBillAdmin({ orderId: detail?._id })
     },
-    enabled: !!detail?._id && isAuthenticated && isOpen && detail?.status_payment === 'Đã thanh toán bằng thẻ tín dụng'
+    enabled: !!detail?._id && detail?.status_payment === 'Đã thanh toán bằng thẻ tín dụng'
   })
 
   return (
@@ -98,7 +97,7 @@ const ModalInformation = (props: any) => {
         {<p className='text-lg font-bold mt-[15px]'>Thông tin thanh toán</p>}
 
         {detail?.status_payment === 'Đã thanh toán bằng thẻ tín dụng' ? (
-          (bills?.data?.length ?? 0) > 0 ? (
+          bills?.data?.length > 0 ? (
             bills?.data.map((bill: any, index: number) => (
               <div key={index}>
                 <p className='font-medium mb-[8px]'>
