@@ -11,12 +11,6 @@ const Blog = lazy(() => import('src/pages/Blog'))
 const CartPage = lazy(() => import('src/pages/Cart'))
 const UsersAdmin = lazy(() => import('src/pages/Admin/Users/UserList'))
 const UsersDetailAdmin = lazy(() => import('src/pages/Admin/Users/DetailUser'))
-const TopicsAdmin = lazy(() => import('src/pages/Admin/Topic/TopicList'))
-const TopicsAddNew = lazy(() => import('src/pages/Admin/Topic/TopicAddNew'))
-const TopicsEdit = lazy(() => import('src/pages/Admin/Topic/TopicEdit'))
-const PostsAdmin = lazy(() => import('src/pages/Admin/Posts/PostsList'))
-const PostsAddNew = lazy(() => import('src/pages/Admin/Posts/PostsAddNew'))
-const PostsEdit = lazy(() => import('src/pages/Admin/Posts/PostsEdit'))
 const CategoriesAdmin = lazy(() => import('src/pages/Admin/Categories/CategoriesList'))
 const CategoriesAddNew = lazy(() => import('src/pages/Admin/Categories/CategoriesAddNew'))
 const CategoriesEdit = lazy(() => import('src/pages/Admin/Categories/CategoriesEdit'))
@@ -159,48 +153,6 @@ export const routes: IRoutes = {
     path: '/admin/user/:id',
     access: ['admin'],
     element: UsersDetailAdmin,
-    layout: 'DashboardLayout',
-    protected: true
-  },
-  TopicsAdmin: {
-    path: '/admin/topic-list',
-    access: ['admin'],
-    element: TopicsAdmin,
-    layout: 'DashboardLayout',
-    protected: true
-  },
-  TopicsAddNew: {
-    path: '/admin/topic-add-new',
-    access: ['admin'],
-    element: TopicsAddNew,
-    layout: 'DashboardLayout',
-    protected: true
-  },
-  TopicsEdit: {
-    path: '/admin/topic/:id',
-    access: ['admin'],
-    element: TopicsEdit,
-    layout: 'DashboardLayout',
-    protected: true
-  },
-  PostsAdmin: {
-    path: '/admin/posts-list',
-    access: ['admin'],
-    element: PostsAdmin,
-    layout: 'DashboardLayout',
-    protected: true
-  },
-  PostsAddNew: {
-    path: '/admin/category-add-new',
-    access: ['admin'],
-    element: PostsAddNew,
-    layout: 'DashboardLayout',
-    protected: true
-  },
-  PostsEdit: {
-    path: '/admin/category/:id',
-    access: ['admin'],
-    element: PostsEdit,
     layout: 'DashboardLayout',
     protected: true
   },
