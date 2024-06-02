@@ -10,7 +10,7 @@ function createHttpInstance(): AxiosInstance {
   const accessToken = getAccessTokenFromLocalStorage()
 
   const instance = axios.create({
-    baseURL: 'https://api-shop-online.onrender.com/'
+    baseURL: BASE_URL
   })
 
   instance.interceptors.request.use(
