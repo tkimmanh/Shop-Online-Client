@@ -53,7 +53,7 @@ const Header = () => {
   useEffect(() => {
     if (isAuthenticated) {
       const userId = user?._id
-      const socket = io('https://shop-online-client.vercel.app', { query: { userId } })
+      const socket = io('shop-online-client-git-main-tkimmanhs-projects.vercel.app', { query: { userId } })
 
       socket.on('notification', (notification) => {
         if (notification.user_id === userId) {
