@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useState } from 'react'
+import { ReactNode } from 'react'
 import ReactModal from 'react-modal'
 import { twMerge } from 'tailwind-merge'
 

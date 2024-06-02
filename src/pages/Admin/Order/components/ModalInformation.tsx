@@ -1,9 +1,7 @@
 import dayjs from 'dayjs'
 import moment from 'moment'
-import { useContext } from 'react'
 import { useQuery } from 'react-query'
 import Modal from 'src/components/Modal'
-import { AppContext } from 'src/context/app.context'
 import billService from 'src/services/bills.service'
 import { formatMoney } from 'src/utils/formatMoney'
 

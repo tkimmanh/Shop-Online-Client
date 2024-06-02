@@ -90,7 +90,7 @@ const ProductsAddNew = () => {
   })
   const { enqueueSnackbar } = useSnackbar()
 
-  const { data: detailProduct } = useQuery({
+  useQuery({
     queryKey: ['product', id],
     queryFn: () => productsService.getProduct(id as string),
     enabled: !!id,
@@ -213,10 +213,6 @@ const ProductsAddNew = () => {
     } catch (error) {
       console.log('error:', error)
     }
-  }
-
-  const customFilterOption = (option: any, inputValue: any) => {
-    return option.label.toLowerCase().includes(inputValue.toLowerCase())
   }
 
   return (

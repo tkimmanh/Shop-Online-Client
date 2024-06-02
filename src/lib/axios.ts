@@ -4,13 +4,13 @@ import { routes } from 'src/routes/routes'
 import { AuthResponse } from 'src/types/auth'
 import { enqueueSnackbar } from 'notistack'
 
-const BASE_URL = 'http://localhost:8001/'
+const BASE_URL = 'https://api-shop-online.onrender.com/'
 
 function createHttpInstance(): AxiosInstance {
   const accessToken = getAccessTokenFromLocalStorage()
 
   const instance = axios.create({
-    baseURL: BASE_URL
+    baseURL: 'https://api-shop-online.onrender.com/'
   })
 
   instance.interceptors.request.use(

@@ -10,13 +10,12 @@ import variantsService from 'src/services/variants.service'
 import ModalInformation from './components/ModalInformation'
 import { useState } from 'react'
 import ModalSize from './components/ModalSize'
-import classNames from 'src/utils/classNames'
 
 const VariantsManage = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isOpenSize, setIsOpenSize] = useState(false)
   const [detail, setDetail] = useState('')
-  const { register, reset, setError, handleSubmit } = useForm()
+  const { register, reset, handleSubmit } = useForm()
   const { register: registerSize, reset: resetSize, handleSubmit: handleSubmitSize } = useForm()
   const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()

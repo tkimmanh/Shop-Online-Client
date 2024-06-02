@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { GoDotFill } from 'react-icons/go'
 import { listImage } from 'src/constants'
-import Heading from '../Heading'
 import Slider from 'react-slick'
 import Button from '../Button'
 import 'aos/dist/aos.css'
