@@ -27,7 +27,6 @@ export interface AdressType {
 }
 
 const CartPage = () => {
-  const [isLoading, setIsLoading] = useState(false)
   const { user, setCartChanged, cartChanged } = useContext(AppContext)
   const { data: listItemCart, loading } = useCartData()
   const { enqueueSnackbar } = useSnackbar()
