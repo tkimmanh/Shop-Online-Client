@@ -8,13 +8,33 @@ import Input from 'src/components/Input'
 import { AppContext } from 'src/context/app.context'
 import usersService from 'src/services/users.service'
 import { TUser } from 'src/types/auth'
-import { useQuery } from 'react-query'
-import addressService from 'src/services/address.service'
 import { profileSchema } from 'src/lib/yup/profile.schema'
 import { yupResolver } from '@hookform/resolvers/yup'
+import addressData from '../../../data.json'
+
+export interface AdressType {
+  Id: string
+  Level: string
+  Name: string
+}
 
 const Profile = () => {
   const { user } = useContext(AppContext)
+
+  const [selectedProvince, setSelectedProvince] = useState<string>('')
+  const [selectedDistrict, setSelectedDistrict] = useState<string>('')
+  const [selectedWard, setSelectedWard] = useState<string>('')
+  const [houseNumber, setHouseNumber] = useState('')
+
+  const provinces = addressData as any
+  const districts = selectedProvince ? provinces.find((p: AdressType) => p.Id === selectedProvince)?.Districts : []
+  const wards = selectedDistrict ? districts?.find((d: AdressType) => d.Id === selectedDistrict)?.Wards : []
+
+  const transformedWards: AdressType[] = wards?.map((ward: AdressType) => ({
+    ...ward,
+    Name: ward.Name
+  }))
+
   const {
     reset,
     handleSubmit,
@@ -24,32 +44,10 @@ const Profile = () => {
   } = useForm<any>({
     resolver: yupResolver(profileSchema)
   })
-  const [selectedProvince, setSelectedProvince] = useState<string>('')
-  const [selectedDistrict, setSelectedDistrict] = useState<string>('')
-  const [selectedWard, setSelectedWard] = useState<string>('')
-  const [houseNumber, setHouseNumber] = useState('')
 
   const updateProfileMutation = useMutation({
     mutationFn: (body: any) => usersService.edit({ _id: user?._id, ...body })
   })
-
-  const { data: provinces, isLoading: loadingProvinces } = useQuery('provinces', addressService.getProvinces)
-
-  const { data: districts, isLoading: loadingDistricts } = useQuery(
-    ['districts', selectedProvince],
-    () => addressService.getDistricts(selectedProvince),
-    {
-      enabled: !!selectedProvince
-    }
-  )
-
-  const { data: wards, isLoading: loadingWards } = useQuery(
-    ['wards', selectedDistrict],
-    () => addressService.getWards(selectedDistrict),
-    {
-      enabled: !!selectedDistrict // Only run query if selectedDistrict is not empty
-    }
-  )
 
   useEffect(() => {
     if (!selectedProvince) {
@@ -69,9 +67,9 @@ const Profile = () => {
     newDistrict = selectedDistrict,
     newWard = selectedWard
   ) => {
-    const provinceName = provinces?.find((p) => p.province_id === newProvince)?.province_name || ''
-    const districtName = districts?.find((d) => d.district_id === newDistrict)?.district_name || ''
-    const wardName = wards?.find((w) => w.ward_id === newWard)?.ward_name || ''
+    const provinceName = provinces?.find((p: AdressType) => p.Id === newProvince)?.Name || ''
+    const districtName = districts?.find((d: AdressType) => d.Id === newDistrict)?.Name || ''
+    const wardName = wards?.find((w: AdressType) => w.Id === newWard)?.Name || ''
 
     const fullAddress = [houseNumber, wardName, districtName, provinceName].filter(Boolean).join(' - ')
     setValue('address', fullAddress)
@@ -128,12 +126,11 @@ const Profile = () => {
                   setSelectedProvince(newProvince)
                   handleAddressChange(newProvince)
                 }}
-                disabled={loadingProvinces}
               >
-                <option value=''>{loadingProvinces ? 'Đang tải...' : 'Chọn tỉnh'}</option>
-                {provinces?.map((province) => (
-                  <option key={province.province_id} value={province.province_id}>
-                    {province.province_name}
+                <option value=''>Chọn tỉnh</option>
+                {provinces?.map((province: AdressType) => (
+                  <option key={province.Id} value={province.Id}>
+                    {province.Name}
                   </option>
                 ))}
               </select>
@@ -146,12 +143,12 @@ const Profile = () => {
                   setSelectedDistrict(newDistrict)
                   handleAddressChange(selectedProvince, newDistrict, selectedWard)
                 }}
-                disabled={!selectedProvince || loadingDistricts}
+                disabled={!selectedProvince}
               >
-                <option value=''>{loadingDistricts ? 'Đang tải...' : 'Chọn huyện'}</option>
-                {districts?.map((district) => (
-                  <option key={district.district_id} value={district.district_id}>
-                    {district.district_name}
+                <option value=''>Chọn huyện</option>
+                {districts?.map((district: AdressType) => (
+                  <option key={district.Id} value={district.Id}>
+                    {district.Name}
                   </option>
                 ))}
               </select>
@@ -166,12 +163,12 @@ const Profile = () => {
                   setSelectedWard(newWard)
                   handleAddressChange(selectedProvince, selectedDistrict, newWard)
                 }}
-                disabled={!selectedDistrict || loadingWards}
+                disabled={!selectedDistrict}
               >
-                <option value=''>{loadingWards ? 'Đang tải...' : 'Chọn xã'}</option>
-                {wards?.map((ward) => (
-                  <option key={ward.ward_id} value={ward.ward_id}>
-                    {ward.ward_name}
+                <option value=''>Chọn xã</option>
+                {transformedWards?.map((ward: AdressType) => (
+                  <option key={ward.Id} value={ward.Id}>
+                    {ward.Name}
                   </option>
                 ))}
               </select>
