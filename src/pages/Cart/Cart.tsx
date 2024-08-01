@@ -16,6 +16,7 @@ import { AppContext } from 'src/context/app.context'
 import { TUser } from 'src/types/auth'
 import addressService from 'src/services/address.service'
 import { useQuery } from 'react-query'
+import Spinner from 'src/components/Spinner'
 export interface AdressType {
   province_id?: string
   district_id?: string
@@ -26,8 +27,9 @@ export interface AdressType {
 }
 
 const CartPage = () => {
+  const [isLoading, setIsLoading] = useState(false)
   const { user, setCartChanged, cartChanged } = useContext(AppContext)
-  const { data: listItemCart } = useCartData()
+  const { data: listItemCart, loading } = useCartData()
   const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
   const [isOpen, setIsOpen] = useState(false)
@@ -50,10 +52,18 @@ const CartPage = () => {
   }, [])
 
   const deleteCartMutation = useMutation({
-    mutationFn: ({ product_id, color_id, size_id }: any) =>
+    mutationFn: ({ product_id, color_id, size_id }: { product_id: string; color_id: string; size_id: string }) =>
       usersService.deleteCart({ product_id, color_id, size_id }) as any
   })
-  const handleDeleteCartItem = ({ product_id, color_id, size_id }: any) => {
+  const handleDeleteCartItem = ({
+    product_id,
+    color_id,
+    size_id
+  }: {
+    product_id: string
+    color_id: string
+    size_id: string
+  }) => {
     deleteCartMutation.mutate(
       { product_id, color_id, size_id },
       {
@@ -65,8 +75,17 @@ const CartPage = () => {
     )
   }
   const updateQuantityMutation = useMutation({
-    mutationFn: ({ product_id, color_id, size_id, quantity }: any) =>
-      usersService.updateCart({ product_id, color_id, size_id, quantity: quantity })
+    mutationFn: ({
+      product_id,
+      color_id,
+      size_id,
+      quantity
+    }: {
+      product_id: string
+      color_id: string
+      size_id: string
+      quantity: number
+    }) => usersService.updateCart({ product_id, color_id, size_id, quantity: quantity })
   })
 
   const handleQuantityChange = (product_id: string, color_id: string, size_id: string, newQuantity: number) => {
@@ -215,6 +234,9 @@ const CartPage = () => {
       }
     })
   }
+  if (loading) {
+    return <Spinner fullHeight></Spinner>
+  }
 
   return (
     <div>
@@ -229,6 +251,7 @@ const CartPage = () => {
               <th className='w-[80px] border-l border-gray-300'></th>
             </tr>
           </thead>
+
           <tbody>
             {listItemCart?.data?.user?.cart?.length > 0 &&
               listItemCart?.data.user?.cart?.map((item: any, index: number) => {
@@ -294,6 +317,7 @@ const CartPage = () => {
               })}
           </tbody>
         </table>
+
         <div className='col-span-4'>
           <div className='bg-[#f7f7f7] w-[460px] h-[476px] p-10'>
             <div className='w-full border-b border-black'>

@@ -1,8 +1,8 @@
-import DashboardLayout from 'src/Layout/DashboardLayout'
+import DashboardLayout from 'src/layout/DashboardLayout'
 import ProtectedRoute from 'src/routes/ProtectedRoute'
 import React, { ReactNode, Suspense } from 'react'
-import AuthLayout from 'src/Layout/AuthLayout'
-import MainLayout from 'src/Layout/MainLayout'
+import AuthLayout from 'src/layout/AuthLayout'
+import MainLayout from 'src/layout/MainLayout'
 import { useRoutes } from 'react-router-dom'
 import { routes } from 'src/routes/routes'
 
