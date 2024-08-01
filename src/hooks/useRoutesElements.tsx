@@ -1,10 +1,10 @@
 import ProtectedRoute from 'src/routes/ProtectedRoute'
 import React, { ReactNode, Suspense } from 'react'
-import AuthLayout from 'src/layout/AuthLayout'
-import MainLayout from 'src/layout/MainLayout'
 import { useRoutes } from 'react-router-dom'
 import { routes } from 'src/routes/routes'
-import DashboardLayout from 'src/layout/DashboardLayout'
+import MainLayout from 'src/layout/MainLayout/MainLayout'
+import DashboardLayout from 'src/layout/DashboardLayout/DashboardLayout'
+import AuthLayout from 'src/layout/AuthLayout/AuthLayout'
 
 interface LayoutProps {
   children: React.ReactNode
