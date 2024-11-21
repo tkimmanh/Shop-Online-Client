@@ -1,6 +1,5 @@
 import { FaDribbble, FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-
 const Blog = () => {
   return (
     <div className='w-[1440px] mx-auto max-[1440px]:px-[10px]'>
@@ -10,7 +9,7 @@ const Blog = () => {
           <div className='mb-[60px]'>
             <div className='relative'>
               <img
-                src='https://wpbingosite.com/wordpress/bedesk/wp-content/uploads/2023/01/blog-1.jpg'
+                src='https://images.unsplash.com/photo-1732107214254-350490d58bda?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
                 alt=''
                 className='w-full h-auto'
               />
@@ -49,12 +48,12 @@ const Blog = () => {
           </div>
           <div className='mb-[25px]'>
             <p className='font-medium text-[16px] leading-[20px] text-[#000] mb-[19px]'>RECENT POST</p>
-            {[1, 1, 1].map((x) => {
+            {[1, 1, 1].map(() => {
               return (
                 <div className='flex mb-[30px] cursor-pointer'>
                   <div className='h-[100px] w-[100px]'>
                     <img
-                      src='https://wpbingosite.com/wordpress/bedesk/wp-content/uploads/2023/01/blog-1.jpg'
+                      src='https://images.unsplash.com/photo-1719937051124-91c677bc58fc?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
                       alt=''
                       className='h-[100px] w-[100px] object-cover'
                     />

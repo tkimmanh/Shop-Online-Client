@@ -90,50 +90,6 @@ const ProductsAddNew = () => {
   })
   const { enqueueSnackbar } = useSnackbar()
 
-  const { data: detailProduct } = useQuery({
-    queryKey: ['product', id],
-    queryFn: () => productsService.getProduct(id as string),
-    enabled: !!id,
-    onSuccess(data) {
-      const item = data?.data?.response
-      reset({
-        ...item
-      })
-      setSelectedColorOptions(
-        item?.colors?.map((color: any) => ({
-          value: color._id,
-          label: color.name
-        }))
-      )
-      setSelectedSizeOptions(
-        item?.sizes?.map((size: any) => ({
-          value: size._id,
-          label: size.name
-        }))
-      )
-      setSelectedCategoryOptions({
-        value: item?.category?._id,
-        label: item?.category?.title
-      })
-      setValue(item?.description)
-      setThumbnail([
-        {
-          name: item?.thumbnail?.public_id,
-          preview: item?.thumbnail?.url
-        } as any
-      ])
-      setImages(
-        item?.images?.map(
-          (image: any) =>
-            ({
-              name: image._id,
-              preview: image.url
-            } as unknown as FileWithPreview[])
-        )
-      )
-    }
-  })
-
   const editProductMutations = useMutation({
     mutationFn: (body: any) => productsService.editProduct(body, id),
     onSuccess: () => {
@@ -213,10 +169,6 @@ const ProductsAddNew = () => {
     } catch (error) {
       console.log('error:', error)
     }
-  }
-
-  const customFilterOption = (option: any, inputValue: any) => {
-    return option.label.toLowerCase().includes(inputValue.toLowerCase())
   }
 
   return (

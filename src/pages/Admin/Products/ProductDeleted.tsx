@@ -1,6 +1,6 @@
 import { useSnackbar } from 'notistack'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Button from 'src/components/Button'
 import Heading from 'src/components/Heading'
 import { routes } from 'src/routes/routes'

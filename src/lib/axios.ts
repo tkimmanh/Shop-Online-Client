@@ -4,7 +4,9 @@ import { routes } from 'src/routes/routes'
 import { AuthResponse } from 'src/types/auth'
 import { enqueueSnackbar } from 'notistack'
 
-const BASE_URL = 'http://localhost:8001/'
+const { VITE_ENDPOINT_URL } = import.meta.env
+
+const BASE_URL = VITE_ENDPOINT_URL
 
 function createHttpInstance(): AxiosInstance {
   const accessToken = getAccessTokenFromLocalStorage()

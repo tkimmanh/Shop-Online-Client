@@ -1,6 +1,5 @@
 import dayjs from 'dayjs'
-import { enqueueSnackbar } from 'notistack'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import Heading from 'src/components/Heading'
 import userService from 'src/services/users.service'
@@ -12,18 +11,7 @@ const Userlist = () => {
       return userService.getAllUser()
     }
   })
-  const queryClient = useQueryClient()
-  const deleteOrderMutation = useMutation({
-    mutationFn: (id: string) => userService.delete(id)
-  })
-  const handleDeleteUser = (id: string) => {
-    deleteOrderMutation.mutate(id, {
-      onSuccess: () => {
-        enqueueSnackbar('Xóa thành công', { variant: 'success' })
-        queryClient.invalidateQueries('USERS')
-      }
-    })
-  }
+
   return (
     <div>
       <div className='flex items-center justify-between gap-x-5 mb-5'>

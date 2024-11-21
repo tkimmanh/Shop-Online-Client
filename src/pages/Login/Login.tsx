@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaGoogle } from 'react-icons/fa'
 import { useMutation } from 'react-query'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Button from 'src/components/Button'
 import Checkbox from 'src/components/Checkbox'
 import Heading from 'src/components/Heading'
@@ -24,6 +24,10 @@ const Login = () => {
     setError,
     formState: { errors }
   } = useForm<TLogin>({
+    defaultValues: {
+      email: 'admin1@gmail.com',
+      password: '123456'
+    },
     resolver: yupResolver(loginSchema)
   })
   const { enqueueSnackbar } = useSnackbar()

@@ -1,7 +1,6 @@
 import { ReactNode, useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
 import Sidebar from './Sidebar'
-import Logo from 'src/components/Logo'
 
 type DashboardLayoutProps = {
   children: ReactNode

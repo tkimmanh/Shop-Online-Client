@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useMutation, useQuery } from 'react-query'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -8,7 +8,7 @@ import usersService from 'src/services/users.service'
 import ReactSelect from 'react-select'
 import Button from 'src/components/Button'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { profileSchema } from 'src/lib/yup/profile.schema'
+
 import { userSchema } from 'src/lib/yup/user.schema'
 
 const optionRole = [

@@ -14,7 +14,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
         <div className='col-span-6 lg:max-w-[707px] md:max-w-[400px]  w-full'>
           <img
             className='lg:h-[705px] w-full md:h-[400px] object-cover'
-            src='https://wpbingosite.com/wordpress/bedesk/wp-content/uploads/2023/06/account-banner.jpg'
+            src='https://images.unsplash.com/photo-1731433485113-11b5939894f1?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
             alt=''
           />
         </div>
