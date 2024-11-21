@@ -5,6 +5,7 @@
     "lib": ["ES2015", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "typeRoots": ["./src/types", "./node_modules/@types"],
     "baseUrl": ".",
     /* Bundler mode */
     "moduleResolution": "bundler",

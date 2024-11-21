@@ -14,20 +14,13 @@ import Button from 'src/components/Button'
 import { useForm } from 'react-hook-form'
 import { AppContext } from 'src/context/app.context'
 import { TUser } from 'src/types/auth'
-import addressService from 'src/services/address.service'
-import { useQuery } from 'react-query'
-export interface AdressType {
-  province_id?: string
-  district_id?: string
-  district_name?: string
-  province_name?: string
-  ward_name?: string
-  ward_id?: string
-}
+import addressData from '../../../data.json'
+import Spinner from 'src/components/Spinner'
+import { AdressType } from '../Profile/Profile'
 
 const CartPage = () => {
   const { user, setCartChanged, cartChanged } = useContext(AppContext)
-  const { data: listItemCart } = useCartData()
+  const { data: listItemCart, loading } = useCartData()
   const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
   const [isOpen, setIsOpen] = useState(false)
@@ -50,10 +43,18 @@ const CartPage = () => {
   }, [])
 
   const deleteCartMutation = useMutation({
-    mutationFn: ({ product_id, color_id, size_id }: any) =>
+    mutationFn: ({ product_id, color_id, size_id }: { product_id: string; color_id: string; size_id: string }) =>
       usersService.deleteCart({ product_id, color_id, size_id }) as any
   })
-  const handleDeleteCartItem = ({ product_id, color_id, size_id }: any) => {
+  const handleDeleteCartItem = ({
+    product_id,
+    color_id,
+    size_id
+  }: {
+    product_id: string
+    color_id: string
+    size_id: string
+  }) => {
     deleteCartMutation.mutate(
       { product_id, color_id, size_id },
       {
@@ -65,8 +66,17 @@ const CartPage = () => {
     )
   }
   const updateQuantityMutation = useMutation({
-    mutationFn: ({ product_id, color_id, size_id, quantity }: any) =>
-      usersService.updateCart({ product_id, color_id, size_id, quantity: quantity })
+    mutationFn: ({
+      product_id,
+      color_id,
+      size_id,
+      quantity
+    }: {
+      product_id: string
+      color_id: string
+      size_id: string
+      quantity: number
+    }) => usersService.updateCart({ product_id, color_id, size_id, quantity: quantity })
   })
 
   const handleQuantityChange = (product_id: string, color_id: string, size_id: string, newQuantity: number) => {
@@ -152,23 +162,14 @@ const CartPage = () => {
     })
   }
 
-  const { data: provinces, isLoading: loadingProvinces } = useQuery('provinces', addressService.getProvinces)
+  const provinces = addressData as any
+  const districts = selectedProvince ? provinces.find((p: AdressType) => p.Id === selectedProvince)?.Districts : []
+  const wards = selectedDistrict ? districts?.find((d: AdressType) => d.Id === selectedDistrict)?.Wards : []
 
-  const { data: districts, isLoading: loadingDistricts } = useQuery(
-    ['districts', selectedProvince],
-    () => addressService.getDistricts(selectedProvince),
-    {
-      enabled: !!selectedProvince
-    }
-  )
-
-  const { data: wards, isLoading: loadingWards } = useQuery(
-    ['wards', selectedDistrict],
-    () => addressService.getWards(selectedDistrict),
-    {
-      enabled: !!selectedDistrict // Only run query if selectedDistrict is not empty
-    }
-  )
+  const transformedWards = wards?.map((ward: AdressType) => ({
+    ...ward,
+    Name: ward.Name
+  }))
 
   useEffect(() => {
     if (!selectedProvince) {
@@ -188,9 +189,9 @@ const CartPage = () => {
     newDistrict = selectedDistrict,
     newWard = selectedWard
   ) => {
-    const provinceName = provinces?.find((p) => p.province_id === newProvince)?.province_name || ''
-    const districtName = districts?.find((d) => d.district_id === newDistrict)?.district_name || ''
-    const wardName = wards?.find((w) => w.ward_id === newWard)?.ward_name || ''
+    const provinceName = provinces?.find((p: any) => p.Id === newProvince)?.Name || ''
+    const districtName = districts?.find((d: any) => d.Id === newDistrict)?.Name || ''
+    const wardName = transformedWards?.find((w: any) => w.Level === newWard)?.Name || ''
 
     const fullAddress = [houseNumber, wardName, districtName, provinceName].filter(Boolean).join(' - ')
     setValue('address', fullAddress)
@@ -215,6 +216,9 @@ const CartPage = () => {
       }
     })
   }
+  if (loading) {
+    return <Spinner fullHeight></Spinner>
+  }
 
   return (
     <div>
@@ -229,6 +233,7 @@ const CartPage = () => {
               <th className='w-[80px] border-l border-gray-300'></th>
             </tr>
           </thead>
+
           <tbody>
             {listItemCart?.data?.user?.cart?.length > 0 &&
               listItemCart?.data.user?.cart?.map((item: any, index: number) => {
@@ -294,6 +299,7 @@ const CartPage = () => {
               })}
           </tbody>
         </table>
+
         <div className='col-span-4'>
           <div className='bg-[#f7f7f7] w-[460px] h-[476px] p-10'>
             <div className='w-full border-b border-black'>
@@ -356,19 +362,18 @@ const CartPage = () => {
             <div className='flex flex-col gap-y-5'>
               <div className='flex gap-x-3'>
                 <select
-                  className='border w-1/2 border-gray-300 p-3 rounded-sm focus:shadow-sm focus:border-gray-500 outline-none'
+                  className='border border-gray-300 p-3 rounded-sm focus:shadow-sm focus:border-gray-500 outline-none w-[50%]'
                   value={selectedProvince}
                   onChange={(e) => {
                     const newProvince = e.target.value
                     setSelectedProvince(newProvince)
                     handleAddressChange(newProvince)
                   }}
-                  disabled={loadingProvinces}
                 >
-                  <option value=''>{loadingProvinces ? 'Đang tải...' : 'Chọn tỉnh'}</option>
-                  {provinces?.map((province) => (
-                    <option key={province.province_id} value={province.province_id}>
-                      {province.province_name}
+                  <option value=''>Chọn tỉnh</option>
+                  {provinces.map((province: AdressType) => (
+                    <option key={province.Id} value={province.Id}>
+                      {province.Name}
                     </option>
                   ))}
                 </select>
@@ -381,12 +386,12 @@ const CartPage = () => {
                     setSelectedDistrict(newDistrict)
                     handleAddressChange(selectedProvince, newDistrict, selectedWard)
                   }}
-                  disabled={!selectedProvince || loadingDistricts}
+                  disabled={!selectedProvince}
                 >
-                  <option value=''>{loadingDistricts ? 'Đang tải...' : 'Chọn huyện'}</option>
-                  {districts?.map((district) => (
-                    <option key={district.district_id} value={district.district_id}>
-                      {district.district_name}
+                  <option value=''>Chọn huyện</option>
+                  {districts?.map((district: AdressType) => (
+                    <option key={district.Id} value={district.Id}>
+                      {district.Name}
                     </option>
                   ))}
                 </select>
@@ -401,12 +406,12 @@ const CartPage = () => {
                     setSelectedWard(newWard)
                     handleAddressChange(selectedProvince, selectedDistrict, newWard)
                   }}
-                  disabled={!selectedDistrict || loadingWards}
+                  disabled={!selectedDistrict}
                 >
-                  <option value=''>{loadingWards ? 'Đang tải...' : 'Chọn xã'}</option>
-                  {wards?.map((ward) => (
-                    <option key={ward.ward_id} value={ward.ward_id}>
-                      {ward.ward_name}
+                  <option value=''>Chọn xã</option>
+                  {transformedWards?.map((ward: AdressType) => (
+                    <option key={ward.Level} value={ward.Level}>
+                      {ward.Name}
                     </option>
                   ))}
                 </select>

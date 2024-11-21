@@ -7,7 +7,6 @@ const Register = lazy(() => import('src/pages/Register'))
 const Home = lazy(() => import('src/pages/Home'))
 const Login = lazy(() => import('src/pages/Login'))
 const About = lazy(() => import('src/pages/About'))
-const Blog = lazy(() => import('src/pages/Blog'))
 const CartPage = lazy(() => import('src/pages/Cart'))
 const UsersAdmin = lazy(() => import('src/pages/Admin/Users/UserList'))
 const UsersDetailAdmin = lazy(() => import('src/pages/Admin/Users/DetailUser'))
@@ -65,11 +64,7 @@ export const routes: IRoutes = {
     element: About,
     layout: 'MainLayout'
   },
-  Blog: {
-    path: '/blog',
-    element: Blog,
-    layout: 'MainLayout'
-  },
+
   PaymentSucess: {
     path: '/payment-success',
     element: PaymentSucess,

@@ -13,6 +13,7 @@ import { useQuery } from 'react-query'
 import categoryService from 'src/services/category.service'
 import { useEffect } from 'react'
 import { setAccessTokenToLocalStorage, setIsAuthenticated } from 'src/utils/localStorage'
+import Spinner from 'src/components/Spinner'
 
 const Home = () => {
   const [params] = useSearchParams()
@@ -39,7 +40,7 @@ const Home = () => {
       }
     ]
   }
-  const { data: listProducts } = useQuery({
+  const { data: listProducts, isLoading } = useQuery({
     queryKey: ['PRODUCTS'],
     queryFn: () => {
       return productsService.getAllProducts()
@@ -67,21 +68,24 @@ const Home = () => {
       <div className='mx-7'>
         <Heading className='text-3xl pt-20 pb-16'>Sản phẩm mới</Heading>
         <div className='mx-5 '>
-          <Slider {...settings}>
-            {filteredProducts?.slice(0, 10).map((product: any) => {
-              return (
-                <div className='slick-slide-item' key={product._id}>
-                  <Card id={product._id} image={product.thumbnail?.url}></Card>
-                  <Link className='inline-block' to={`products/${product._id}/${product.slug}`}>
-                    <div className='mt-5 flex w-full flex-col gap-y-2'>
-                      <Title>{product.title}</Title>
-                      <Price>{formatMoney(product.price)}</Price>
-                    </div>
-                  </Link>
-                </div>
-              )
-            })}
-          </Slider>
+          {isLoading && <Spinner fullHeight></Spinner>}
+          {!isLoading && (
+            <Slider {...settings}>
+              {filteredProducts?.slice(0, 10).map((product: any) => {
+                return (
+                  <div className='slick-slide-item' key={product._id}>
+                    <Card id={product._id} image={product.thumbnail?.url}></Card>
+                    <Link className='inline-block' to={`products/${product._id}/${product.slug}`}>
+                      <div className='mt-5 flex w-full flex-col gap-y-2'>
+                        <Title>{product.title}</Title>
+                        <Price>{formatMoney(product.price)}</Price>
+                      </div>
+                    </Link>
+                  </div>
+                )
+              })}
+            </Slider>
+          )}
         </div>
 
         <div className='w-full bg-[#f7f4ef] h-[438px] mt-16'>

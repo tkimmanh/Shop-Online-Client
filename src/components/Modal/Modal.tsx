@@ -3,7 +3,7 @@ import ReactModal from 'react-modal'
 import { twMerge } from 'tailwind-merge'
 
 type Props = {
-  className?: string
+  className?: string | ''
   overlayClassName?: string
   children: ReactNode
   isOpenModal: boolean
@@ -18,11 +18,11 @@ const Modal = ({ children, className, overlayClassName, isOpenModal, setIsOpenMo
         isOpen={isOpenModal}
         overlayClassName={twMerge(
           'fixed inset-0 bg-black bg-opacity-40 z-50 w-full transition-opacity duration-500',
-          overlayClassName && overlayClassName
+          overlayClassName ? overlayClassName : ''
         )}
         className={twMerge(
           'modal-content relative bg-white outline-none shadow-md transition-transform transform translate-x-full',
-          className && className
+          className || ''
         )}
         closeTimeoutMS={500}
       >

@@ -16,6 +16,7 @@ import { routes } from 'src/routes/routes'
 import { useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate'
 import classNames from 'src/utils/classNames'
+import Spinner from 'src/components/Spinner'
 const Products = () => {
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -49,7 +50,7 @@ const Products = () => {
     },
     isUndefined
   )
-  const { data: listProducts } = useQuery({
+  const { data: listProducts, isLoading } = useQuery({
     queryKey: ['PRODUCTS', queryConfig],
     queryFn: () => {
       return productsService.getAllProducts(queryConfig)
@@ -142,10 +143,14 @@ const Products = () => {
   const pageCount = Math.ceil(totalProducts / limit)
 
   const filteredProducts = listProducts?.data.products
-  
+
   useEffect(() => {
     document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [pageCount])
+
+  if (isLoading) {
+    return <Spinner></Spinner>
+  }
   return (
     <div className='mt-10'>
       <div className='grid lg:grid-cols-10 min'>

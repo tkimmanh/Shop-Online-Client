@@ -16,7 +16,7 @@ import usersService from 'src/services/users.service'
 import { enqueueSnackbar } from 'notistack'
 import NotificationModal from 'src/components/NotificationModal/NotificationModal'
 import { useQuery } from 'react-query'
-
+const { VITE_ENDPOINT_URL } = import.meta.env
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const { user, isAuthenticated, setIsAuthenticated } = useContext(AppContext)
@@ -53,7 +53,7 @@ const Header = () => {
   useEffect(() => {
     if (isAuthenticated) {
       const userId = user?._id
-      const socket = io('http://localhost:8001', { query: { userId } })
+      const socket = io(VITE_ENDPOINT_URL, { query: { userId } })
 
       socket.on('notification', (notification) => {
         if (notification.user_id === userId) {

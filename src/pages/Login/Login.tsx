@@ -91,6 +91,7 @@ const Login = () => {
         <form action='' onSubmit={handleSubmit(onSubmit)}>
           <div className='mb-5'>
             <Input
+              defaultValue={'admin@gmail.com'}
               className='h-10'
               type='text'
               placeholder='Enter your email adress *'
@@ -101,6 +102,7 @@ const Login = () => {
           </div>
           <div className='mb-5'>
             <Input
+              defaultValue={'123456'}
               className='h-10'
               type='password'
               name='password'

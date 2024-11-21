@@ -7,5 +7,5 @@ export function useCartData() {
   const result = useQuery('cart', usersService.getCurrentUser, {
     enabled: !!accessToken
   })
-  return result
+  return { ...result, loading: result.isLoading }
 }

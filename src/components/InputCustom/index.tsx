@@ -20,9 +20,9 @@ const InputCustom = React.forwardRef<HTMLInputElement, InputProps>(
           type={type}
           className={twMerge(
             'p-3 w-full outline-none border rounded-sm focus:shadow-sm',
-            className && className,
-            errMessage && 'border-red-300 focus:border-red-500',
-            !errMessage && 'border-gray-300 focus:border-gray-500'
+            className || '',
+            errMessage ? 'border-red-300 focus:border-red-500' : '',
+            !errMessage ? 'border-gray-300 focus:border-gray-500' : ''
           )}
           ref={ref}
           {...props}

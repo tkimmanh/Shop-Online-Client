@@ -132,78 +132,110 @@ const Dashboard = () => {
       </div>
       <h2 className='text-xl font-semibold mb-4'>Doanh Thu Hàng Tháng</h2>
       <Line data={data} options={options} />
-      <div className='grid grid-cols-2 gap-x-10'>
-        <div className='mt-8'>
-          <h3 className='text-lg font-semibold mb-4'>Top 5 Sản Phẩm Bán Chạy</h3>
-          <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl'>
-            {topSoldProducts?.map((product: any) => (
-              <div key={product._id} className='bg-white p-4 flex '>
-                <div>
-                  <img className='w-20 h-20 object-contain gap-x-5' src={product?.thumbnail?.url} alt='' />
-                </div>
-                <div>
-                  <h4 className='text-lg font-semibold mt-2'>{product.title}</h4>
-                  <p className='text-sm text-gray-500 mt-1'>
-                    <span className='font-bold'>{product.sold}</span> sản phẩm đã bán
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className='mt-8'>
-          <h3 className='text-lg font-semibold mb-4'>Danh mục có sản phẩm bán chạy</h3>
-          <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl'>
-            {categorySelling?.data?.categories?.map((category: any) => {
-              return (
-                <div key={category._id} className='bg-white p-4 flex '>
-                  <div>
-                    <h4 className='text-lg font-semibold mt-2'>{category.categoryDetails.title}</h4>
-                    <p className='text-sm text-gray-500 mt-1'>
-                      <span className='font-bold'>{category.totalSold}</span> sản phẩm đã bán
-                    </p>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </div>
-
-      <div className='grid grid-cols-2 gap-x-10'>
-        {topDailyProducts?.data?.products?.length > 0 && (
+      {topSoldProducts?.length > 0 && (
+        <div className='grid grid-cols-2 gap-x-10'>
           <div className='mt-8'>
-            <h3 className='text-lg font-semibold mb-4'>Top 5 sản phẩm bán chạy theo ngày</h3>
-            <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl min-h-[496px]'>
-              {topDailyProducts?.data.products?.map((product: any) => {
-                console.log('product:', product)
-                return (
-                  <div key={product._id} className='bg-white p-4 flex gap-x-5'>
-                    <div>
-                      <img
-                        className='w-20 h-20 object-contain gap-x-5'
-                        src={product.productDetails.thumbnail.url}
-                        alt=''
-                      />
-                    </div>
-                    <div>
-                      <h4 className='text-lg font-semibold mt-2'>{product.productDetails.title}</h4>
-                      <p className='text-sm text-gray-500 mt-1'>
-                        <span className='font-bold'>{product.totalSold}</span> sản phẩm đã bán trong ngày hôm nay
-                      </p>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {topMonthlyProducts?.data?.products?.length > 0 && (
-          <div className='mt-8'>
-            <h3 className='text-lg font-semibold mb-4'>Top 5 sản phẩm bán chạy theo tháng</h3>
+            <h3 className='text-lg font-semibold mb-4'>Top 5 Sản Phẩm Bán Chạy</h3>
             <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl'>
-              {topMonthlyProducts?.data.products?.map((product: any) => {
+              {topSoldProducts?.map((product: any) => (
+                <div key={product._id} className='bg-white p-4 flex '>
+                  <div>
+                    <img className='w-20 h-20 object-contain gap-x-5' src={product?.thumbnail?.url} alt='' />
+                  </div>
+                  <div>
+                    <h4 className='text-lg font-semibold mt-2'>{product.title}</h4>
+                    <p className='text-sm text-gray-500 mt-1'>
+                      <span className='font-bold'>{product.sold}</span> sản phẩm đã bán
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className='mt-8'>
+            <h3 className='text-lg font-semibold mb-4'>Danh mục có sản phẩm bán chạy</h3>
+            <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl'>
+              {categorySelling?.data?.categories?.map((category: any) => {
+                return (
+                  <div key={category._id} className='bg-white p-4 flex '>
+                    <div>
+                      <h4 className='text-lg font-semibold mt-2'>{category.categoryDetails.title}</h4>
+                      <p className='text-sm text-gray-500 mt-1'>
+                        <span className='font-bold'>{category.totalSold}</span> sản phẩm đã bán
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {topMonthlyProducts?.data && topDailyProducts?.data && (
+        <div className='grid grid-cols-2 gap-x-10'>
+          {topDailyProducts?.data?.products?.length > 0 && (
+            <div className='mt-8'>
+              <h3 className='text-lg font-semibold mb-4'>Top 5 sản phẩm bán chạy theo ngày</h3>
+              <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl min-h-[496px]'>
+                {topDailyProducts?.data.products?.map((product: any) => {
+                  console.log('product:', product)
+                  return (
+                    <div key={product._id} className='bg-white p-4 flex gap-x-5'>
+                      <div>
+                        <img
+                          className='w-20 h-20 object-contain gap-x-5'
+                          src={product.productDetails.thumbnail.url}
+                          alt=''
+                        />
+                      </div>
+                      <div>
+                        <h4 className='text-lg font-semibold mt-2'>{product.productDetails.title}</h4>
+                        <p className='text-sm text-gray-500 mt-1'>
+                          <span className='font-bold'>{product.totalSold}</span> sản phẩm đã bán trong ngày hôm nay
+                        </p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {topMonthlyProducts?.data?.products?.length > 0 && (
+            <div className='mt-8'>
+              <h3 className='text-lg font-semibold mb-4'>Top 5 sản phẩm bán chạy theo tháng</h3>
+              <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl'>
+                {topMonthlyProducts?.data.products?.map((product: any) => {
+                  return (
+                    <div key={product._id} className='bg-white p-4 flex gap-x-5'>
+                      <div>
+                        <img
+                          className='w-20 h-20 object-contain gap-x-5'
+                          src={product.productDetails.thumbnail.url}
+                          alt=''
+                        />
+                      </div>
+                      <div>
+                        <h4 className='text-lg font-semibold mt-2'>{product.productDetails.title}</h4>
+                        <p className='text-sm text-gray-500 mt-1'>
+                          <span className='font-bold'>{product.totalSold}</span> sản phẩm đã bán trong tháng này
+                        </p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+      {topYearlyProducts?.data?.products?.length > 0 && (
+        <div className='grid grid-cols-2 gap-x-10'>
+          <div className='mt-8'>
+            <h3 className='text-lg font-semibold mb-4'>Top 5 sản phẩm bán chạy theo năm</h3>
+            <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl min-h-[496px]'>
+              {topYearlyProducts?.data.products?.map((product: any) => {
                 return (
                   <div key={product._id} className='bg-white p-4 flex gap-x-5'>
                     <div>
@@ -216,7 +248,7 @@ const Dashboard = () => {
                     <div>
                       <h4 className='text-lg font-semibold mt-2'>{product.productDetails.title}</h4>
                       <p className='text-sm text-gray-500 mt-1'>
-                        <span className='font-bold'>{product.totalSold}</span> sản phẩm đã bán trong tháng này
+                        <span className='font-bold'>{product.totalSold}</span> sản phẩm đã bán trong năm nay
                       </p>
                     </div>
                   </div>
@@ -224,35 +256,8 @@ const Dashboard = () => {
               })}
             </div>
           </div>
-        )}
-      </div>
-
-      <div className='grid grid-cols-2 gap-x-10'>
-        <div className='mt-8'>
-          <h3 className='text-lg font-semibold mb-4'>Top 5 sản phẩm bán chạy theo năm</h3>
-          <div className='gap-4 max-w-[500px] w-full flex flex-col rounded-lg shadow-xl min-h-[496px]'>
-            {topYearlyProducts?.data.products?.map((product: any) => {
-              return (
-                <div key={product._id} className='bg-white p-4 flex gap-x-5'>
-                  <div>
-                    <img
-                      className='w-20 h-20 object-contain gap-x-5'
-                      src={product.productDetails.thumbnail.url}
-                      alt=''
-                    />
-                  </div>
-                  <div>
-                    <h4 className='text-lg font-semibold mt-2'>{product.productDetails.title}</h4>
-                    <p className='text-sm text-gray-500 mt-1'>
-                      <span className='font-bold'>{product.totalSold}</span> sản phẩm đã bán trong năm nay
-                    </p>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

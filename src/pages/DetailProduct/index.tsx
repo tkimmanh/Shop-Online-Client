@@ -25,6 +25,7 @@ import { routes } from 'src/routes/routes'
 import Button from 'src/components/Button'
 import ImageZoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
+import Spinner from 'src/components/Spinner'
 
 const DetailProduct = () => {
   const { isAuthenticated, cartChanged, setCartChanged } = useContext(AppContext)
@@ -60,7 +61,7 @@ const DetailProduct = () => {
       reviewMutation.mutate({ star: rating } as any)
     }
   }
-  const { data: productDetail } = useQuery({
+  const { data: productDetail, isLoading } = useQuery({
     queryKey: ['PRODUCT', id],
     queryFn: async () => {
       try {
@@ -109,6 +110,10 @@ const DetailProduct = () => {
   useEffect(() => {
     document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [detail])
+
+  if (isLoading) {
+    return <Spinner fullHeight></Spinner>
+  }
   return (
     <div className='max-w-[1440px] mx-auto'>
       <div className='grid grid-cols-5 gap-[115px]'>
@@ -261,8 +266,8 @@ const DetailProduct = () => {
             <span
               className={twMerge(
                 'inline-block p-2  cursor-pointer text-[22px] text-[#000] leading-[37px]',
-                valueTab == 1 && 'border-[#000] border-b-2',
-                valueTab != 1 && 'hover:text-gray-600 hover:border-gray-300'
+                (valueTab == 1 ? 'border-[#000] border-b-2' : '') +
+                  (valueTab != 1 ? 'hover:text-gray-600 hover:border-gray-300' : '')
               )}
               onClick={() => setValueTab(1)}
             >
@@ -274,8 +279,8 @@ const DetailProduct = () => {
               <span
                 className={twMerge(
                   'inline-block p-2  cursor-pointer text-[22px] text-[#000] leading-[37px]',
-                  valueTab == 2 && 'border-[#000] border-b-2',
-                  valueTab != 2 && 'hover:text-gray-600 hover:border-gray-300'
+                  (valueTab == 2 ? ' border-[#000] border-b-2' : '') +
+                    (valueTab != 2 ? ' hover:text-gray-600 hover:border-gray-300' : '')
                 )}
                 onClick={() => setValueTab(2)}
               >
